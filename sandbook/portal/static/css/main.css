@@ -1,0 +1,23 @@
+label.errorlist, ul.errorlist {
+  color: #f44336 !important;
+  font-weight: normal !important;
+  list-style: none !important;
+  font-size: 0.8rem !important;
+  padding-left: 56px;
+}
+label.errorlist {
+  margin-top: 5px;
+}
+
+.header-filter[filter-color=dark]:after {
+  background: rgba(37, 35, 37, 0.56);
+  background: linear-gradient(60deg, rgba(67, 64, 68, 0.56), rgb(31, 29, 26));
+}
+
+.logo-image {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: -6px;
+}

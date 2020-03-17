@@ -1,0 +1,65 @@
+{% extends 'account/layout.html' %}
+{% load static %}
+{% block title_content %}登录{% endblock %}
+{% block body_class %}login-page sidebar-collapse{% endblock %}
+{% block main_account %}
+  <div class="page-header header-filter"
+       style="background-image: url('{% static 'images/background/1920x1200/bg1.jpg' %}'); background-size: cover; background-position: top center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+          <form class="form" method="post" action="{% url 'portal:account_login' %}">
+            {% csrf_token %}
+            <div class="card card-login card-hidden">
+              <div class="card-header card-header-primary text-center">
+                <h4 class="card-title">登录</h4>
+                <div class="social-line">
+                  <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
+                    <i class="fa fa-qq"></i>
+                  </a>
+                  <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
+                    <i class="fa fa-weixin"></i>
+                  </a>
+                  <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
+                    <i class="fa fa-weibo"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="card-body ">
+                <p class="card-description text-center">或使用账号登录 </p>
+                <p class="card-description text-center">没有账号？<a href="{% url 'portal:account_signup' %}">快速注册</a> <a href="{% url 'portal:account_password_recover' %}">忘记密码</a></p>
+                {{ form.non_field_errors }}
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">face</i>
+                      </span>
+                    </div>
+                    {{ form.username }}
+                  </div>
+                  {{ form.username.errors }}
+                </span>
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                    </div>
+                    {{ form.password }}
+                  </div>
+                  {{ form.password.errors }}
+                </span>
+              </div>
+              <div class="card-footer justify-content-center">
+                <button type="submit" class="btn btn-rose btn-link btn-lg">登 录</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% include 'blocks/footer.html' %}
+  </div>
+{% endblock %}

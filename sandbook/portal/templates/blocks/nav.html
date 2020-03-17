@@ -1,0 +1,99 @@
+{% load static %}
+<nav class="navbar navbar-color-on-scroll navbar-transparent fixed-top  navbar-expand-lg " color-on-scroll="100"
+     id="sectionsNav">
+  <div class="container">
+    <div class="navbar-translate">
+      <a class="navbar-brand" href="{% url 'portal:index' %}">
+        沙之书 </a>
+{#      <a class="navbar-brand" href="/">#}
+{#        <div class="logo-image">#}
+{#          <img src="{% static 'images/logo.png' %}?v=1" class="img-fluid" alt="logo" style="height: 50px; width: 50px;">#}
+{#          <span class="text-light">沙之书</span>#}
+{#        </div>#}
+{#      </a>#}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="dropdown nav-item">
+          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <i class="material-icons">apps</i> 小说分类
+          </a>
+          <div class="dropdown-menu dropdown-with-icons">
+            <a href="../presentation.html" class="dropdown-item">
+              <i class="material-icons">line_style</i> 西方奇幻
+            </a>
+            <a href="../presentation.html" class="dropdown-item">
+              <i class="material-icons">line_style</i> 北方奇幻
+            </a>
+            <a href="../presentation.html" class="dropdown-item">
+              <i class="material-icons">line_style</i> 南方奇幻
+            </a>
+            <a href="../presentation.html" class="dropdown-item">
+              <i class="material-icons">line_style</i> 东方奇幻
+            </a>
+          </div>
+        </li>
+        <li class="dropdown nav-item">
+          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <i class="material-icons">view_day</i> 一个菜单
+          </a>
+          <div class="dropdown-menu dropdown-with-icons">
+            <a href="../sections.html#headers" class="dropdown-item">
+              <i class="material-icons">dns</i> Headers
+            </a>
+            <a href="../sections.html#features" class="dropdown-item">
+              <i class="material-icons">build</i> Features
+            </a>
+          </div>
+        </li>
+        <li class="dropdown nav-item">
+          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+            <i class="material-icons">view_carousel</i> 又一个菜单
+          </a>
+          <div class="dropdown-menu dropdown-with-icons">
+            <a href="../examples/about-us.html" class="dropdown-item">
+              <i class="material-icons">account_balance</i> About Us
+            </a>
+            <a href="../examples/blog-post.html" class="dropdown-item">
+              <i class="material-icons">art_track</i> Blog Post
+            </a>
+          </div>
+        </li>
+        {% if user.is_authenticated %}
+          <li class="dropdown nav-item">
+            <a href="#" class="profile-photo dropdown-toggle nav-link" data-toggle="dropdown">
+              <div class="profile-photo-small">
+                <img src="{% static 'images/avatar1.jpeg' %}" alt="Circle Image" class="rounded-circle img-fluid">
+              </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <h6 class="dropdown-header">欢迎，{{ user.nickname|default:user.username }}</h6>
+              <a href="{% url 'portal:user_index' user.id %}" class="dropdown-item">我的领地</a>
+              <a href="#" class="dropdown-item">设置</a>
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'portal:account_logout' %}?next={{ request.path }}" class="dropdown-item">登出</a>
+            </div>
+          </li>
+        {% else %}
+          {% url 'portal:account_login' as login_url %}
+          {% if request.path != login_url %}
+            <li class="button-container nav-item iframe-extern">
+              <a href="{% url 'portal:account_login' %}?next={{ request.path }}" class="btn btn-primary btn-sm btn-round btn-block">
+                <i class="material-icons">perm_identity</i> 登录
+              </a>
+            </li>
+          {% endif %}
+
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>

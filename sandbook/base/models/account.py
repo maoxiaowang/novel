@@ -1,0 +1,146 @@
+import os
+
+from django.contrib.auth import models as auth_model
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import ASCIIUsernameValidator, UnicodeUsernameValidator
+from django.core.files.storage import FileSystemStorage
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+
+
+class Group(auth_model.Group):
+    """
+    用户组
+
+    作者组（所有作者）
+    小说管理组（小说审核，屏蔽，解封，删除）
+    用户管理组（用户行为管理，封号，禁言，删除评论，发送站内信）
+    """
+    class Meta:
+        proxy = True
+
+
+created_at = models.DateTimeField('创建时间', default=timezone.now)
+created_at.contribute_to_class(auth_model.Group, 'created_at')
+
+
+class Permission(auth_model.Permission):
+    """
+    权限
+    """
+    class Meta:
+        proxy = True
+
+
+def avatar_path(instance, filename):
+    return os.path.join('users', str(instance.id), 'avatars', filename)
+
+
+class User(AbstractUser):
+    """
+    用户
+    """
+    username_validator = ASCIIUsernameValidator()
+    username = models.CharField(
+        '用户名',
+        max_length=32,
+        unique=True,
+        help_text=_(
+            'Required. 32 characters or fewer. '
+            'Letters, digits and @/./+/-/_ only.'),
+        validators=[username_validator],
+        error_messages={
+            'unique': _('A user with that username already exists.'),
+        },
+    )
+    groups = models.ManyToManyField(
+        'base.Group')
+    user_permissions = models.ManyToManyField(
+        'base.Permission')
+    teams = models.ManyToManyField('base.Team')
+    nickname = models.CharField(
+        '昵称',
+        max_length=150,
+        validators=[UnicodeUsernameValidator],
+        blank=True,
+        help_text=_('Nick name is only used to display.')
+    )
+    avatar = models.ImageField(
+        '头像', storage=FileSystemStorage(),
+        default='default/avatars/user/default.png',
+        upload_to=avatar_path, blank=True
+    )
+    description = models.CharField(
+        '描述', max_length=100, blank=True
+    )
+    is_locked = models.BooleanField(default=False)  # 锁定
+    is_muted = models.BooleanField(default=False)  # 禁言
+    is_author = models.BooleanField(default=False)  # True时才会有AuthorInfo
+
+    class Meta:
+        db_table = 'auth_user'
+        default_permissions = ()
+        permissions = (
+            # ('create_user', '创建用户'),  暂不需要，为管理员权限
+            # ('view_user', '查看用户'),
+            # ('delete_user', '删除用户'),
+            # ('change_user', '修改用户'),
+            ('lock_user', '锁定用户'),
+        )
+
+
+class UserInfo(models.Model):
+    """
+    用户详细信息
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='用户')
+    exp = models.PositiveIntegerField('经验值', default=0)
+
+    class Meta:
+        db_table = 'auth_user_info'
+        default_permissions = ()
+
+
+class AuthorInfo(models.Model):
+    """
+    作者详细信息
+    """
+    LEVEL_CHOICES = (
+        (0, '普通'),
+        (1, '青铜'),
+        (2, '白银'),
+        (3, '黄金'),
+        (4, '钻石'),
+        (5, '铂金')
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='用户')
+    name = models.CharField('笔名', max_length=32, default=None, validators=[UnicodeUsernameValidator])
+    level = models.PositiveSmallIntegerField('等级', choices=LEVEL_CHOICES, default=0)
+    date_joined = models.DateTimeField('成为作者的日期', default=timezone.now)
+
+    class Meta:
+        db_table = 'auth_author_info'
+        default_permissions = ()
+
+
+class Team(models.Model):
+    """
+    小组
+    """
+    name = models.CharField('名称', max_length=32)
+    created_at = models.DateTimeField('创建时间', auto_now_add=True)
+    description = models.CharField('描述', max_length=255)
+
+    class Meta:
+        db_table = 'auth_team'
+        default_permissions = ()
+
+
+class Following(models.Model):
+    """
+    关注
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', verbose_name='被关注者')
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', verbose_name='关注者')
+    created_at = models.DateTimeField('关注事件', auto_now_add=True)

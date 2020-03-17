@@ -1,0 +1,13 @@
+{% load i18n %}
+{% autoescape off %}
+
+    <p>亲爱的{{ user.nickname|default:user.get_username }}，</p>
+    <p>我们收到了你找回密码的请求。请点击访问下方链接重置你的密码。如果无法点击，请复制链接到浏览器。</p>
+    {% block reset_link %}
+      {# host or protocol #}
+        <a href="{{ protocol }}://{{ host }}{% url 'portal:account_password_reset_confirm' uidb64=uid token=token %}">
+            {{ protocol }}://{{ host }}{% url 'portal:account_password_reset_confirm' uidb64=uid token=token %}</a>
+    {% endblock %}
+    <p>你的登录用户名：{{ user.get_username }}</p>
+
+{% endautoescape %}
