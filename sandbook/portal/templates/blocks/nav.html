@@ -75,7 +75,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
               <h6 class="dropdown-header">欢迎，{{ user.nickname|default:user.username }}</h6>
-              <a href="{% url 'portal:user_index' user.id %}" class="dropdown-item">我的领地</a>
+              <a href="{% url 'portal:user_homepage' user.id %}" class="dropdown-item">我的领地</a>
               <a href="#" class="dropdown-item">设置</a>
               <div class="dropdown-divider"></div>
               <a href="{% url 'portal:account_logout' %}?next={{ request.path }}" class="dropdown-item">登出</a>

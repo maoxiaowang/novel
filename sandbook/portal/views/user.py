@@ -1,10 +1,11 @@
+from django.shortcuts import render
 from django.views.generic import DetailView, UpdateView
 
 from base.models import User
 from general.views import JSONDetailView, JSONResponseMixin
 
 
-class Index(DetailView):
+class HomePage(DetailView):
     """
     用户主页
 
@@ -17,7 +18,7 @@ class Index(DetailView):
     """
     model = User
     pk_url_kwarg = 'user_id'
-    template_name = 'user/profile.html'
+    template_name = 'user/homepage.html'
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
@@ -31,16 +32,14 @@ class Profile(JSONResponseMixin, DetailView):
     pk_url_kwarg = 'user_id'
     template_name = 'user/blocks/profile.html'
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        return self.json_response(data={'html': response})
-
 
 class Circle(DetailView):
     """
     用户圈子
     """
-    ...
+    model = User
+    pk_url_kwarg = 'user_id'
+    template_name = 'user/blocks/circle.html'
 
 
 class Settings:
@@ -56,7 +55,7 @@ class Works(DetailView):
     """
     model = User
     pk_url_kwarg = 'user_id'
-    template_name = 'user/works.html'
+    template_name = 'user/blocks/works.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

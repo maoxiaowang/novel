@@ -1,4 +1,5 @@
 import decimal
+import json
 import uuid
 from datetime import datetime, date, time
 
@@ -9,7 +10,7 @@ from django.utils import timezone
 from django.utils.functional import Promise
 
 
-class SJSONEncoder:
+class SJSONEncoder(json.JSONEncoder):
 
     def default(self, obj):
         if isinstance(obj, datetime):

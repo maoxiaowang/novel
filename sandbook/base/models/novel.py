@@ -8,7 +8,7 @@ class Category(models.Model):
     name = models.CharField('名称', max_length=32)
 
     class Meta:
-        db_table = 'base_category'
+        db_table = 'base_novel_category'
 
 
 class SubCategory(models.Model):
@@ -16,10 +16,10 @@ class SubCategory(models.Model):
     二级分类
     """
     name = models.CharField('名称', max_length=32)
-    level_one = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='一级分类')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='一级分类')
 
     class Meta:
-        db_table = 'base_sub_category'
+        db_table = 'base_novel_sub_category'
         default_permissions = ()
 
 
@@ -77,9 +77,7 @@ class NovelCommentReply(models.Model):
     """
     novel_comment = models.ForeignKey(NovelComment, on_delete=models.CASCADE, verbose_name='书评')
     user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True,
-                             related_name='reply_user', verbose_name='回复用户')
-    target_user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True,
-                                    related_name='target_user', verbose_name='回复目标用户')
+                             related_name='nc_reply_user', verbose_name='回复用户')
     created_at = models.DateTimeField('创建于', auto_now_add=True)
 
     class Meta:
@@ -100,7 +98,7 @@ class Chapter(models.Model):
     updated_at = models.DateTimeField('更新于', auto_now=True)
 
     class Meta:
-        db_table = 'base_chapter'
+        db_table = 'base_novel_chapter'
         default_permissions = ()
 
 
@@ -114,7 +112,7 @@ class Paragraph(models.Model):
     serial = models.PositiveIntegerField('序号', default=1)
 
     class Meta:
-        db_table = 'base_paragraph'
+        db_table = 'base_novel_paragraph'
         default_permissions = ()
         unique_together = (('chapter', 'serial'),)
 
@@ -129,7 +127,7 @@ class ParagraphComment(models.Model):
     created_at = models.DateTimeField('创建于', auto_now_add=True)
 
     class Meta:
-        db_table = 'base_paragraph_comment'
+        db_table = 'base_novel_paragraph_comment'
         default_permissions = ()
 
 
@@ -139,11 +137,9 @@ class ParagraphCommentReply(models.Model):
     """
     paragraph_comment = models.ForeignKey(ParagraphComment, on_delete=models.CASCADE, verbose_name='段评')
     user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True,
-                             related_name='reply_user', verbose_name='回复用户')
-    target_user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True,
-                                    related_name='target_user', verbose_name='回复目标用户')
+                             related_name='pc_reply_user', verbose_name='回复用户')
     created_at = models.DateTimeField('创建于', auto_now_add=True)
 
     class Meta:
-        db_table = 'base_paragraph_comment_reply'
+        db_table = 'base_novel_paragraph_comment_reply'
         default_permissions = ()

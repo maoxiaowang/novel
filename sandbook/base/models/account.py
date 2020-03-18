@@ -143,4 +143,69 @@ class Following(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', verbose_name='被关注者')
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower', verbose_name='关注者')
-    created_at = models.DateTimeField('关注事件', auto_now_add=True)
+    created_at = models.DateTimeField('关注于', auto_now_add=True)
+
+    class Meta:
+        db_table = 'base_user_following'
+        default_permissions = ()
+
+
+class Activity(models.Model):
+    """
+    （圈子）动态
+    """
+    TYPE_CHOICES = (
+        (1, '魔法日记'),  # 用户个人（及关注的人）发表的动态
+        (2, '成长之路'),  # 用户相关记录，如升级，连续更新，连续鸽，获得称号等
+        (3, '其他')  # 未定
+    )
+    type = models.PositiveSmallIntegerField('类型')
+    title = models.CharField('标题', max_length=64)
+    content = models.CharField('内容', max_length=1024)
+    created_at = models.DateTimeField('发布于', auto_now_add=True)
+
+    class Meta:
+        db_table = 'base_user_activity'
+        default_permissions = ()
+
+
+class ActivityLikes(models.Model):
+    """
+    动态点赞
+    """
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name='动态')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='用户')
+    created_at = models.DateTimeField('点赞于', auto_now_add=True)
+
+    class Meta:
+        db_table = 'base_user_activity_likes'
+        default_permissions = ()
+
+
+class ActivityComment(models.Model):
+    """
+    动态评论
+    """
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name='动态')
+    user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='用户')
+    content = models.CharField('内容', max_length=1024)
+    created_at = models.DateTimeField('创建于', auto_now_add=True)
+
+    class Meta:
+        db_table = 'base_user_activity_comment'
+        default_permissions = ()
+
+
+class ActivityCommentReply(models.Model):
+    """
+    动态评论回复
+    """
+    activity_comment = models.ForeignKey(ActivityComment, on_delete=models.CASCADE, verbose_name='动态评论')
+    user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True,
+                             related_name='ac_reply_user', verbose_name='回复用户')
+    created_at = models.DateTimeField('创建于', auto_now_add=True)
+
+    class Meta:
+        db_table = 'base_user_activity_comment_reply'
+        default_permissions = ()
+
