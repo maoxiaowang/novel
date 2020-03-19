@@ -23,6 +23,8 @@ class Group(auth_model.Group):
 
 created_at = models.DateTimeField('创建时间', default=timezone.now)
 created_at.contribute_to_class(auth_model.Group, 'created_at')
+description = models.CharField('描述', max_length=100)
+description.contribute_to_class(auth_model.Group, 'description')
 
 
 class Permission(auth_model.Permission):
@@ -68,7 +70,7 @@ class User(AbstractUser):
     )
     avatar = models.ImageField(
         '头像', storage=FileSystemStorage(),
-        default='default/avatars/user/default.png',
+        default='default/avatars/user.jpg',
         upload_to=avatar_path, blank=True
     )
     description = models.CharField(
@@ -77,6 +79,7 @@ class User(AbstractUser):
     is_locked = models.BooleanField(default=False)  # 锁定
     is_muted = models.BooleanField(default=False)  # 禁言
     is_author = models.BooleanField(default=False)  # True时才会有AuthorInfo
+    is_robot = models.BooleanField(default=False)  # True时无法登陆，系统机器人
 
     class Meta:
         db_table = 'auth_user'
@@ -160,6 +163,7 @@ class Activity(models.Model):
         (3, '其他')  # 未定
     )
     type = models.PositiveSmallIntegerField('类型')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='用户')
     title = models.CharField('标题', max_length=64)
     content = models.CharField('内容', max_length=1024)
     created_at = models.DateTimeField('发布于', auto_now_add=True)
@@ -173,7 +177,7 @@ class ActivityLikes(models.Model):
     """
     动态点赞
     """
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name='动态')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name='动态', related_name='likes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='用户')
     created_at = models.DateTimeField('点赞于', auto_now_add=True)
 
@@ -186,7 +190,7 @@ class ActivityComment(models.Model):
     """
     动态评论
     """
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name='动态')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name='动态', related_name='comments')
     user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='用户')
     content = models.CharField('内容', max_length=1024)
     created_at = models.DateTimeField('创建于', auto_now_add=True)

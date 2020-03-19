@@ -35,6 +35,20 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         ),
     )
 
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=request, *args, **kwargs)
+        self.error_messages.update()
+
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+        # 机器人不能登陆
+        if user.is_robot:
+            raise forms.ValidationError(
+                self.error_messages['invalid_login'],
+                code='invalid_login',
+                params={'username': self.username_field.verbose_name},
+            )
+
 
 class SignUpForm(auth_forms.UserCreationForm):
     # terms_and_conditions = forms.BooleanField(

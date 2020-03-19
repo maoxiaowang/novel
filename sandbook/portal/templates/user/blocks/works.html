@@ -1,3 +1,176 @@
-{% extends 'user/layout.html' %}
-{% block title_content %}作品管理{% endblock %}
-{% include 'user/blocks/nav_tabs.html' %}
+{% load static %}
+{% if object.is_author %}
+  {{ works.count }}
+  {% if works.count == 0 %}
+    {# 没有作品 #}
+    <div class="card card-raised card-background" style="background-image: url('{% static 'images/test/bg2.jpeg' %}')">
+      <div class="card-body">
+        <h6 class="card-category text-info">沙之书</h6>
+        <h3 class="card-title">发布作品</h3>
+        <p class="card-description">
+          与社区里的奇幻爱好者们分享你内心的奇妙世界。
+        </p>
+        <p class="card-description">
+          不要害怕失败，参天大树也是从发芽开始，现在就迈出从0到1的一步吧...
+        </p>
+        <button class="btn btn-outline-success btn-round" data-toggle="modal" data-target="#novel-create-modal">
+          <i class="material-icons">subject</i> 发布作品
+        </button>
+      </div>
+    </div>
+  {% else %}
+    {# 有作品 #}
+    <div class="table-responsive">
+      <table class="table table-shopping">
+        <thead>
+        <tr>
+          <th class="text-center"></th>
+          <th>Product</th>
+          <th class="th-description">Color</th>
+          <th class="th-description text-right">Size</th>
+          <th class="text-center">Price</th>
+          <th class="text-right">Qty</th>
+          <th class="text-right">Amount</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>
+            <div class="img-container">
+              <img src="./assets/img/product1.jpg" alt="...">
+            </div>
+          </td>
+          <td class="td-name">
+            <a href="#jacket">Spring Jacket</a>
+            <br>
+            <small>by Dolce&amp;Gabbana</small>
+          </td>
+          <td>
+            Red
+          </td>
+          <td class="text-center">
+            M
+          </td>
+          <td class="td-number text-center">
+            <small>€</small>
+            549
+          </td>
+          <td class="td-number">
+            1
+            <div class="btn-group">
+              <button class="btn btn-round btn-info btn-sm"><i class="material-icons">remove</i></button>
+              <button class="btn btn-round btn-info btn-sm"><i class="material-icons">add</i></button>
+            </div>
+          </td>
+          <td class="td-number text-center">
+            <small>€</small>
+            549
+          </td>
+          <td class="td-actions">
+            <button type="button" rel="tooltip" data-placement="left" title="" class="btn btn-link"
+                    data-original-title="Remove item">
+              <i class="material-icons">close</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="img-container">
+              <img src="./assets/img/product2.jpg" alt="...">
+            </div>
+          </td>
+          <td class="td-name">
+            <a href="#pants">Short Pants</a>
+            <br>
+            <small>by Gucci</small>
+          </td>
+          <td>
+            Purple
+          </td>
+          <td class="text-center">
+            M
+          </td>
+          <td class="td-number text-center">
+            <small>€</small>
+            499
+          </td>
+          <td class="td-number">
+            2
+            <div class="btn-group">
+              <button class="btn btn-round btn-info btn-sm"><i class="material-icons">remove</i></button>
+              <button class="btn btn-round btn-info btn-sm"><i class="material-icons">add</i></button>
+            </div>
+          </td>
+          <td class="td-number text-center">
+            <small>€</small>
+            998
+          </td>
+          <td class="td-actions">
+            <button type="button" rel="tooltip" data-placement="left" title="" class="btn btn-link"
+                    data-original-title="Remove item">
+              <i class="material-icons">close</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="img-container">
+              <img src="./assets/img/product3.jpg" alt="...">
+            </div>
+          </td>
+          <td class="td-name">
+            <a href="#nothing">Pencil Skirt</a>
+            <br>
+            <small>by Valentino</small>
+          </td>
+          <td>
+            White
+          </td>
+          <td class="text-center">
+            XL
+          </td>
+          <td class="td-number text-center">
+            <small>€</small>
+            799
+          </td>
+          <td class="td-number">
+            1
+            <div class="btn-group">
+              <button class="btn btn-round btn-info btn-sm"><i class="material-icons">remove</i></button>
+              <button class="btn btn-round btn-info btn-sm"><i class="material-icons">add</i></button>
+            </div>
+          </td>
+          <td class="td-number text-center">
+            <small>€</small>
+            799
+          </td>
+          <td class="td-actions">
+            <button type="button" rel="tooltip" data-placement="left" title="" class="btn btn-link"
+                    data-original-title="Remove item">
+              <i class="material-icons">close</i>
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+          </td>
+          <td class="td-total">
+            Total
+          </td>
+          <td class="td-price text-center">
+            <small>€</small>
+            2,346
+          </td>
+          <td colspan="3" class="text-right">
+            <button type="button" class="btn btn-info btn-round">Complete Purchase <i class="material-icons">keyboard_arrow_right</i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% else %}
+
+{% endif %}

@@ -1,25 +1,27 @@
-{% for item in circles %}
+{% load static %}
+{% load common_tags %}
+<h4 class="title">最新动态</h4>
+{% for activity in activities %}
 <div class="media">
-  <a class="float-left" href="#pablo">
+  <a class="float-left" href="#">
     <div class="avatar">
-      <img class="media-object" src="../assets/img/faces/card-profile4-square.jpg" alt="...">
+      <img class="media-object" src="{% if activity.type == 1 %}{{ user.avatar.url }}{% else %}{{ system_robot.avatar.url }}{% endif %}" alt="...">
     </div>
   </a>
   <div class="media-body">
-    <h4 class="media-heading">Tina Andrew
-      <small>· 7 minutes ago</small>
-    </h4>
+    <h5 class="media-heading">
+      <a class="text-info" href="#">{% if activity.type == 1 %}{{ user.nickname|default:user.username }}{% else %}{{ system_robot.nickname|default:user.username }}{% endif %}</a>
+      <small>{{ activity.created_at|render_datetime }}</small>
+    </h5>
     <h6 class="text-muted"></h6>
-    <p>Chance too good. God level bars. I'm so proud of @LifeOfDesiigner #1 song in the country. Panda! Don't be scared
-      of the truth because we need to restart the human foundation in truth I stand with the most humility. We are so
-      blessed!</p>
+    <p>{{ activity.content }}</p>
     <div class="media-footer">
-      <a href="#pablo" class="btn btn-primary btn-link float-right" rel="tooltip" title=""
+      <a href="#" class="btn btn-primary btn-link float-right" rel="tooltip" title=""
          data-original-title="Reply to Comment">
-        <i class="material-icons">reply</i> Reply
+        <i class="material-icons">reply</i> 回复
       </a>
-      <a href="#pablo" class="btn btn-danger btn-link float-right">
-        <i class="material-icons">favorite</i> 243
+      <a href="#" class="btn {% if activity.user_likes %}btn-danger{% endif %} btn-link float-right">
+        <i class="material-icons">favorite</i> {{ activity.user_likes|length }}
       </a>
     </div>
   </div>

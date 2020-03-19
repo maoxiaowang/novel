@@ -6,11 +6,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(
 
 config_parser = ConfigParser()
 config_parser.read('settings.ini')
-# default = parser.defaults()
+defaults = config_parser.defaults()
 
 __all__ = [
     'sys_settings',
-    'config_parser'
+    'config_parser',
+    'defaults'
 ]
 
 

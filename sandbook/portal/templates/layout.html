@@ -13,11 +13,12 @@
     <link href="{% static 'libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">
     <link href="{% static 'libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">
 {#    <link href="{% static 'libs/material/vertical-nav.css' %}" rel="stylesheet">#}
-    <link href="{% static 'css/main.css' %}?v=4" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}?v=10" rel="stylesheet">
   {% endblock %}
   {% block css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+{% block modals %}{% endblock %}
 {% block main_base %}{% endblock %}
 {% block js_base %}
   <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
@@ -27,6 +28,9 @@
 {#  <script src="{% static 'libs/material/modernizr.js' %}"></script>#}
   <script src="{% static 'libs/material/bootstrap-material-design.min.js' %}"></script>
   <script src="{% static 'libs/material/material-kit.min.js' %}?v=1"></script>
+  <script src="{% static 'libs/validate/dist/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}?v=1"></script>
+
   <script>
   $('[data-toggle=tooltip]').tooltip()
   </script>

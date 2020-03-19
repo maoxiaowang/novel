@@ -26,10 +26,6 @@ class Login(FormValidationMixin, auth_views.LoginView):
     template_name = 'account/login.html'
     redirect_authenticated_user = True
 
-    def form_valid(self, form):
-        res = super().form_valid(form)
-        return res
-
 
 class Logout(auth_views.LogoutView):
     pass

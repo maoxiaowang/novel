@@ -1,0 +1,50 @@
+{% load static %}
+{% load common_tags %}
+<form method="post" action="{% url 'portal:novel_create' %}">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-12 col-md-4 mr-auto">
+      <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+        <div class="fileinput-new thumbnail img-raised">
+          <img src="{{ MEDIA_URL }}default/covers/default.png" style="height: 238px;width: 168px;" alt="cover">
+        </div>
+        <div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+        <div>
+          <span class="btn btn-raised btn-round btn-default btn-file">
+            <span class="fileinput-new">选择封面</span>
+            <span class="fileinput-exists">更改</span>
+            <input type="file" name="...">
+          </span>
+          <a href="#" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i
+              class="fa fa-times"></i> 移除</a>
+        </div>
+        <p class="text-left text-muted mt-3">
+          建议选择高宽比在1.41左右且大小小于2M的图片。
+        </p>
+      </div>
+    </div>
+    <div class="col-12 col-md-7 ml-auto">
+      <div class="form-group">
+        {{ form.name|to_label }}
+        {{ form.name }}
+        {{ form.name.errors }}
+      </div>
+      <div class="form-group">
+        {{ form.category|to_label }}
+        {{ form.category }}
+        {{ form.category.errors }}
+      </div>
+      <div class="form-group">
+        {{ form.sub_category|to_label }}
+        {{ form.sub_category }}
+        {{ form.sub_category.errors }}
+      </div>
+      <div class="form-group">
+        {{ form.intro|to_label }}
+        {{ form.intro }}
+        {{ form.intro.errors }}
+      </div>
+      <button type="submit" class="btn btn-primary float-right">创建</button>
+    </div>
+  </div>
+</form>

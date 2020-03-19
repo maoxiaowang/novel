@@ -1,4 +1,9 @@
+import os
+
+from django.core.files.storage import FileSystemStorage
 from django.db import models
+
+from base.constants.novel import DEFAULT_COVER
 
 
 class Category(models.Model):
@@ -6,9 +11,13 @@ class Category(models.Model):
     一级分类
     """
     name = models.CharField('名称', max_length=32)
+    description = models.CharField('描述', max_length=255)
 
     class Meta:
         db_table = 'base_novel_category'
+
+    def __str__(self):
+        return self.name
 
 
 class SubCategory(models.Model):
@@ -17,10 +26,18 @@ class SubCategory(models.Model):
     """
     name = models.CharField('名称', max_length=32)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='一级分类')
+    description = models.CharField('描述', max_length=255)
 
     class Meta:
         db_table = 'base_novel_sub_category'
         default_permissions = ()
+
+    def __str__(self):
+        return self.name
+
+
+def cover_path(instance, filename):
+    return os.path.join('novel', str(instance.id), 'cover', filename)
 
 
 class Novel(models.Model):
@@ -37,7 +54,12 @@ class Novel(models.Model):
     author = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='作者')
     intro = models.TextField('简介', max_length=1024)
     status = models.SmallIntegerField('状态', choices=STATUS_CHOICES, default=0)
-    type_level_two = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='一级分类')
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, verbose_name='二级分类')
+    cover = models.ImageField(
+        '封面', storage=FileSystemStorage(), default=DEFAULT_COVER,
+        upload_to=cover_path, blank=True
+    )
     word_count = models.PositiveIntegerField('字数', default=0)
     created_at = models.DateTimeField('创建于', auto_now_add=True)
     updated_at = models.DateTimeField('更新于', auto_now=True)

@@ -55,15 +55,36 @@
         </li>
         <li class="dropdown nav-item">
           <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-            <i class="material-icons">view_carousel</i> 又一个菜单
+            <i class="material-icons">notifications</i>
           </a>
-          <div class="dropdown-menu dropdown-with-icons">
-            <a href="../examples/about-us.html" class="dropdown-item">
-              <i class="material-icons">account_balance</i> About Us
-            </a>
-            <a href="../examples/blog-post.html" class="dropdown-item">
-              <i class="material-icons">art_track</i> Blog Post
-            </a>
+          <div class="dropdown-menu dropdown-with-icons" id="notifications-menu">
+            <div class="list-group">
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">标题1</h5>
+                  <small>3天 前</small>
+                </div>
+                <p class="mb-1">内容1容1容1容1</p>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">List group item heading</h5>
+                  <small class="text-muted">3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
+                  blandit.</p>
+                <small class="text-muted">Donec id elit non mi porta.</small>
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">List group item heading</h5>
+                  <small class="text-muted">3 days ago</small>
+                </div>
+                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
+                  blandit.</p>
+                <small class="text-muted">Donec id elit non mi porta.</small>
+              </a>
+            </div>
           </div>
         </li>
         {% if user.is_authenticated %}

@@ -1,7 +1,11 @@
+from django.db.models import Prefetch
+from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import DetailView, UpdateView
 
-from base.models import User
+from base.constants.account import SYSTEM_ROBOT_ID
+from base.constants.novel import ALL_CATEGORIES
+from base.models import User, ActivityLikes, ActivityComment
 from general.views import JSONDetailView, JSONResponseMixin
 
 
@@ -21,10 +25,12 @@ class HomePage(DetailView):
     template_name = 'user/homepage.html'
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context.update(categories=ALL_CATEGORIES)
+        return context
 
 
-class Profile(JSONResponseMixin, DetailView):
+class Profile(DetailView):
     """
     个人资料
     """
@@ -40,6 +46,18 @@ class Circle(DetailView):
     model = User
     pk_url_kwarg = 'user_id'
     template_name = 'user/blocks/circle.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        activities = self.object.activity_set.prefetch_related(
+            Prefetch('likes', queryset=ActivityLikes.objects.filter(user=self.object),
+                     to_attr='user_likes'),
+            Prefetch('comments', queryset=ActivityComment.objects.filter(user=self.object),
+                     to_attr='user_comments')
+        )
+        context.update(activities=activities)
+        context.update(system_robot=self.model.objects.get(id=SYSTEM_ROBOT_ID))
+        return context
 
 
 class Settings:
@@ -60,8 +78,8 @@ class Works(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object.is_author:
-            ...
-
+            works = self.object.novel_set.prefetch_related('sub_category__category')
+            context.update(works=works)
         return context
 
 

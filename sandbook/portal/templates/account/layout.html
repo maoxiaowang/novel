@@ -10,43 +10,5 @@
   {% block main_account %}{% endblock %}
 {% endblock %}
 {% block js %}
-  <script src="{% static 'libs/validate/dist/jquery.validate.min.js' %}"></script>
-  <script>
-    $(function () {
-      $.extend($.validator.messages, {
-        required: '这个字段是必填项',
-        remote: '请修复这个字段',
-        email: '请输入一个正确的电子邮件地址',
-        url: '请输入一个正确的URL地址',
-        date: '请输入一个正确的日期',
-        dateISO: '请输入一个正确的日期( ISO )',
-        number: '请输入一个可用的数字',
-        digits: '请输入纯数字',
-        {#creditcard: gettext('Please enter a valid credit card number.'),#}
-        equalTo: '确保输入相同的值',
-        maxlength: $.validator.format('请输入最多{0}个字符'),
-        minlength: $.validator.format('请输入最少{0}个字符'),
-        rangelength: $.validator.format('请输入介于{0}到{1}长度之间的字符'),
-        {#range: $.validator.format(gettext('Please enter a value between {0} and {1}.')),#}
-        max: $.validator.format('请输入不超过{0}的值'),
-        min: $.validator.format('请输入不小于{0}的值')
-      });
-      $.each($('form'), function (i, item) {
-        let $form = $(item);
-        let validator = $form.validate({
-          errorPlacement: function (error, element) {
-            error.appendTo(element.parent().parent())
-          },
-          errorClass: 'errorlist d-block'
-        });
-        $form.submit(function (e) {
-          // validate
-          if (!validator.form()) {
-            return false
-          }
-        })
-      })
-    });
-  </script>
   {% block js_account %}{% endblock %}
 {% endblock %}

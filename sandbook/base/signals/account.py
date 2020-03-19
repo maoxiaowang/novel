@@ -15,11 +15,11 @@ def init():
 
 
 @receiver(post_save, sender=User)
-def on_user_saved(sender, user, **kwargs):
+def on_user_saved(sender, instance, **kwargs):
     if kwargs.get('created'):
         # 创建用户及作者信息
-        UserInfo.objects.create(user=user)
-        AuthorInfo.objects.create(user=user)
+        UserInfo.objects.create(user=instance)
+        AuthorInfo.objects.create(user=instance)
     else:
         # update
         ...

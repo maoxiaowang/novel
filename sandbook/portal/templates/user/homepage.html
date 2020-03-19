@@ -12,6 +12,24 @@
     }
   </style>
 {% endblock %}
+{% block modals %}
+  <div id="novel-create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="create novel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">创建作品</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
 {% block main_user %}
   <div class="page-header header-filter" data-parallax="true"
        style="background-image: url('{% static 'images/background/1920x1200/bg4.jpeg' %}');"></div>
@@ -58,29 +76,27 @@
                                                         color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
                                                 -->
                 <li class="nav-item">
-                  <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"
-                     data-url="{% url 'portal:user_profile' object.id %}">
+                  <a class="nav-link active" href="#profile" role="tab" data-toggle="tab" data-url="{% url 'portal:user_profile_tab' object.id %}">
                     <i class="material-icons">face</i>
                     首页
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#circle" role="tab" data-toggle="tab">
+                  <a class="nav-link" href="#circle" role="tab" data-toggle="tab" data-url="{% url 'portal:user_circle_tab' object.id %}">
                     <i class="material-icons">camera</i>
-                    圈子
+                    书友圈
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#works" role="tab" data-toggle="tab"
-                     data-url="{% url 'portal:user_works' object.id %}">
+                  <a class="nav-link" href="#works" role="tab" data-toggle="tab" data-url="{% url 'portal:user_works_tab' object.id %}">
                     <i class="material-icons">library_books</i>
-                    作品
+                    我的作品
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#settings" role="tab" data-toggle="tab">
                     <i class="material-icons">settings</i>
-                    设置
+                    账号设置
                   </a>
                 </li>
               </ul>
@@ -89,128 +105,91 @@
         </div>
 
         <div class="row">
-          <div class="col-md-7 ml-auto mr-auto ">
+          <div class="col-md-9 ml-auto mr-auto ">
             <div class="tab-content tab-space">
               <div class="tab-pane active" id="profile">
-                <div>加载中……</div>
-              </div>
-              <div class="tab-pane" id="circle">
-                <div class="row">
-                  <div class="col-md-5 ml-auto mr-auto">
-                    <div class="card card-profile card-plain">
-                      <div class="row">
-                        <div class="col-md-5">
-                          <div class="card-header card-header-image">
-                            <a href="#pablo">
-                              <img class="img" src="../assets/img/faces/avatar.jpg">
-                            </a>
-                          </div>
-                        </div>
-                        <div class="col-md-7">
-                          <div class="card-body">
-                            <h4 class="card-title">Gigi Hadid</h4>
-                            <h6 class="card-category text-muted">Model</h6>
-                            <p class="card-description">
-                              Don't be scared of the truth because we need to restart the human foundation in truth...
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                  <div class="image header">
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
-                  <div class="col-md-5 mr-auto ml-auto">
-                    <div class="card card-profile card-plain">
-                      <div class="row">
-                        <div class="col-md-5">
-                          <div class="card-header card-header-image">
-                            <a href="#pablo">
-                              <img class="img" src="../assets/img/faces/marc.jpg">
-                            </a>
-                          </div>
-                        </div>
-                        <div class="col-md-7">
-                          <div class="card-body">
-                            <h4 class="card-title">Marc Jacobs</h4>
-                            <h6 class="card-category text-muted">Designer</h6>
-                            <p class="card-description">
-                              Don't be scared of the truth because we need to restart the human foundation in truth...
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-5 ml-auto mr-auto">
-                    <div class="card card-profile card-plain">
-                      <div class="row">
-                        <div class="col-md-5">
-                          <div class="card-header card-header-image">
-                            <a href="#pablo">
-                              <img class="img" src="../assets/img/faces/kendall.jpg">
-                            </a>
-                          </div>
-                        </div>
-                        <div class="col-md-7">
-                          <div class="card-body">
-                            <h4 class="card-title">Kendall Jenner</h4>
-                            <h6 class="card-category text-muted">Model</h6>
-                            <p class="card-description">
-                              I love you like Kanye loves Kanye. Don't be scared of the truth.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                  <div class="image header">
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
-                  <div class="col-md-5 ml-auto mr-auto">
-                    <div class="card card-profile card-plain">
-                      <div class="row">
-                        <div class="col-md-5">
-                          <div class="card-header card-header-image">
-                            <a href="#pablo">
-                              <img class="img" src="../assets/img/faces/card-profile2-square.jpg">
-                            </a>
-                          </div>
-                        </div>
-                        <div class="col-md-7">
-                          <div class="card-body">
-                            <h4 class="card-title">George West</h4>
-                            <h6 class="card-category text-muted">Model/DJ</h6>
-                            <p class="card-description">
-                              I love you like Kanye loves Kanye.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="circle">
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                  <div class="image header">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                  <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                </div>
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                  <div class="image header">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                  <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
                 </div>
               </div>
               <div class="tab-pane" id="works">
-                <div class="row">
-                  <div class="col-md-3 ml-auto">
-                    <img src="{% static 'images/test/mariya-georgieva.jpg' %}" class="rounded">
-                    <img src="../assets/img/examples/clem-onojegaw.jpg" class="rounded">
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                  <div class="image header">
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
-                  <div class="col-md-3 mr-auto">
-                    <img src="../assets/img/examples/clem-onojeghuo.jpg" class="rounded">
-                    <img src="../assets/img/examples/olu-eletu.jpg" class="rounded">
-                    <img src="../assets/img/examples/cynthia-del-rio.jpg" class="rounded">
+                  <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
                 </div>
               </div>
               <div class="tab-pane" id="settings">
-                <div class="row">
-                  <div class="col-md-3 ml-auto">
-                    <img src="../assets/img/examples/mariya-georgieva.jpg" class="rounded">
-                    <img src="../assets/img/examples/clem-onojegaw.jpg" class="rounded">
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                  <div class="image header">
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
-                  <div class="col-md-3 mr-auto">
-                    <img src="../assets/img/examples/clem-onojeghuo.jpg" class="rounded">
-                    <img src="../assets/img/examples/olu-eletu.jpg" class="rounded">
-                    <img src="../assets/img/examples/cynthia-del-rio.jpg" class="rounded">
+                  <div class="paragraph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
                   </div>
                 </div>
               </div>
@@ -244,24 +223,104 @@
   </div>
 {% endblock %}
 {% block js_user %}
+  <script src="{% static 'libs/jasny-bootstrap.min.js' %}"></script>
+  <script src="{% static 'libs/bootstrap-selectpicker.js' %}"></script>
   <script>
     'use strict';
 
+    let categories = {{ categories|safe }};
     let User = (function () {
-      function request(tab) {
+      // Tab
+      function request(tab, relatedTab) {
         tab = tab || '[data-toggle="tab"][href="#profile"]';
+        let $tab = $(tab), $tabContent = $($tab.attr('href')), $relatedTab = $(relatedTab);
+
+        $relatedTab.find('div.ui.placeholder').show();
+        $tabContent.find(':not(div.ui.placeholder)').remove();
+        $tabContent.find('div.ui.placeholder').show();
         $.ajax({
-          url: $(tab).attr('data-url'),
+          url: $tab.attr('data-url'),
           success: function (res) {
-            $($(tab).attr('href')).html('').prepend(res)
-          }
+            $tabContent.find('div.ui.placeholder').hide();
+            $tabContent.prepend(res);
+          },
         })
       }
       request();
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        let target = e.target;
-        request(target)
-      })
+        request(e.target, e.relatedTarget)
+      });
+
+      function initSelect() {
+        $('.selectpicker').selectpicker('setStyle', 'btn-link', 'add');
+            $('select[name=category]').on('change', function () {
+              console.log('changed')
+              let $this = $(this), val = $this.val();
+              if (val) {
+                val = parseInt(val);
+                $.each(categories, function (ci, c) {
+                  if (c['id'] === val) {
+                    let options = '<option value selected>请选择</option>';
+                    $.each(c['sub'], function (si, s) {
+                      options += '<option value="{0}">{1}</option>'.format(s['id'], s['name'])
+                    });
+                    $('select[name=sub_category]').removeAttr('disabled').html(
+                      options).selectpicker('refresh');
+                  }
+                })
+              } else {
+                $('select[name=sub_category]').attr('disabled', true).selectpicker('refresh')
+              }
+            });
+      }
+
+      // New Work
+      let $novelCreateModal = $('#novel-create-modal');
+      $novelCreateModal.on('show.bs.modal', function (e) {
+        $.ajax({
+          url: '{% url 'portal:novel_create' %}',
+          success: function (res) {
+            $novelCreateModal.find('div.modal-body').html(res);
+            let $form = $novelCreateModal.find('form');
+
+            // Select init
+            initSelect();
+
+            // Validator init
+            let validator = $form.validate({
+              errorPlacement: function (error, element) {
+                error.appendTo(element.parent())
+              },
+              errorClass: 'errorlist d-block'
+            });
+            $form.submit(function (e) {
+              e.preventDefault();
+              // validate
+              if (!validator.form()) {
+                return false
+              }
+              $.ajax({
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: $form.serialize(),
+                success: function (res) {
+                  console.log(res)
+                  if (res.indexOf('class="errorlist"') >= 0) {
+                    $novelCreateModal.find('div.modal-body').html(res);
+                    console.log('3333')
+                    initSelect();
+                  } else {
+                    console.log('hide')
+                    $novelCreateModal.modal('hide');
+                    request('[data-toggle="tab"][href="#works"]')
+                  }
+                }
+              })
+            });
+          }
+        })
+      });
+
     })();
 
   </script>

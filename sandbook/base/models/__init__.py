@@ -1,5 +1,8 @@
-from .account import User, Group, Permission, Team
+from .account import (
+    User, Group, Permission, Team, UserInfo, AuthorInfo, Following,
+    Activity, ActivityLikes, ActivityComment, ActivityCommentReply
+)
 from .novel import (
-    Category, SubCategory, Novel, Chapter, Paragraph, ParagraphComment,
-    ParagraphCommentReply
+    Category, SubCategory, Novel, NovelComment, NovelCommentReply,
+    Chapter, Paragraph, ParagraphComment, ParagraphCommentReply,
 )
