@@ -1,0 +1,4 @@
+{% extends 'error.html' %}
+{% block title_content %}403 权限不足{% endblock %}
+{% block error_title %}403 权限不足{% endblock %}
+{% block error_description %}对不起，你的权限无法访问该页面。<br>点击下面的按钮回到首页，或尝试<a href="{% url 'operation:account_login' %}">切换账号</a>。{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'portal/layout.html' %}
+{% load static %}
+
+{% block title_content %}登录{% endblock %}
+{% block css %}
+  {% block css_account %}{% endblock %}
+{% endblock %}
+{% block main_base %}
+  {% include 'portal/blocks/nav.html' %}
+  {% block main_account %}{% endblock %}
+{% endblock %}
+{% block js %}
+  {% block js_account %}{% endblock %}
+{% endblock %}

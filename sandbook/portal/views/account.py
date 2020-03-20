@@ -23,7 +23,7 @@ INTERNAL_ACTIVE_SESSION_TOKEN = '_account_active_token'
 
 class Login(FormValidationMixin, auth_views.LoginView):
     authentication_form = AuthenticationForm
-    template_name = 'account/login.html'
+    template_name = 'portal/account/login.html'
     redirect_authenticated_user = True
 
 
@@ -34,7 +34,7 @@ class Logout(auth_views.LogoutView):
 class SignUp(FormValidationMixin, CreateView):
     model = User
     form_class = SignUpForm
-    template_name = 'account/signup.html'
+    template_name = 'portal/account/signup.html'
     success_url = reverse_lazy('portal:account_signup_done')
     valid_link = False
 
@@ -70,7 +70,7 @@ class Active(FormView):
     token_generator = default_token_generator
     form_class = ActiveForm
     success_url = reverse_lazy('client20:account_active_done')
-    template_name = 'account/active_done.html'
+    template_name = 'portal/account/active_done.html'
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
@@ -144,7 +144,7 @@ class PasswordRecover(auth_views.PasswordResetView):
     email_template_name = 'account/password/reset_email.html'
     html_email_template_name = 'mail/general.html'
     success_url = reverse_lazy('portal:account_password_recover_done')
-    template_name = 'account/password/recover.html'
+    template_name = 'portal/account/password/recover.html'
     subject_template_name = 'account/password/reset_subject.txt'
 
     def form_valid(self, form):
@@ -160,7 +160,7 @@ class PasswordResetConfirm(auth_views.PasswordResetConfirmView):
     用户通过正确的链接进入密码重置页面
     """
     form_class = SetPasswordForm
-    template_name = 'account/password/reset_confirm.html'
+    template_name = 'portal/account/password/reset_confirm.html'
     success_url = reverse_lazy('portal:account_login')
 
     def form_valid(self, form):

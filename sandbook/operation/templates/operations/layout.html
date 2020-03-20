@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{% block title_content %}{% endblock %} - 沙之书管理平台</title>
+  <!-- Favicons -->
+  <link rel="icon" href="{% static 'images/favicons/favicon-32x32.png' %}" sizes="32x32" type="image/png">
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+  {% block css_base %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'operations/libs/bootstrap/bootstrap-material-design.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static 'operations/css/main.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+  {% endblock %}
+  <!-- Custom styles for this template -->
+</head>
+<body class="{% block body_class %}{% endblock %}" {% block body_attrs %}{% endblock %}>
+{% block main_base %}{% endblock %}
+{% block js_base %}
+  <script src="{% static 'operations/libs/jquery/jquery-3.2.1.slim.min.js' %}"></script>
+  <script src="{% static 'operations/libs/jquery/popper.min.js' %}"></script>
+  <script src="{% static 'operations/libs/bootstrap/bootstrap-material-design.js' %}"></script>
+  <script>$(document).ready(function () {
+    $('body').bootstrapMaterialDesign();
+  });</script>
+  {% block js %}{% endblock %}
+{% endblock %}
+</body>
+</html>

@@ -22,7 +22,7 @@ class HomePage(DetailView):
     """
     model = User
     pk_url_kwarg = 'user_id'
-    template_name = 'user/homepage.html'
+    template_name = 'portal/user/homepage.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,7 +36,7 @@ class Profile(DetailView):
     """
     model = User
     pk_url_kwarg = 'user_id'
-    template_name = 'user/blocks/profile.html'
+    template_name = 'portal/user/blocks/profile.html'
 
 
 class Circle(DetailView):
@@ -45,7 +45,7 @@ class Circle(DetailView):
     """
     model = User
     pk_url_kwarg = 'user_id'
-    template_name = 'user/blocks/circle.html'
+    template_name = 'portal/user/blocks/circle.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +73,7 @@ class Works(DetailView):
     """
     model = User
     pk_url_kwarg = 'user_id'
-    template_name = 'user/blocks/works.html'
+    template_name = 'portal/user/blocks/works.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

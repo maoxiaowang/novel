@@ -8,6 +8,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from base.constants.account import MANAGEMENT_GROUP_IDS
+
 
 class Group(auth_model.Group):
     """
@@ -91,6 +93,10 @@ class User(AbstractUser):
             # ('change_user', '修改用户'),
             ('lock_user', '锁定用户'),
         )
+
+    @property
+    def is_manager(self):
+        return self.groups.filter(id__in=MANAGEMENT_GROUP_IDS).exists()
 
 
 class UserInfo(models.Model):

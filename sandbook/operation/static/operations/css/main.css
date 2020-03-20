@@ -1,0 +1,11 @@
+.errorlist {
+  color: #f44336 !important;
+  font-weight: normal !important;
+  list-style: none !important;
+  font-size: .8rem !important;
+  padding-left: 0;
+  margin-top: .5rem;
+}
+.icon-prepend-form .errorlist {
+  padding-left: 56px;
+}

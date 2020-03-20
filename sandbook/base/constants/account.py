@@ -8,6 +8,7 @@ BUILTIN_GROUPS = [
     {'id': 15, 'name': '普通用户', 'description': '-'},
 ]
 BUILTIN_GROUP_NAMES = [item['name'] for item in BUILTIN_GROUPS]
+MANAGEMENT_GROUP_IDS = [11, 12]
 
 SYSTEM_ROBOT_ID = 101
 BUILTIN_USERS = [
