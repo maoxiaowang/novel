@@ -1,0 +1,51 @@
+{% extends 'operations/dashboard/layout.html' %}
+
+{% block title_content %}{{ category.name }}{% endblock %}
+{% block nav_title_content %}{{ category.name }}{% endblock %}
+{% block container_content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-icon card-header-rose">
+          <div class="card-icon">
+            <i class="material-icons">assignment</i>
+          </div>
+{#          <h4 class="card-title ">{{ category.name }}小说</h4>#}
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+              <tr>
+                <th>ID</th>
+                <th colspan="2">书名</th>
+                <th>作者</th>
+                <th>状态</th>
+                <th>字数</th>
+                <th>收藏</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for item in object_list %}
+              <tr>
+                <td>{{ item.id }}</td>
+                <td style="width: 100px;">
+                  <div class="img-container" style="max-width: 64px;">
+                    <img src="{{ item.cover.url }}" alt="cover image">
+                  </div>
+                </td>
+                <td><a href="#" class="text-dark">{{ item.name }}</a></td>
+                <td>{{ item.author|default_if_none:"-" }}</td>
+                <td>{{ item.get_status_display }}</td>
+                <td>{{ item.word_count }}</td>
+                <td>0</td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -5,10 +5,11 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import ASCIIUsernameValidator, UnicodeUsernameValidator
 from django.core.files.storage import FileSystemStorage
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from base.constants.account import MANAGEMENT_GROUP_IDS
+from base.constants.account import MANAGEMENT_GROUP_IDS, WORK_MANAGER_GROUP_ID, USER_MANAGER_GROUP_ID
 
 
 class Group(auth_model.Group):
@@ -97,6 +98,17 @@ class User(AbstractUser):
     @property
     def is_manager(self):
         return self.groups.filter(id__in=MANAGEMENT_GROUP_IDS).exists()
+
+    @property
+    def is_work_manager(self):
+        return self.groups.filter(id=WORK_MANAGER_GROUP_ID).exists()
+
+    @property
+    def is_user_manager(self):
+        return self.groups.filter(id=USER_MANAGER_GROUP_ID).exists()
+
+    def get_display_name(self):
+        return self.nickname or self.username
 
 
 class UserInfo(models.Model):

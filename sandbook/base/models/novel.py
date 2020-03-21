@@ -1,12 +1,29 @@
 import os
+import time
 
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 
-from base.constants.novel import DEFAULT_COVER
+from base.constants.novel import (
+    DEFAULT_COVER, NOVEL_STATUS_UNAPPROVED, NOVEL_STATUS_ACTIVE, NOVEL_STATUS_FINISHED,
+    NOVEL_STATUS_BLOCKED
+)
+from django.core.cache import cache
+
+from general.utils.text import get_filename_extension
 
 
-class Category(models.Model):
+class CategoryMixin:
+
+    @property
+    def novel_count_key(self):
+        raise NotImplementedError
+
+    def novel_count(self):
+        return cache.get(self.novel_count_key)
+
+
+class Category(CategoryMixin, models.Model):
     """
     一级分类
     """
@@ -19,8 +36,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def novel_count_key(self):
+        return 'sc_%d_count' % self.id
 
-class SubCategory(models.Model):
+
+class SubCategory(CategoryMixin, models.Model):
     """
     二级分类
     """
@@ -35,9 +56,20 @@ class SubCategory(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def novel_count_key(self):
+        return 'c_%d_count' % self.id
+
+    def incr_novel_count(self, count: int):
+        """
+        count 可以为正负整数
+        """
+        cache.incr(self.novel_count_key, count)
+
 
 def cover_path(instance, filename):
-    return os.path.join('novel', str(instance.id), 'cover', filename)
+    new_name = '%s.%s' % (str(int(time.time())), get_filename_extension(filename))
+    return os.path.join('novel', 'cover', str(instance.author_id), new_name)
 
 
 class Novel(models.Model):
@@ -45,15 +77,15 @@ class Novel(models.Model):
     小说
     """
     STATUS_CHOICES = (
-        (0, '未审核'),
-        (1, '连载中'),
-        (2, '已完结'),
-        (3, '已屏蔽')
+        (NOVEL_STATUS_UNAPPROVED, '未审核'),
+        (NOVEL_STATUS_ACTIVE, '连载中'),
+        (NOVEL_STATUS_FINISHED, '已完结'),
+        (NOVEL_STATUS_BLOCKED, '已屏蔽')
     )
     name = models.CharField('书名', unique=True, max_length=64)  # TODO: 书名验证
     author = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='作者')
     intro = models.TextField('简介', max_length=1024)
-    status = models.SmallIntegerField('状态', choices=STATUS_CHOICES, default=0)
+    status = models.SmallIntegerField('状态', choices=STATUS_CHOICES, default=NOVEL_STATUS_UNAPPROVED)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='一级分类')
     sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, verbose_name='二级分类')
     cover = models.ImageField(
@@ -66,6 +98,7 @@ class Novel(models.Model):
 
     class Meta:
         db_table = 'base_novel'
+        ordering = ('-id',)
         default_permissions = ()
         permissions = (
             ('view_novel', '查看小说'),

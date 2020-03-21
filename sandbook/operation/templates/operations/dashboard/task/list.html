@@ -1,0 +1,117 @@
+{% extends 'operations/dashboard/layout.html' %}
+
+{% block title_content %}{{ category.name }}任务{% endblock %}
+{% block task_active %}active{% endblock %}
+{% block nav_title_content %}{{ category.name }}任务{% endblock %}
+{% block modals %}
+<div class="modal fade" id="approve-modal" tabindex="-1" role="dialog" aria-labelledby="approve-modal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">审核通过</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        若确定该作品满足审核条件，请点击确定，所有人将可以看到此作品。
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" data-confirm>确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block container_content %}
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'operation:dashboard_task_index' %}">任务广场</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ category.name }}任务</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-icon card-header-rose">
+          <div class="card-icon">
+            <i class="material-icons">assignment</i>
+          </div>
+{#          <h4 class="card-title ">{{ category.name }}小说</h4>#}
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+              <tr>
+                <th>ID</th>
+                <th colspan="2">书名</th>
+                <th>作者</th>
+                <th>字数</th>
+                <th>创建日期</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for novel in object_list %}
+              <tr>
+                <td>{{ novel.id }}</td>
+                <td style="width: 100px;">
+                  <div class="img-container" style="max-width: 64px;">
+                    <img src="{{ novel.cover.url }}" alt="cover image">
+                  </div>
+                </td>
+                <td><a href="#" class="text-dark">{{ novel.name }}</a></td>
+                <td>{{ novel.author|default_if_none:"-" }}</td>
+                <td>{{ novel.word_count }}</td>
+                <td>{{ novel.created_at }}</td>
+                <td class="td-actions text-right">
+{#                  <button type="button" rel="tooltip" class="btn btn-info btn-link"#}
+{#                          title="添加" data-add="{{ novel.id }}">#}
+{#                    <i class="material-icons">add</i>#}
+{#                  </button>#}
+                  <button type="button" rel="tooltip" class="btn btn-success btn-link"
+                          data-toggle="modal" data-target="#approve-modal" title="通过" data-approve="{% url 'operation:dashboard_novel_approve' novel.id %}">
+                    <i class="material-icons">done</i>
+                  </button>
+                  <button type="button" rel="tooltip" class="btn btn-danger btn-link"
+                          data-toggle="modal" title="拒绝" data-reject="{{ novel.id }}">
+                    <i class="material-icons">close</i>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js_dashboard %}
+  <script>
+  let Task = (function () {
+    $('#approve-modal').on('show.bs.modal', function (e) {
+      let $btn = $(e.relatedTarget);
+      $(this).find('button[data-confirm]').unbind('click').click(function () {
+        $.ajax({
+          url: $btn.attr('data-approve'),
+          type: 'POST',
+          data: {'status': 2},
+          success: function () {
+            window.location.reload()
+          }
+        })
+      });
+    })
+  })();
+
+  </script>
+{% endblock %}

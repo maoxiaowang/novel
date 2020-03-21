@@ -1,6 +1,6 @@
 {% load static %}
 {% load common_tags %}
-<form method="post" action="{% url 'portal:novel_create' %}">
+<form enctype="multipart/form-data" method="post" action="{% url 'portal:novel_create' %}">
   {% csrf_token %}
   <div class="row">
     <div class="col-12 col-md-4 mr-auto">
@@ -13,7 +13,8 @@
           <span class="btn btn-raised btn-round btn-default btn-file">
             <span class="fileinput-new">选择封面</span>
             <span class="fileinput-exists">更改</span>
-            <input type="file" name="...">
+            {{ form.cover }}
+            {{ form.cover.errors }}
           </span>
           <a href="#" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i
               class="fa fa-times"></i> 移除</a>

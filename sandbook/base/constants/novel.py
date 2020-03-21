@@ -1,7 +1,20 @@
 import copy
 
+
+# Novel
+
+DEFAULT_COVER = 'default/covers/default.png'
+NOVEL_STATUS_UNAPPROVED = 1  # 未审核
+NOVEL_STATUS_ACTIVE = 2  # 连载中
+NOVEL_STATUS_FINISHED = 3  # 已完结
+NOVEL_STATUS_BLOCKED = 4
+
+
+# Category
+
+CATEGORY_FANTASY_ID = 1
 BUILTIN_CATEGORIES = [
-    {'id': 1, 'name': '奇幻', 'description': '奇幻'}
+    {'id': CATEGORY_FANTASY_ID, 'name': '奇幻', 'description': '奇幻'}
 ]
 BUILTIN_SUBCATEGORIES = [
     {'id': 1, 'name': '剑与魔法', 'category_id': 1, 'description': '剑与魔法'},
@@ -13,9 +26,8 @@ BUILTIN_SUBCATEGORIES = [
 ]
 ALL_CATEGORIES = copy.deepcopy(BUILTIN_CATEGORIES)
 for _c in ALL_CATEGORIES:
-    _c['sub'] = []
+    _c['sub'] = list()
     for _s in BUILTIN_SUBCATEGORIES:
         if _s['category_id'] == _c['id']:
             _c['sub'].append(_s)
 
-DEFAULT_COVER = 'default/covers/default.jpg'

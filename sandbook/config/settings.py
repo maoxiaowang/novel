@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'base.context_processors.common',
             ],
         },
     },
@@ -173,6 +174,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = [
+    ('images', os.path.join(STATIC_ROOT, 'images')),  # framework and plugins
+    ('js', os.path.join(STATIC_ROOT, 'js')),
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

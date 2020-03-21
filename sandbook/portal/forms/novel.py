@@ -1,7 +1,9 @@
 from django import forms
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from base.constants.novel import DEFAULT_COVER
 from base.models import Novel
+from general.utils.image import process_novel_cover
 
 
 class NovelCreationForm(forms.ModelForm):
@@ -40,3 +42,15 @@ class NovelCreationForm(forms.ModelForm):
         if not cover:
             return DEFAULT_COVER
         return cover
+
+    def _post_clean(self):
+        super()._post_clean()
+        cover = self.cleaned_data.get('cover')
+        if isinstance(cover, InMemoryUploadedFile):
+            # process and save avatar
+            try:
+                self.instance.cover = process_novel_cover(cover)
+            except Exception:
+                raise forms.ValidationError('请上传正确格式的图片')
+        return cover
+

@@ -1,5 +1,121 @@
 {% extends 'operations/dashboard/layout.html' %}
-{% block title_content %}控制台{% endblock %}
-{% block main_base %}
+{% block title_content %}首页{% endblock %}
 
+{% block nav_title_content %}首页{% endblock %}
+{% block index_active %}active{% endblock %}
+{% block container_content %}
+  {% if user.is_work_manager %}
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-primary card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">equalizer</i>
+            </div>
+            <p class="card-category">作品总数</p>
+            <h3 class="card-title">{{ all_fantasy_count }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-danger">warning</i>
+              <a href="#pablo">Get More Space...</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-success card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">equalizer</i>
+            </div>
+            <p class="card-category">连载中</p>
+            <h3 class="card-title">{{ active_fantasy_count }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-danger">warning</i>
+              <a href="#pablo">Get More Space...</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-rose card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">equalizer</i>
+            </div>
+            <p class="card-category">已完结</p>
+            <h3 class="card-title">{{ finished_fantasy_count }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-danger">warning</i>
+              <a href="#pablo">Get More Space...</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="card card-stats">
+          <div class="card-header card-header-warning card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">equalizer</i>
+            </div>
+            <p class="card-category">待审核</p>
+            <h3 class="card-title">{{ unapproved_fantasy_count }}</h3>
+          </div>
+          <div class="card-footer">
+            <div class="stats">
+              <i class="material-icons text-secondary">navigate_before</i>
+              <a href="#">去任务广场</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {# 作品统计 #}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card ">
+          <div class="card-header card-header-success card-header-icon">
+            <div class="card-icon">
+              <i class="material-icons">equalizer</i>
+            </div>
+            <h4 class="card-title">奇幻统计</h4>
+          </div>
+          <div class="card-body ">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="table-responsive table-sales">
+                  <table class="table">
+                    <tbody>
+                    <tr>
+                      <td>排行</td>
+                      <td>类别</td>
+                      <td class="text-right">数量</td>
+                      <td class="text-right">占比</td>
+                    </tr>
+                    {% for category in fantasy_sub_categories %}
+                      <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ category.name }}</td>
+                        <td class="text-right">{{ category.count }}</td>
+                        <td class="text-right">{{ category.percent }}%</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-md-6">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}

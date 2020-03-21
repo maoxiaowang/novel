@@ -1,13 +1,9 @@
-from django.urls import path, reverse_lazy
-from django.views.generic import RedirectView
-
 from operation.urls.account import auth_urlpatterns
-from operation.views.dashboard import Index
+from operation.urls.dashboard import dashboard_urlpatterns
 
 app_name = 'operation'
 
-urlpatterns = [
-    path('', Index.as_view(), name='dashboard_index')
-]
+urlpatterns = []
 
 urlpatterns += auth_urlpatterns
+urlpatterns += dashboard_urlpatterns

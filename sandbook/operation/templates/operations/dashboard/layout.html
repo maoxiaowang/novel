@@ -1,1 +1,190 @@
 {% extends 'operations/layout.html' %}
+{% load static cache %}
+{% block meta_viewport %}
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">{% endblock %}
+{% block css_base %}
+  <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{% static 'operations/libs/material/material-dashboard.min.css' %}" rel="stylesheet">
+  <style>
+    .breadcrumb {
+      background-color: unset;
+    }
+  </style>
+{% endblock %}
+{% block main_base %}
+  {% block modals %}{% endblock %}
+  <div class="wrapper ">
+    <div class="sidebar" data-color="azure" data-background-color="black"
+         data-image="{% static 'operations/images/background/1920x1080/bg1.jpeg' %}">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+      <div class="logo">
+        <a href="{% url 'operation:dashboard_index' %}" class="simple-text logo-mini">
+          <img src="{% static 'images/favicons/favicon-32x32.png' %}">
+        </a>
+        <a href="{% url 'operation:dashboard_index' %}" class="simple-text logo-normal">
+          沙之书管理平台
+        </a></div>
+{#      {% cache 60 siderbar %} #}
+      <div class="sidebar-wrapper">
+        <div class="user">
+          <div class="photo">
+            <img src="{{ user.avatar.url }}">
+          </div>
+          <div class="user-info">
+            <a class="username">
+              <span>{{ user.get_display_name }}</span>
+            </a>
+          </div>
+        </div>
+        <ul class="nav">
+          <li class="nav-item {% block index_active %}{% endblock %}">
+            <a class="nav-link" href="{% url 'operation:dashboard_index' %}">
+              <i class="material-icons">dashboard</i>
+              <p> 首页 </p>
+            </a>
+          </li>
+          <li class="nav-item {% block task_active %}{% endblock %}">
+            <a class="nav-link" href="{% url 'operation:dashboard_task_index' %}">
+              <i class="material-icons">dashboard</i>
+              <p> 任务广场 </p>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#library">
+              <i class="material-icons">image</i>
+              <p> 图书馆
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="library">
+              <ul class="nav">
+                {% for c in builtin_categories %}
+                <li class="nav-item ">
+                  <a class="nav-link" href="{% url 'operation:dashboard_novel_list' c.id %}">
+                    <span class="sidebar-mini"> <i class="material-icons">star_border</i> </span>
+                    <span class="sidebar-normal"> {{ c.name }} </span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
+              <i class="material-icons">apps</i>
+              <p> 我的任务 </p>
+            </a>
+          </li>
+        </ul>
+      </div>
+{#      {% endcache %}#}
+    </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            {# 左侧导航收缩 #}
+            {#            <div class="navbar-minimize">#}
+            {#              <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">#}
+            {#                <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>#}
+            {#                <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>#}
+            {#              </button>#}
+            {#            </div>#}
+            <a class="navbar-brand">{% block nav_title_content %}{% endblock %}</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
+                  aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+              {#              <li class="nav-item">#}
+              {#                <a class="nav-link" href="javascript:;">#}
+              {#                  <i class="material-icons">dashboard</i>#}
+              {#                  <p class="d-lg-none d-md-block">#}
+              {#                    Stats#}
+              {#                  </p>#}
+              {#                </a>#}
+              {#              </li>#}
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">notifications</i>
+                  <span class="notification">5</span>
+                  <p class="d-lg-none d-md-block">
+                    Some Actions
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
+                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
+                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
+                  <a class="dropdown-item" href="#">Another Notification</a>
+                  <a class="dropdown-item" href="#">Another One</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">person</i>
+                  <p class="d-lg-none d-md-block">
+                    Account
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                  <a class="dropdown-item" href="#">Profile</a>
+                  <a class="dropdown-item" href="#">Settings</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'operation:account_logout' %}?next={% url 'operation:account_login' %}">Log out</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="container-fluid">
+          {% block container_content %}{% endblock %}
+        </div>
+      </div>
+      {% include 'operations/blocks/footer.html' %}
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  <script>
+  $(function () {
+    // 初始化菜单
+    $.each($('.sidebar-wrapper ul.nav > li'), function () {
+      let $collapse = $(this).children('div.collapse');
+      if ($collapse.length > 0) {
+        // 子菜单
+        $.each($collapse.find('a.nav-link'), function () {
+          if ($(this).attr('href') === window.location.pathname) {
+            $(this).parent().addClass('active'),
+              $(this).parent().parent().parent().addClass('show'),
+              $(this).parent().parent().parent().parent().addClass('active');
+          }
+        })
+      }
+    });
+
+    // tooltips
+    $('[data-toggle=tooltip]').tooltip();
+
+    // vars
+  })
+  </script>
+  {% block js_dashboard %}{% endblock %}
+{% endblock %}

@@ -10,6 +10,9 @@
       border-radius: 50%;
       margin-right: 5px;
     }
+  .img-container {
+    width: 100px!important;
+  }
   </style>
 {% endblock %}
 {% block modals %}
@@ -40,7 +43,7 @@
           <div class="col-md-6 ml-auto mr-auto">
             <div class="profile">
               <div class="avatar">
-                <img src="{% static 'portal/images/avatar1.jpeg' %}" alt="Circle Image"
+                <img src="{{ user.avatar.url }}" alt="Circle Image"
                      class="img-raised rounded-circle img-fluid">
               </div>
               <div class="name">
@@ -198,9 +201,9 @@
           <div class="col-md-2 mr-auto ml-auto stats">
             <h4 class="title">阅历</h4>
             <ul class="list-unstyled">
-              <li><b>6</b> 作品</li>
-              <li><b>4</b> 书单</li>
-              <li><b>1020</b> 粉丝</li>
+              <li><b>{{ user.novel_set.count }}</b> 作品</li>
+              <li><b>0</b> 书单</li>
+              <li><b>0</b> 粉丝</li>
               <li><b>331</b> 创作天数</li>
             </ul>
             <hr>
@@ -233,10 +236,9 @@
       // Tab
       function request(tab, relatedTab) {
         tab = tab || '[data-toggle="tab"][href="#profile"]';
-        let $tab = $(tab), $tabContent = $($tab.attr('href')), $relatedTab = $(relatedTab);
-
-        $relatedTab.find('div.ui.placeholder').show();
-        $tabContent.find(':not(div.ui.placeholder)').remove();
+        let $tab = $(tab), $tabContent = $($tab.attr('href'));
+        $(relatedTab).find('div.ui.placeholder').show();
+        $tabContent.find(':not(.ui,.image,.line,.paragraph,.placeholder)').remove();
         $tabContent.find('div.ui.placeholder').show();
         $.ajax({
           url: $tab.attr('data-url'),
@@ -298,10 +300,17 @@
               if (!validator.form()) {
                 return false
               }
+              var formdata = new FormData();
+              $.each($form.serializeArray(), function (i, item) {
+                formdata.append(item.name, item.value)
+              });
+              formdata.append('cover', $('input[name=cover]')[0].files[0]);
               $.ajax({
                 url: $form.attr('action'),
                 type: $form.attr('method'),
-                data: $form.serialize(),
+                data: formdata,
+                processData:false, //告诉jQuery不要去处理发送的数据
+                contentType:false,// 告诉jQuery不要去设置Content-Type请求头
                 success: function (res) {
                   if (res.indexOf('class="errorlist"') >= 0) {
                     $novelCreateModal.find('div.modal-body').html(res);
