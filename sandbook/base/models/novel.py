@@ -140,14 +140,23 @@ class NovelCommentReply(models.Model):
         default_permissions = ()
 
 
+class Volume(models.Model):
+    """
+    卷
+    """
+    name = models.CharField('卷名', max_length=32, default='正文卷')
+    novel = models.ForeignKey(Novel, on_delete=models.CASCADE, verbose_name='小说')
+    created_at = models.DateTimeField('创建于', auto_now_add=True)
+
+
 class Chapter(models.Model):
     """
     章节
     """
-    title = models.CharField('标题', max_length=32)  # TODO: 章节名验证
-    content = models.TextField('内容', max_length=65535)
-    novel = models.ForeignKey(Novel, on_delete=models.CASCADE, verbose_name='小说')
-    word_count = models.PositiveIntegerField('字数')
+    title = models.CharField('标题', max_length=32, blank=True, default='新章节')  # TODO: 章节名验证
+    content = models.TextField('内容', max_length=65535, blank=True)
+    volume = models.ForeignKey(Volume, on_delete=models.CASCADE, verbose_name='卷')
+    word_count = models.PositiveIntegerField('字数', default=0)
     is_free = models.BooleanField('免费', default=True)
     created_at = models.DateTimeField('创建于', auto_now_add=True)
     updated_at = models.DateTimeField('更新于', auto_now=True)

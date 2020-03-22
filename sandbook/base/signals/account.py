@@ -19,7 +19,7 @@ def on_user_saved(sender, instance, **kwargs):
     if kwargs.get('created'):
         # 创建用户及作者信息
         UserInfo.objects.create(user=instance)
-        AuthorInfo.objects.create(user=instance)
+        # AuthorInfo.objects.create(user=instance)
     else:
         # update
         ...

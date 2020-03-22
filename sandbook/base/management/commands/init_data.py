@@ -20,6 +20,11 @@ class Command(BaseCommand):
 
         # 创建默认用户
         exist_users = User.objects.values_list('id', flat=True)
+        user_groups = dict()
+        for user in BUILTIN_USERS:
+            # 移除并记录groups
+            groups = user.pop('groups') if 'groups' in user else []
+            user_groups.update({user['id']: groups})
         users = User.objects.bulk_create(
             [User(**item) for item in BUILTIN_USERS if item['id'] not in exist_users]
         )
@@ -27,6 +32,15 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.SUCCESS('Successfully created %d users.' % len(users))
             )
+            for user in users:
+                # 添加组
+                groups = user_groups[user.id]
+                if groups:
+                    user.groups.add(*groups)
+                    self.stdout.write(
+                        self.style.SUCCESS('Successfully add user %s to groups %s.' %
+                                           (user.username, ','.join(map(lambda g: str(g), groups))))
+                    )
 
         # 创建默认一级分类
         exist_categories = Category.objects.values_list('id', flat=True)

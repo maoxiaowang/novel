@@ -62,7 +62,7 @@
             {{ work.word_count }}
           </td>
           <td class="td-actions">
-            <a href="#" class="" >
+            <a href="{% url 'portal:user_novel_update' novel_id=work.id %}" target="_blank">
               <i class="material-icons">edit</i> 编辑
             </a>
           </td>

@@ -1,12 +1,16 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
-from django.http import Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import DetailView, UpdateView
+from django.urls import reverse
+from django.views.generic import DetailView, UpdateView, CreateView, RedirectView
 
 from base.constants.account import SYSTEM_ROBOT_ID
 from base.constants.novel import ALL_CATEGORIES
-from base.models import User, ActivityLikes, ActivityComment
-from general.views import JSONDetailView, JSONResponseMixin
+from base.models import User, ActivityLikes, ActivityComment, Novel, Chapter
+from general.views import JSONResponseMixin
+from portal.forms.novel import NovelCreationForm, ChapterUpdateForm, ChapterCreateForm
 
 
 class HomePage(DetailView):
@@ -90,8 +94,65 @@ class Follow(JSONResponseMixin, UpdateView):
     ...
 
 
+class NovelCreate(CreateView):
+    model = Novel
+    form_class = NovelCreationForm
+    template_name = 'portal/user/blocks/novel/create_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        self.object = form.save()
+        return render(self.request, 'portal/user/blocks/works.html')
 
 
-# class BeAuthor()
-#
-#
+class NovelDetail(DetailView):
+    model = Novel
+
+
+class NovelUpdate(LoginRequiredMixin, UpdateView):
+    """
+    作家小说更新页面
+    列出所有章节标题
+    """
+    model = Novel
+    pk_url_kwarg = 'novel_id'
+    form_class = ChapterUpdateForm
+    template_name = 'portal/user/blocks/novel/update_page.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.author != request.user:
+            raise PermissionDenied
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        chapter_id = self.kwargs.get('cid', 1)
+        try:
+            chapter = Chapter.objects.get(id=chapter_id)
+        except Chapter.DoesNotExist:
+            pass
+        else:
+            context.update(chapter=chapter)
+            context.update(form=self.form_class(
+                initial={'title': chapter.title, 'content': chapter.content}
+            ))
+        return context
+
+
+class ChapterCreate(JSONResponseMixin, CreateView):
+    model = Chapter
+    form_class = ChapterCreateForm
+    pk_url_kwarg = 'novel_id'
+    http_method_names = ['post']
+
+    def get_success_url(self):
+        return reverse(
+            'portal:user_novel_update', kwargs={'novel_id': self.object.novel.id}
+        ) + '?chapter=%s' % self.object.id
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return self.json_response(data={'url': self.get_success_url()})

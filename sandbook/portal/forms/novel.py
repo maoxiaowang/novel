@@ -2,7 +2,7 @@ from django import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from base.constants.novel import DEFAULT_COVER
-from base.models import Novel
+from base.models import Novel, Chapter
 from general.utils.image import process_novel_cover
 
 
@@ -54,3 +54,16 @@ class NovelCreationForm(forms.ModelForm):
                 raise forms.ValidationError('请上传正确格式的图片')
         return cover
 
+
+class ChapterUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Chapter
+        fields = ('title', 'content')
+
+
+class ChapterCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Chapter
+        fields = ('title', 'content', 'volume')

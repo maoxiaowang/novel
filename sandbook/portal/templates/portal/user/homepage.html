@@ -10,13 +10,20 @@
       border-radius: 50%;
       margin-right: 5px;
     }
-  .img-container {
-    width: 100px!important;
-  }
+
+    .img-container {
+      width: 100px !important;
+    }
+
+    @media (min-width: 992px) {
+      .modal-xl {
+        max-width: 1200px;
+      }
+    }
   </style>
 {% endblock %}
 {% block modals %}
-  <div id="novel-create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="create novel"
+  <div id="novel-create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="novel-create-modal"
        aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -26,9 +33,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-
-        </div>
+        <div class="modal-body"></div>
       </div>
     </div>
   </div>
@@ -79,19 +84,22 @@
                                                         color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
                                                 -->
                 <li class="nav-item">
-                  <a class="nav-link active" href="#profile" role="tab" data-toggle="tab" data-url="{% url 'portal:user_profile_tab' object.id %}">
+                  <a class="nav-link active" href="#profile" role="tab" data-toggle="tab"
+                     data-url="{% url 'portal:user_profile_tab' object.id %}">
                     <i class="material-icons">face</i>
                     首页
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#circle" role="tab" data-toggle="tab" data-url="{% url 'portal:user_circle_tab' object.id %}">
+                  <a class="nav-link" href="#circle" role="tab" data-toggle="tab"
+                     data-url="{% url 'portal:user_circle_tab' object.id %}">
                     <i class="material-icons">camera</i>
                     书友圈
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#works" role="tab" data-toggle="tab" data-url="{% url 'portal:user_works_tab' object.id %}">
+                  <a class="nav-link" href="#works" role="tab" data-toggle="tab"
+                     data-url="{% url 'portal:user_works_tab' object.id %}">
                     <i class="material-icons">library_books</i>
                     我的作品
                   </a>
@@ -248,6 +256,7 @@
           },
         })
       }
+
       request();
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         request(e.target, e.relatedTarget)
@@ -255,24 +264,24 @@
 
       function initSelect() {
         $('.selectpicker').selectpicker('setStyle', 'btn-link', 'add');
-            $('select[name=category]').on('change', function () {
-              let $this = $(this), val = $this.val();
-              if (val) {
-                val = parseInt(val);
-                $.each(categories, function (ci, c) {
-                  if (c['id'] === val) {
-                    let options = '<option value selected>请选择</option>';
-                    $.each(c['sub'], function (si, s) {
-                      options += '<option value="{0}">{1}</option>'.format(s['id'], s['name'])
-                    });
-                    $('select[name=sub_category]').removeAttr('disabled').html(
-                      options).selectpicker('refresh');
-                  }
-                })
-              } else {
-                $('select[name=sub_category]').attr('disabled', true).selectpicker('refresh')
+        $('select[name=category]').on('change', function () {
+          let $this = $(this), val = $this.val();
+          if (val) {
+            val = parseInt(val);
+            $.each(categories, function (ci, c) {
+              if (c['id'] === val) {
+                let options = '<option value selected>请选择</option>';
+                $.each(c['sub'], function (si, s) {
+                  options += '<option value="{0}">{1}</option>'.format(s['id'], s['name'])
+                });
+                $('select[name=sub_category]').removeAttr('disabled').html(
+                  options).selectpicker('refresh');
               }
-            });
+            })
+          } else {
+            $('select[name=sub_category]').attr('disabled', true).selectpicker('refresh')
+          }
+        });
       }
 
       // New Work
@@ -309,8 +318,8 @@
                 url: $form.attr('action'),
                 type: $form.attr('method'),
                 data: formdata,
-                processData:false, //告诉jQuery不要去处理发送的数据
-                contentType:false,// 告诉jQuery不要去设置Content-Type请求头
+                processData: false,
+                contentType: false,
                 success: function (res) {
                   if (res.indexOf('class="errorlist"') >= 0) {
                     $novelCreateModal.find('div.modal-body').html(res);

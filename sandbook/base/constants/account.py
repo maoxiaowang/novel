@@ -19,11 +19,29 @@ BUILTIN_USERS = [
     {
         'id': SYSTEM_ROBOT_ID, 'username': 'system', 'nickname': '机器人一号',
         'email': 'robot1@%s' % defaults.get('domain_name'), 'is_robot': True,
-        'password': 'gRnV7fq1cAVa', 'avatar': 'default/avatars/system.jpg'
+        'password': 'gRnV7fq1cAVa', 'avatar': 'default/avatars/system.jpg',
     },
     {
         'id': 1000, 'username': 'test', 'nickname': '测试账号',
         'email': 'test@%s' % defaults.get('domain_name'), 'is_robot': True,
         'password': 'gRnV7fq1cAVa', 'avatar': 'default/avatars/system.jpg'
+    },
+    {
+        'id': 1, 'username': 'admin', 'nickname': '大Boss',
+        'email': 'big_boss@%s' % defaults.get('domain_name'), 'is_robot': False,
+        'password': 'admin@sandbook', 'avatar': 'default/avatars/system.jpg',
+        'groups': [WORK_MANAGER_GROUP_ID, USER_MANAGER_GROUP_ID]
+    },
+    {
+        'id': 2, 'username': 'novel_admin', 'nickname': '小说审核',
+        'email': 'novel@%s' % defaults.get('domain_name'), 'is_robot': False,
+        'password': 'admin@sandbook', 'avatar': 'default/avatars/system.jpg',
+        'groups': [WORK_MANAGER_GROUP_ID]
+    },
+{
+        'id': 3, 'username': 'user_admin', 'nickname': '用户管理',
+        'email': 'big_boss@%s' % defaults.get('domain_name'), 'is_robot': False,
+        'password': 'admin@sandbook', 'avatar': 'default/avatars/system.jpg',
+        'groups': [USER_MANAGER_GROUP_ID]
     },
 ]
