@@ -10,10 +10,6 @@ user_urlpatterns = [
 
     path('user/<int:user_id>/follow/', user.Follow.as_view(), name='user_follow'),
 
-    path('user/novel/create/', user.NovelCreate.as_view(), name='novel_create'),
-    # （作品管理）
-    path('user/novel/<int:novel_id>/update/', user.NovelUpdate.as_view(),
-         name='user_novel_update'),
-    path('user/novel/<int:novel_id>/chapter/create/', user.ChapterCreate.as_view(), name='user_novel_chapter_create'),
+    path('user/be-author/', user.BeAuthor.as_view(), name='user_be_author')
 
 ]

@@ -15,7 +15,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form method="post" action="{% url 'portal:user_novel_chapter_create' novel.id %}"></form>
+          <form method="post" action="{% url 'portal:novel_chapter_create' novel.id %}"></form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary">Save changes</button>
@@ -41,7 +41,7 @@
             {% with chapters=novel.chapter_set.all %}
               {% if chapters.count > 0 %}
                 {% for chapter in chapters %}
-                  <a class="bd-toc-link" href="{% url 'portal:user_novel_update' novel.id %}?chapter={{ chapter.id }}">
+                  <a class="bd-toc-link" href="{% url 'portal:novel_update' novel.id %}?chapter={{ chapter.id }}">
                     {{ chapter.name }}
                   </a>
                 {% endfor %}
@@ -75,7 +75,7 @@
         let $this = $(this);
         $this.attr('disabled', true);
         $.ajax({
-          url: '{% url 'portal:user_novel_chapter_create' novel.id %}',
+          url: '{% url 'portal:novel_chapter_create' novel.id %}',
           data: {'novel': '{{ novel.id }}'},
           type: 'POST',
           success: function (res) {

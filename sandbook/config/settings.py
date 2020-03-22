@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'base.middleware.ExceptionProcessingMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -238,6 +239,30 @@ LOGGING = {
             # 'backupCount': 5,
             'formatter': 'standard',
         },
+        'operation': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(log_dir, 'operation.log'),
+            'maxBytes': 1024 * 1024 * 100,
+            # 'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'operation_error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(log_dir, 'operation_error.log'),
+            'maxBytes': 1024 * 1024 * 100,
+            # 'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'middleware': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(log_dir, 'middleware.log'),
+            'maxBytes': 1024 * 1024 * 100,
+            # 'backupCount': 5,
+            'formatter': 'standard',
+        }
     },
     'loggers': {
         'django': {
@@ -249,6 +274,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False
         },
+        'operation': {
+            'handlers': ['operation', 'operation_error'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'middleware': {
+            'handlers': ['middleware'],
+            'level': 'DEBUG',
+            'propagate': False
+        }
     }
 }
 

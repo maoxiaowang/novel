@@ -6,3 +6,6 @@ from .novel import (
     Category, SubCategory, Novel, NovelComment, NovelCommentReply,
     Chapter, Paragraph, ParagraphComment, ParagraphCommentReply,
 )
+from .author import (
+    AuthorApplication,
+)

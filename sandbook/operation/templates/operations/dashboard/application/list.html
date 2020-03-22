@@ -1,0 +1,139 @@
+{% extends 'operations/dashboard/layout.html' %}
+{% block title_content %}作者申请{% endblock %}
+{% block nav_title_content %}作者申请{% endblock %}
+{% block application_active %}active{% endblock %}
+{% block modals %}
+  <div class="modal fade" id="approve-modal" tabindex="-1" role="dialog" aria-labelledby="approve-modal"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">同意申请</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          若确定该用户满足成为作家条件，请点击确定，该用户即可发表作品。
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" data-confirm>确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="reject-modal" tabindex="-1" role="dialog" aria-labelledby="reject-modal"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">拒绝申请</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          拒绝该用户成为作家的申请，并自动发送站内信。
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" data-confirm>确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block container_content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-icon card-header-rose">
+          <div class="card-icon">
+            <i class="material-icons">assignment</i>
+          </div>
+          {#          <h4 class="card-title ">{{ category.name }}小说</h4>#}
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+              <tr>
+                <th>ID</th>
+                <th></th>
+                <th>账号</th>
+                <th>加入时间</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for object in object_list %}
+                <tr>
+                  <td>{{ object.applier.id }}</td>
+                  <td style="width: 100px;">
+                    <div class="img-container" style="max-width: 64px;">
+                      <img src="{{ object.applier.avatar.url }}" alt="avatar image">
+                    </div>
+                  </td>
+                  <td><a href="#" class="text-dark">{{ object.applier.username }}</a></td>
+                  <td>{{ object.applier.date_joined }}</td>
+                  <td class="td-actions text-right">
+                    {#                  <button type="button" rel="tooltip" class="btn btn-info btn-link"#}
+                    {#                          title="添加" data-add="{{ novel.id }}">#}
+                    {#                    <i class="material-icons">add</i>#}
+                    {#                  </button>#}
+                    <button type="button" rel="tooltip" class="btn btn-success btn-link"
+                            data-toggle="modal" data-target="#approve-modal" data-tooltip title="通过"
+                            data-approve="{% url 'operation:dashboard_application_approve' object.id %}">
+                      <i class="material-icons">done</i>
+                    </button>
+                    <button type="button" rel="tooltip" class="btn btn-danger btn-link"
+                            data-toggle="modal" data-target="#reject-modal" data-tooltip title="拒绝"
+                            data-reject="{% url 'operation:dashboard_application_approve' object.id %}">
+                      <i class="material-icons">close</i>
+                    </button>
+                  </td>
+                </tr>
+              {% endfor %}
+
+              </tbody>
+            </table>
+            {% if object_list|length_is:0 %}
+              <div class="text-center py-4">暂无申请</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js_dashboard %}
+  <script>
+    let Task = (function () {
+      $('#approve-modal').on('show.bs.modal', function (e) {
+        $(this).find('button[data-confirm]').unbind('click').click(function () {
+          $.ajax({
+            url: $(e.relatedTarget).attr('data-approve'),
+            type: 'POST',
+            data: {'status': 1},
+            success: function () {
+              window.location.reload()
+            }
+          })
+        });
+      });
+      $('#reject-modal').on('show.bs.modal', function (e) {
+        $(this).find('button[data-confirm]').unbind('click').click(function () {
+          $.ajax({
+            url: $(e.relatedTarget).attr('data-reject'),
+            type: 'POST',
+            data: {'status': 2},
+            success: function () {
+              window.location.reload()
+            }
+          })
+        });
+      })
+    })();
+  </script>
+{% endblock %}

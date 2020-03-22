@@ -7,4 +7,5 @@ class BaseConfig(AppConfig):
     def ready(self):
         # signals
         import base.signals.account
-        base.signals.account.init()
+        import base.signals.author
+        import base.signals.novel

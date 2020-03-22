@@ -55,7 +55,7 @@
     }
   </style>
 {% endblock %}
-{#{% block body_attrs %}style="background: url('{% static 'operations/images/background/1920x1080/bg2.jpg' %}') no-repeat;background-size: cover;"{% endblock %}#}
+{% block body_attrs %}style="background: url('{% static 'operations/images/background/1920x1080/bg2.jpg' %}') no-repeat;background-size: cover;"{% endblock %}
 {% block main_base %}
   <form class="form-signin" method="post" action="{% url 'operation:account_login' %}?next={% url 'operation:dashboard_index' %}">
   {% csrf_token %}

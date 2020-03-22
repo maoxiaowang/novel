@@ -8,7 +8,8 @@ from general.core.serializer import SJSONEncoder
 
 class JSONResponseMixin:
 
-    def json_response(self, result: bool = True, messages: list = None,
+    @staticmethod
+    def json_response(result: bool = True, messages: list = None,
                       level=None, code=200, data=None, default_msg=True,
                       **response_kwargs):
         """

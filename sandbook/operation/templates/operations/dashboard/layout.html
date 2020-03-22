@@ -75,10 +75,10 @@
               </ul>
             </div>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
+          <li class="nav-item {% block application_active %}{% endblock %}">
+            <a class="nav-link" href="{% url 'operation:dashboard_application_list' %}">
               <i class="material-icons">apps</i>
-              <p> 我的任务 </p>
+              <p> 作者申请 </p>
             </a>
           </li>
         </ul>

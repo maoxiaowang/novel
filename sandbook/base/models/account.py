@@ -158,6 +158,33 @@ class Team(models.Model):
         default_permissions = ()
 
 
+class Notification(models.Model):
+    """
+    通知
+    """
+    LEVEL_NORMAL = 0
+    LEVEL_SUCCESS = 1
+    LEVEL_WARNING = 2
+    LEVEL_ERROR = 3
+    LEVEL_CHOICES = (
+        (LEVEL_NORMAL, '普通'),
+        (LEVEL_SUCCESS, '成功'),
+        (LEVEL_WARNING, '警告'),
+        (LEVEL_ERROR, '错误'),
+    )
+    title = models.CharField('标题', max_length=32)
+    content = models.CharField('内容', max_length=1024)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sender', verbose_name='发送者')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver', verbose_name='接受者')
+    level = models.SmallIntegerField('等级', default=0, choices=LEVEL_CHOICES)
+    read = models.BooleanField('已读', default=False)
+    created_at = models.DateTimeField('创建时间', auto_now_add=True)
+
+    class Meta:
+        db_table = 'base_notifications'
+        default_permissions = ()
+
+
 class Following(models.Model):
     """
     关注

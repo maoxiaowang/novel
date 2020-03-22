@@ -1,4 +1,5 @@
 {% load static %}
+{% load common_tags %}
 <nav class="navbar navbar-color-on-scroll navbar-transparent fixed-top  navbar-expand-lg " color-on-scroll="100"
      id="sectionsNav">
   <div class="container">
@@ -53,49 +54,35 @@
             </a>
           </div>
         </li>
+        {% if request.user.is_authenticated %}
         <li class="dropdown nav-item">
           <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
             <i class="material-icons">notifications</i>
           </a>
           <div class="dropdown-menu dropdown-with-icons" id="notifications-menu">
             <div class="list-group">
+              {% for item in notifications %}
               <a href="#" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">标题1</h5>
-                  <small>3天 前</small>
+                  <h5 class="mb-1">{{ item.title }}</h5>
+                  <small>{{ item.created_at|render_datetime }}</small>
                 </div>
-                <p class="mb-1">内容1容1容1容1</p>
+                <p class="mb-1">{{ item.content|safe|truncatechars:"30" }}</p>
               </a>
-              <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">List group item heading</h5>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
-                  blandit.</p>
-                <small class="text-muted">Donec id elit non mi porta.</small>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">List group item heading</h5>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
-                  blandit.</p>
-                <small class="text-muted">Donec id elit non mi porta.</small>
-              </a>
+              {% endfor %}
             </div>
           </div>
         </li>
-        {% if user.is_authenticated %}
+        {% endif %}
+        {% if request.user.is_authenticated %}
           <li class="dropdown nav-item">
             <a href="#" class="profile-photo dropdown-toggle nav-link" data-toggle="dropdown">
               <div class="profile-photo-small">
-                <img src="{{ user.avatar.url }}" alt="Circle Image" class="rounded-circle img-fluid">
+                <img src="{{ request.user.avatar.url }}" alt="Circle Image" class="rounded-circle img-fluid">
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <h6 class="dropdown-header">欢迎，{{ user.nickname|default:user.username }}</h6>
+              <h6 class="dropdown-header">欢迎，{{ request.user.nickname|default:request.user.username }}</h6>
               <a href="{% url 'portal:user_homepage' user.id %}" class="dropdown-item">我的领地</a>
               <a href="#" class="dropdown-item">设置</a>
               <div class="dropdown-divider"></div>

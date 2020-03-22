@@ -148,6 +148,10 @@ class Volume(models.Model):
     novel = models.ForeignKey(Novel, on_delete=models.CASCADE, verbose_name='小说')
     created_at = models.DateTimeField('创建于', auto_now_add=True)
 
+    class Meta:
+        db_table = 'base_novel_volume'
+        default_permissions = ()
+
 
 class Chapter(models.Model):
     """

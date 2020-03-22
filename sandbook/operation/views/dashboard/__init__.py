@@ -40,7 +40,7 @@ class Index(LoginRequiredMixin, TemplateView):
             unapproved_fantasy_count += novels.filter(status=NOVEL_STATUS_UNAPPROVED).count()
         # 添加百分比
         for item in fantasy_category_list:
-            item['percent'] = round(item['count']*100 / all_fantasy_count, 1)
+            item['percent'] = round(item['count']*100 / all_fantasy_count, 1) if all_fantasy_count > 0 else 0
         # 按数量排序
         fantasy_category_list = sorted(fantasy_category_list, key=lambda c: c['count'], reverse=True)
         context.update(

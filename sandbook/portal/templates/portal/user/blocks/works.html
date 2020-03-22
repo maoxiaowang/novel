@@ -62,7 +62,7 @@
             {{ work.word_count }}
           </td>
           <td class="td-actions">
-            <a href="{% url 'portal:user_novel_update' novel_id=work.id %}" target="_blank">
+            <a href="{% url 'portal:novel_update' novel_id=work.id %}" target="_blank">
               <i class="material-icons">edit</i> 编辑
             </a>
           </td>
@@ -73,5 +73,26 @@
     </div>
   {% endif %}
 {% else %}
-
+  {# not author #}
+  <div class="card card-raised card-background" style="background-image: url('{% static 'portal/images/test/bg2.jpeg' %}')">
+      <div class="card-body">
+        <h6 class="card-category text-info">沙之书</h6>
+        <h3 class="card-title">成为作者</h3>
+        <p class="card-description">
+          与社区里的奇幻爱好者们分享你内心的奇妙世界。
+        </p>
+        <p class="card-description">
+          不要害怕失败，参天大树也是从发芽开始，现在就迈出从0到1的一步吧...
+        </p>
+        {% if not application %}
+          <button id="be-author-btn" class="btn btn-outline-info btn-round">
+            <i class="material-icons">subject</i> 成为作者
+          </button>
+        {% else %}
+          <button id="be-author-btn" class="btn btn-round btn-warning">
+            <i class="material-icons">perm_identity</i> 审核中
+          </button>
+        {% endif %}
+      </div>
+    </div>
 {% endif %}

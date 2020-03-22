@@ -1,19 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic import DetailView, UpdateView, CreateView, RedirectView
+from django.views.generic import DetailView, UpdateView
+from django.views.generic.base import View
 
 from base.constants.account import SYSTEM_ROBOT_ID
 from base.constants.novel import ALL_CATEGORIES
-from base.models import User, ActivityLikes, ActivityComment, Novel, Chapter
+from base.models import User, ActivityLikes, ActivityComment, Novel, AuthorApplication
 from general.views import JSONResponseMixin
-from portal.forms.novel import NovelCreationForm, ChapterUpdateForm, ChapterCreateForm
 
 
-class HomePage(DetailView):
+class HomePage(LoginRequiredMixin, DetailView):
     """
     用户主页
 
@@ -34,7 +30,7 @@ class HomePage(DetailView):
         return context
 
 
-class Profile(DetailView):
+class Profile(LoginRequiredMixin, DetailView):
     """
     个人资料
     """
@@ -43,7 +39,7 @@ class Profile(DetailView):
     template_name = 'portal/user/blocks/profile.html'
 
 
-class Circle(DetailView):
+class Circle(LoginRequiredMixin, DetailView):
     """
     用户圈子
     """
@@ -71,7 +67,7 @@ class Settings:
     ...
 
 
-class Works(DetailView):
+class Works(LoginRequiredMixin, DetailView):
     """
     用户（作家）的作品管理
     """
@@ -84,75 +80,38 @@ class Works(DetailView):
         if self.object.is_author:
             works = self.object.novel_set.prefetch_related('sub_category__category')
             context.update(works=works)
+
+        # if be-author application exists
+        context.update(
+            application=AuthorApplication.objects.filter(
+                applier=self.request.user, status=AuthorApplication.STATUS_UNAPPROVED).exists()
+        )
         return context
 
 
-class Follow(JSONResponseMixin, UpdateView):
+class Follow(LoginRequiredMixin, JSONResponseMixin, UpdateView):
     """
     关注/取消关注
     """
     ...
 
 
-class NovelCreate(CreateView):
-    model = Novel
-    form_class = NovelCreationForm
-    template_name = 'portal/user/blocks/novel/create_form.html'
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        self.object = form.save()
-        return render(self.request, 'portal/user/blocks/works.html')
-
-
 class NovelDetail(DetailView):
     model = Novel
 
 
-class NovelUpdate(LoginRequiredMixin, UpdateView):
+class BeAuthor(JSONResponseMixin, View):
     """
-    作家小说更新页面
-    列出所有章节标题
+    创建审批
     """
-    model = Novel
-    pk_url_kwarg = 'novel_id'
-    form_class = ChapterUpdateForm
-    template_name = 'portal/user/blocks/novel/update_page.html'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        if self.object.author != request.user:
-            raise PermissionDenied
-        context = self.get_context_data(object=self.object)
-        return self.render_to_response(context)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        chapter_id = self.kwargs.get('cid', 1)
-        try:
-            chapter = Chapter.objects.get(id=chapter_id)
-        except Chapter.DoesNotExist:
-            pass
-        else:
-            context.update(chapter=chapter)
-            context.update(form=self.form_class(
-                initial={'title': chapter.title, 'content': chapter.content}
-            ))
-        return context
-
-
-class ChapterCreate(JSONResponseMixin, CreateView):
-    model = Chapter
-    form_class = ChapterCreateForm
-    pk_url_kwarg = 'novel_id'
     http_method_names = ['post']
 
-    def get_success_url(self):
-        return reverse(
-            'portal:user_novel_update', kwargs={'novel_id': self.object.novel.id}
-        ) + '?chapter=%s' % self.object.id
+    def post(self, request, **kwargs):
+        if not request.user.is_author:
+            AuthorApplication.objects.get_or_create(
+                defaults={'applier': request.user}, applier=request.user,
+                status=AuthorApplication.STATUS_UNAPPROVED
+            )
+            return self.json_response()
+        return self.json_response(result=False)
 
-    def form_valid(self, form):
-        self.object = form.save()
-        return self.json_response(data={'url': self.get_success_url()})

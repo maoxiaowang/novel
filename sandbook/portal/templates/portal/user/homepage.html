@@ -1,6 +1,6 @@
 {% extends 'portal/user/layout.html' %}
 {% load static %}
-{% block title_content %}{{ object.username }}的领地{% endblock %}
+{% block title_content %}{{ user.nickname|default:user.username }}的领地{% endblock %}
 {% block css_user %}
   <style>
     .visitors img.avatar {
@@ -38,6 +38,7 @@
     </div>
   </div>
 {% endblock %}
+
 {% block main_user %}
   <div class="page-header header-filter" data-parallax="true"
        style="background-image: url('{% static 'portal/images/background/1920x1200/bg4.jpeg' %}');"></div>
@@ -253,6 +254,22 @@
           success: function (res) {
             $tabContent.find('div.ui.placeholder').hide();
             $tabContent.prepend(res);
+
+            // init sth
+            // Be author
+            $('#be-author-btn').click(function () {
+              let $this = $(this);
+              $.ajax({
+                url: '{% url 'portal:user_be_author' %}',
+                type: 'POST',
+                success: function (res) {
+                  if (res.result) {
+                    $this.removeClass('btn-outline-info').addClass('btn-warning');
+                    $this.html('<i class="material-icons">perm_identity</i> 审核中')
+                  }
+                }
+              })
+            });
           },
         })
       }
