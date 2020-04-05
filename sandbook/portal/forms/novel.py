@@ -3,6 +3,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from base.constants.novel import DEFAULT_COVER
 from base.models import Novel, Chapter
+from base.models.novel import Volume
 from general.utils.image import process_novel_cover
 
 
@@ -59,7 +60,37 @@ class ChapterUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Chapter
-        fields = ('title', 'content')
+        fields = ('title', 'content', 'status')
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '请输入标题',
+                'required': True
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'focus': True,
+                'required': True,
+                'placeholder': '请输入内容……'
+            }),
+            'status': forms.NumberInput(attrs={'hidden': True})
+        }
+
+    def clean_status(self):
+        saved, submitted = Chapter.STATUS['saved'], Chapter.STATUS['submitted']
+        status = self.cleaned_data.get('status')
+        if self.instance.status == saved:
+            # can be changed to submitted
+            if status in (saved, submitted):
+                return status
+        elif self.instance.status == submitted:
+            return submitted
+        raise forms.ValidationError('Wrong status', code='wrong_status')
+
+    def clean_content(self):
+        content = self.cleaned_data['content']
+        paragraph_lines = ['　　' + line.strip() for line in filter(lambda x: x.strip(), content.splitlines())]
+        return '\n'.join(paragraph_lines)
 
 
 class ChapterCreateForm(forms.ModelForm):
@@ -67,3 +98,19 @@ class ChapterCreateForm(forms.ModelForm):
     class Meta:
         model = Chapter
         fields = ('title', 'content', 'volume')
+
+    def clean_title(self):
+        return '新章节'
+
+    def clean_content(self):
+        return ''
+
+
+class VolumeCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Volume
+        fields = ('novel', 'name')
+
+    def clean_name(self):
+        return '新卷'

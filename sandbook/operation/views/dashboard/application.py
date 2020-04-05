@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.views.generic import ListView, UpdateView
 
 from base.models import AuthorApplication
@@ -9,7 +10,7 @@ class ApplicationList(ListView):
     template_name = 'operations/dashboard/application/list.html'
 
     def get_queryset(self):
-        return super().get_queryset().filter(status=AuthorApplication.STATUS_UNAPPROVED)
+        return super().get_queryset().filter(status=AuthorApplication.STATUS['unapproved'])
 
 
 class ApplicationApprove(JSONResponseMixin, UpdateView):
@@ -23,4 +24,10 @@ class ApplicationApprove(JSONResponseMixin, UpdateView):
     def form_valid(self, form):
         form.instance.approver = self.request.user
         form.save()
+        if form.cleaned_data['status'] == AuthorApplication.STATUS['agreed']:
+            messages.add_message(self.request, messages.SUCCESS, '已同意用户“%s”的申请'
+                                 % form.instance.applier.username)
+        elif form.clean_data['status'] == AuthorApplication.STATUS['rejected']:
+            messages.add_message(self.request, messages.SUCCESS, '已拒绝用户“%s”的申请'
+                                 % form.instance.applier.username)
         return self.json_response()

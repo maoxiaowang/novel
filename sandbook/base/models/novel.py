@@ -1,4 +1,5 @@
 import os
+import re
 import time
 
 from django.core.files.storage import FileSystemStorage
@@ -10,7 +11,7 @@ from base.constants.novel import (
 )
 from django.core.cache import cache
 
-from general.utils.text import get_filename_extension
+from general.utils.text import get_filename_extension, calc_word_count
 
 
 class CategoryMixin:
@@ -76,11 +77,17 @@ class Novel(models.Model):
     """
     小说
     """
+    STATUS = {
+        'unapproved': NOVEL_STATUS_UNAPPROVED,
+        'active': NOVEL_STATUS_ACTIVE,
+        'finished': NOVEL_STATUS_FINISHED,
+        'blocked': NOVEL_STATUS_BLOCKED,
+    }
     STATUS_CHOICES = (
-        (NOVEL_STATUS_UNAPPROVED, '未审核'),
-        (NOVEL_STATUS_ACTIVE, '连载中'),
-        (NOVEL_STATUS_FINISHED, '已完结'),
-        (NOVEL_STATUS_BLOCKED, '已屏蔽')
+        (STATUS['unapproved'], '未审核'),
+        (STATUS['active'], '连载中'),
+        (STATUS['finished'], '已完结'),
+        (STATUS['blocked'], '已屏蔽')
     )
     name = models.CharField('书名', unique=True, max_length=64)  # TODO: 书名验证
     author = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='作者')
@@ -157,11 +164,25 @@ class Chapter(models.Model):
     """
     章节
     """
+    STATUS = {
+        'saved': 0,
+        'submitted': 1,
+        'blocked': 2,
+        'approved': 3  # 暂不用
+    }
+    STATUS_CHOICES = (
+        (STATUS['saved'], '已保存'),
+        (STATUS['submitted'], '已提交'),
+        (STATUS['blocked'], '已屏蔽'),
+        (STATUS['approved'], '已审核')
+    )
+
     title = models.CharField('标题', max_length=32, blank=True, default='新章节')  # TODO: 章节名验证
     content = models.TextField('内容', max_length=65535, blank=True)
     volume = models.ForeignKey(Volume, on_delete=models.CASCADE, verbose_name='卷')
     word_count = models.PositiveIntegerField('字数', default=0)
     is_free = models.BooleanField('免费', default=True)
+    status = models.IntegerField('状态', choices=STATUS_CHOICES, default=STATUS['saved'])
     created_at = models.DateTimeField('创建于', auto_now_add=True)
     updated_at = models.DateTimeField('更新于', auto_now=True)
 
@@ -170,19 +191,26 @@ class Chapter(models.Model):
         default_permissions = ()
 
 
+# class ChapterUpdated(models.Model):
+#     ...
+
+
 class Paragraph(models.Model):
     """
     段落
     """
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, verbose_name='章节')
     content = models.TextField('内容', max_length=65535)  # TODO: 段落字数限制
-    word_count = models.PositiveIntegerField('字数')
     serial = models.PositiveIntegerField('序号', default=1)
 
     class Meta:
         db_table = 'base_novel_paragraph'
         default_permissions = ()
         unique_together = (('chapter', 'serial'),)
+
+    @property
+    def word_count(self):
+        return calc_word_count(self.content)
 
 
 class ParagraphComment(models.Model):

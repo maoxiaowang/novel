@@ -6,6 +6,7 @@ def common(request):
     context = dict()
     context['builtin_categories'] = BUILTIN_CATEGORIES
     context['ID'] = '00000000'
+    context['STR'] = 'XXXXXXXX'
     if request.user.is_authenticated:
         # notifications
         # fixme: 性能

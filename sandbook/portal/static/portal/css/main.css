@@ -404,3 +404,17 @@
 .h1, .h2, .h3, .h4, body, h1, h2, h3, h4, h5, h6 {
   font-weight: unset;
 }
+
+.badge-sm {
+    padding: 2px 6px;
+}
+
+.cover {
+  max-height: 200px;
+}
+
+.notie-container {
+  z-index: 5;
+  padding-bottom: 25px;
+  padding-top: 25px;
+}

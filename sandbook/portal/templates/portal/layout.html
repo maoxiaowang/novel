@@ -13,12 +13,20 @@
     <link href="{% static 'portal/libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">
     <link href="{% static 'portal/libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">
 {#    <link href="{% static 'libs/material/vertical-nav.css' %}" rel="stylesheet">#}
-    <link href="{% static 'portal/css/main.css' %}?v=12" rel="stylesheet">
+    <link href="{% static 'portal/libs/notie/notie.min.css' %}" rel="stylesheet">
+    <link href="{% static 'portal/css/main.css' %}?v=15" rel="stylesheet">
   {% endblock %}
   {% block css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
 {% block modals %}{% endblock %}
+{% if messages %}
+  <ul class="messages" hidden>
+    {% for message in messages %}
+      <li class="message" data-level="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 {% block main_base %}{% endblock %}
 {% block js_base %}
   <script src="{% static 'portal/libs/jquery/jquery.min.js' %}"></script>
@@ -29,12 +37,33 @@
   <script src="{% static 'portal/libs/material/bootstrap-material-design.min.js' %}"></script>
   <script src="{% static 'portal/libs/material/material-kit.min.js' %}?v=1"></script>
   <script src="{% static 'portal/libs/validate/dist/jquery.validate.min.js' %}"></script>
-  <script src="{% static 'js/main.js' %}?v=1"></script>
-
+  <script src="{% static 'portal/libs/notie/notie.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}?v=12"></script>
   <script>
-  $('[data-toggle=tooltip]').tooltip()
+    $('[data-toggle=tooltip]').tooltip();
+    let id = '{{ ID }}', str = '{{ STR }}';
   </script>
 {% endblock %}
 {% block js %}{% endblock %}
+<script>
+  $(function () {
+    $.each($('form'), function (i, item) {
+      let $form = $(item);
+      let validator = $form.validate({
+        errorPlacement: function (error, element) {
+          error.appendTo(element.parent().parent())
+        },
+        errorClass: 'errorlist d-block'
+      });
+      $form.submit(function (e) {
+        // validate
+        if (!validator.form()) {
+          return false
+        }
+      })
+    });
+  })
+
+  </script>
 </body>
 </html>

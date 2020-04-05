@@ -273,18 +273,22 @@ $.extend($.validator.messages, {
   max: $.validator.format('请输入不超过{0}的值'),
   min: $.validator.format('请输入不小于{0}的值')
 });
-$.each($('form'), function (i, item) {
-  let $form = $(item);
-  let validator = $form.validate({
-    errorPlacement: function (error, element) {
-      error.appendTo(element.parent().parent())
-    },
-    errorClass: 'errorlist d-block'
-  });
-  $form.submit(function (e) {
-    // validate
-    if (!validator.form()) {
-      return false
-    }
-  })
-});
+
+
+/**
+ * messages notify
+ * */
+let $messages = $('body > ul.messages');
+console.log($messages)
+if ($messages.length > 0) {
+  setTimeout(function () {
+    $.each($messages.find('li.message'), function (i, item) {
+      let level = $(item).attr('data-level');
+      let msg = $(item).text();
+      notie.alert({ type: level, text: msg, time: 2 }) // Hides after 2 seconds
+    });
+  }, 100)
+
+  // $messages.remove();
+
+}

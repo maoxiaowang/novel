@@ -14,7 +14,7 @@ def on_application_changed(sender, instance, **kwargs):
         # 给管理员发送通知
         ...
     else:
-        if instance.status == instance.STATUS_AGREE:
+        if instance.status == instance.STATUS['agreed']:
             # 审核通过，给用户发送通知
             approver = instance.approver
             approver.is_author = True
@@ -25,7 +25,7 @@ def on_application_changed(sender, instance, **kwargs):
                 title='恭喜你', content='你提交的成为作家的请求已经通过，可以前往作品管理处发布作品。',
                 sender=instance.approver, receiver=instance.applier, level=Notification.LEVEL_SUCCESS
             )
-        elif instance.status == instance.STATUS_REJECT:
+        elif instance.status == instance.STATUS['rejected']:
             # 审核拒绝
             Notification.objects.create(
                 title='很遗憾', content='你提交的成为作家的请求未通过，可以前往帮助中心寻求帮助。',

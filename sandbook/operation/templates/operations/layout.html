@@ -11,21 +11,31 @@
   {% block css_base %}
     <!-- Bootstrap core CSS -->
     <link href="{% static 'operations/libs/material/bootstrap-material-design.css' %}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="{% static 'operations/css/main.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{% static 'operations/libs/notie/notie.min.css' %}" rel="stylesheet">
+    <link href="{% static 'operations/css/main.css' %}?v=2" rel="stylesheet">
     {% block css %}{% endblock %}
   {% endblock %}
   <!-- Custom styles for this template -->
 </head>
 <body class="{% block body_class %}{% endblock %}" {% block body_attrs %}{% endblock %}>
+{% if messages %}
+  <ul class="messages" hidden>
+    {% for message in messages %}
+      <li class="message" data-level="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 {% block main_base %}{% endblock %}
 {% block js_base %}
   <script src="{% static 'operations/libs/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'operations/libs/jquery/popper.min.js' %}"></script>
   <script src="{% static 'operations/libs/material/bootstrap-material-design.js' %}"></script>
   <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>
-  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'operations/libs/notie/notie.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}?v=12"></script>
   <script>$(document).ready(function () {
     $('body').bootstrapMaterialDesign();
   });</script>

@@ -9,7 +9,12 @@ from base.models import User, ActivityLikes, ActivityComment, Novel, AuthorAppli
 from general.views import JSONResponseMixin
 
 
-class HomePage(LoginRequiredMixin, DetailView):
+class HomeBaseView(LoginRequiredMixin, DetailView):
+    model = User
+    pk_url_kwarg = 'user_id'
+
+
+class HomePage(HomeBaseView):
     """
     用户主页
 
@@ -20,8 +25,6 @@ class HomePage(LoginRequiredMixin, DetailView):
     关注/取消关注（非自己主页）
 
     """
-    model = User
-    pk_url_kwarg = 'user_id'
     template_name = 'portal/user/homepage.html'
 
     def get_context_data(self, **kwargs):
@@ -30,21 +33,17 @@ class HomePage(LoginRequiredMixin, DetailView):
         return context
 
 
-class Profile(LoginRequiredMixin, DetailView):
+class Profile(HomeBaseView):
     """
     个人资料
     """
-    model = User
-    pk_url_kwarg = 'user_id'
     template_name = 'portal/user/blocks/profile.html'
 
 
-class Circle(LoginRequiredMixin, DetailView):
+class Circle(HomeBaseView):
     """
     用户圈子
     """
-    model = User
-    pk_url_kwarg = 'user_id'
     template_name = 'portal/user/blocks/circle.html'
 
     def get_context_data(self, **kwargs):
@@ -60,31 +59,30 @@ class Circle(LoginRequiredMixin, DetailView):
         return context
 
 
-class Settings:
+class Settings(HomeBaseView):
     """
     用户（账号）设置
     """
-    ...
+    template_name = 'portal/user/blocks/settings.html'
 
 
-class Works(LoginRequiredMixin, DetailView):
+class Works(HomeBaseView):
     """
     用户（作家）的作品管理
     """
-    model = User
-    pk_url_kwarg = 'user_id'
     template_name = 'portal/user/blocks/works.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object.is_author:
-            works = self.object.novel_set.prefetch_related('sub_category__category')
+            works = self.object.novel_set.select_related(
+                'sub_category__category').prefetch_related('volume_set__chapter_set')
             context.update(works=works)
 
         # if be-author application exists
         context.update(
             application=AuthorApplication.objects.filter(
-                applier=self.request.user, status=AuthorApplication.STATUS_UNAPPROVED).exists()
+                applier=self.request.user, status=AuthorApplication.STATUS['unapproved']).exists()
         )
         return context
 
@@ -110,7 +108,7 @@ class BeAuthor(JSONResponseMixin, View):
         if not request.user.is_author:
             AuthorApplication.objects.get_or_create(
                 defaults={'applier': request.user}, applier=request.user,
-                status=AuthorApplication.STATUS_UNAPPROVED
+                status=AuthorApplication.STATUS['unapproved']
             )
             return self.json_response()
         return self.json_response(result=False)

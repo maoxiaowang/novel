@@ -2,10 +2,7 @@
 {% load static cache %}
 {% block meta_viewport %}
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">{% endblock %}
-{% block css_base %}
-  <link rel="stylesheet" type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+{% block css %}
   <link href="{% static 'operations/libs/material/material-dashboard.min.css' %}" rel="stylesheet">
   <style>
     .breadcrumb {
@@ -120,17 +117,14 @@
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
+                  <span class="notification">2</span>
                   <p class="d-lg-none d-md-block">
                     Some Actions
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Mike John responded to your email</a>
-                  <a class="dropdown-item" href="#">You have 5 new tasks</a>
-                  <a class="dropdown-item" href="#">You're now friend with Andrew</a>
-                  <a class="dropdown-item" href="#">Another Notification</a>
-                  <a class="dropdown-item" href="#">Another One</a>
+                  <a class="dropdown-item" href="#">假消息1</a>
+                  <a class="dropdown-item" href="#">假消息2</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -138,14 +132,14 @@
                    aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">person</i>
                   <p class="d-lg-none d-md-block">
-                    Account
+                    账号
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <a class="dropdown-item" href="#">Settings</a>
+                  <a class="dropdown-item" href="#">个人资料</a>
+                  <a class="dropdown-item" href="#">设置</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="{% url 'operation:account_logout' %}?next={% url 'operation:account_login' %}">Log out</a>
+                  <a class="dropdown-item" href="{% url 'operation:account_logout' %}?next={% url 'operation:account_login' %}">退出</a>
                 </div>
               </li>
             </ul>

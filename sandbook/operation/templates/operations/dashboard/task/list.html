@@ -89,6 +89,9 @@
               {% endfor %}
               </tbody>
             </table>
+            {% if object_list|length_is:0 %}
+              <div class="text-center py-4">暂无申请</div>
+            {% endif %}
           </div>
         </div>
       </div>

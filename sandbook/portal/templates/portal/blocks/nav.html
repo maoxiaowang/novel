@@ -60,7 +60,7 @@
             <i class="material-icons">notifications</i>
           </a>
           <div class="dropdown-menu dropdown-with-icons" id="notifications-menu">
-            <div class="list-group">
+            <div class="list-group" style="max-height: 350px; overflow-y: scroll;">
               {% for item in notifications %}
               <a href="#" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
@@ -69,6 +69,8 @@
                 </div>
                 <p class="mb-1">{{ item.content|safe|truncatechars:"30" }}</p>
               </a>
+                {% empty %}
+                <div href="#" class="list-group-item d-inline-block text-center">暂无通知</div>
               {% endfor %}
             </div>
           </div>

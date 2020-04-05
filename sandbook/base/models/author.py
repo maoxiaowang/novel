@@ -5,13 +5,15 @@ class AuthorApplication(models.Model):
     """
     申请成为作者
     """
-    STATUS_UNAPPROVED = 0
-    STATUS_AGREE = 1
-    STATUS_REJECT = 2
+    STATUS = {
+        'unapproved': 0,
+        'agreed': 1,
+        'rejected': 2
+    }
     STATUS_CHOICES = (
-        (STATUS_UNAPPROVED, '未审核'),
-        (STATUS_AGREE, '通过'),
-        (STATUS_REJECT, '拒绝'),
+        (STATUS['unapproved'], '未审核'),
+        (STATUS['agreed'], '通过'),
+        (STATUS['rejected'], '拒绝'),
     )
     applier = models.ForeignKey('base.User', on_delete=models.CASCADE, related_name='applier')
     status = models.SmallIntegerField(default=0)

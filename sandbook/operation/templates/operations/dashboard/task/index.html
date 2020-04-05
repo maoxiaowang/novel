@@ -5,20 +5,20 @@
 {% block task_active %}active{% endblock %}
 {% block container_content %}
   <div class="row">
-    {% for c in categories %}
+    {% for category in categories %}
       <div class="col-lg-3 col-md-6">
         <div class="card card-pricing card-background"
              style="background-image: url('{% static 'operations/images/cover/1.jpeg' %}')">
           <div class="card-body">
-            <h6 class="card-category text-info">奇幻任务</h6>
+            <h6 class="card-category text-info">{{ category }}任务</h6>
             <h1 class="card-title">
               {{ fantasy_unapproved_count }}
             </h1>
             <ul>
-              <li><b>100</b> Projects</li>
-              <li><b>5</b> Team Members</li>
+              <li><b>{{ category.subcategory_set.count }}</b> 个子类</li>
+              <li><b>5</b> 管理员</li>
             </ul>
-            <a href="{% url 'operation:dashboard_task_list' c.id %}" class="btn btn-warning">进入</a>
+            <a href="{% url 'operation:dashboard_task_list' category.id %}" class="btn btn-warning">进入</a>
           </div>
         </div>
       </div>

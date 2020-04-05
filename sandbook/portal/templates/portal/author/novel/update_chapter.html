@@ -1,0 +1,168 @@
+{% extends 'portal/layout.html' %}
+{% load static %}
+{% block title_content %}编辑《{{ novel.name }}》{% endblock %}
+{% block css %}
+  <link href="{% static 'portal/css/docs.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block main_base %}
+  <header class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+    <a class="navbar-brand mr-md-2">
+      沙之书
+    </a>
+    -- <span class="ml-3">编辑《{{ novel.name }}》</span>
+  </header>
+  <div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+      <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+        <nav class="collapse bd-links" id="bd-docs-nav">
+          <div class="bd-toc-item active">
+            <form method="post" action="{% url 'portal:novel_volume_create' %}">
+              {% csrf_token %}
+              <input hidden name="novel" value="{{ novel.id }}">
+              <input hidden name="name" value="新卷">
+              <button type="submit" class="btn btn-link btn-block mb-4" style="border-bottom: 1px solid;border-top: 1px solid;">添加新卷 <i class="material-icons">library_books</i></button>
+            </form>
+
+            {% with volumes=novel.volume_set.all %}
+              {% for volume in volumes %}
+                <form class="mb-0 mt-3" method="post" action="{% url 'portal:novel_chapter_create' %}">
+                  <a class="bd-toc-link" data-volume-id="{{ volume.id }}" data-volume-name="{{ volume.name }}">
+                    {{ volume.name }} <i role="button" type="submit" class="material-icons float-right"
+                                         style="cursor: pointer" data-add-chapter>playlist_add</i>
+                    <input hidden name="volume" value="{{ volume.id }}">
+                    {% csrf_token %}
+                  </a>
+                </form>
+
+                {% with chapters=volume.chapter_set.all %}
+                  <ul class="nav bd-sidenav">
+                    {% for chapter in chapters %}
+                      <li>
+                        <a href="{% url 'portal:novel_chapter_update' novel.id chapter.id %}">{{ chapter.title }}
+                          {% if chapter.status == 0 %}<span class="badge badge-sm badge-default">草稿</span>{% endif %}
+                          <span class="float-right">{{ chapter.word_count }}</span>
+                        </a>
+                      </li>
+                    {% empty %}
+                      <li><a>暂无章节</a></li>
+                    {% endfor %}
+                  </ul>
+
+                {% endwith %}
+              {% empty %}
+                <a class="bd-toc-link">暂无内容</a>
+              {% endfor %}
+            {% endwith %}
+          </div>
+        </nav>
+      </div>
+      <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+        {#        <h1 class="bd-title" id="content">Introduction</h1>#}
+        <form id="chapter-form" method="post" action="{% url 'portal:novel_chapter_update' novel.id chapter.id %}">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.title }}
+          </div>
+          <div class="form-group">
+            {{ form.content }}
+          </div>
+          {{ form.status }}
+        </form>
+        <button id="chapter-save-btn" class="btn btn-primary btn-raised">保存</button>
+          {% if chapter.status == 0 %}
+            <button id="chapter-submit-btn" class="btn btn-link">发布</button>
+          {% endif %}
+      </main>
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'portal/libs/md5.min.js' %}"></script>
+  <script>
+    $(function () {
+      let chapterId = {{ chapter.id }}, novelId = {{ novel.id }};
+
+      // rename volume
+      $('[data-volume-name]').unbind('click').click(function (e) {
+        let $this = $(this);
+        let url = "{% url 'portal:novel_volume_rename' ID %}";
+        url = url.replace(id, $this.attr('data-volume-id'));
+        let name = $this.attr('data-volume-name');
+        $this.html(
+          '<form method="post" action="{0}"><input name="name" value="{1}"></form>'.format(url, name)
+        );
+        let $form = $this.find('form');
+        let $nameInput = $form.find('input[name=name]');
+        $form.submit(function (e) {
+          e.preventDefault();
+          $nameInput.blur();
+        });
+
+        $nameInput.focus();
+        $nameInput.click(function (e) {
+          e.stopPropagation();
+        });
+        $this.unbind('focusout').focusout(function () {
+          $this.attr('disabled', true);
+          let newName = $nameInput.val();
+          if (newName !== name) {
+            $.ajax({
+              url: url,
+              method: 'POST',
+              data: $form.serialize(),
+              success: function () {
+                $this.html(newName);
+                $this.attr('data-volume-name', newName);
+                $this.removeAttr('disabled')
+              },
+              error: function () {
+                $this.removeAttr('disabled')
+              }
+            })
+          } else {
+            $this.html(name);
+          }
+        });
+      });
+
+      // save & submit
+      let $chapterForm = $('#chapter-form');
+      $('#chapter-save-btn').click(function () {
+        $chapterForm.trigger('submit')
+      });
+      $('#chapter-submit-btn').click(function () {
+        $chapterForm.find('input[name=status]').val('1');
+        $chapterForm.trigger('submit')
+      });
+      $('form').submit(function () {
+        window.onbeforeunload = null;
+      });
+
+      // menu active
+      $.each($('#bd-docs-nav').find('ul.nav > li > a'), function (i, item) {
+        if ($(item).attr('href') === window.location.pathname) {
+          $(item).parent().addClass('active')
+        }
+      });
+
+      // add chapter
+      $('i[data-add-chapter]').click(function (e) {
+        e.stopPropagation();
+        let $this = $(this), $form = $this.parent().parent();
+        $form.trigger('submit');
+      });
+
+      // save prompt
+      let chapterKey = 'n_{0}_c_{1}'.format(novelId, chapterId);
+      window.originChapterContent = $chapterForm.find('textarea[name=content]').val();
+      window.localStorage.setItem(chapterKey, md5(window.originChapterContent));
+      window.onbeforeunload = function (e) {
+        let latestContent = $chapterForm.find('textarea[name=content]').val();
+        if (md5(latestContent) !== window.localStorage.getItem(chapterKey)) {
+          return ''
+        }
+      };
+
+    })
+  </script>
+{% endblock %}

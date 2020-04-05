@@ -56,13 +56,13 @@
           </td>
           <td><span class="text-{{ work|novel_status_color }}" style="vertical-align: middle">{{ work.get_status_display }}</span></td>
           <td>
-            {{ work.chapter_set.first.title|default:"-" }}
+            {{ work.volume_set.last.chapter_set.last.title|default:"-" }}
           </td>
           <td class="text-center">
             {{ work.word_count }}
           </td>
           <td class="td-actions">
-            <a href="{% url 'portal:novel_update' novel_id=work.id %}" target="_blank">
+            <a href="{% url 'portal:novel_chapter_update' work.id 0 %}" target="_blank">
               <i class="material-icons">edit</i> 编辑
             </a>
           </td>
