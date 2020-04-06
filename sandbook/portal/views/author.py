@@ -36,6 +36,12 @@ class ChapterUpdate(LoginRequiredMixin, UpdateView):
     form_class = ChapterUpdateForm
     template_name = 'portal/author/novel/update_chapter.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        novel = Novel.objects.get(id=kwargs.get('novel_id'))
+        if novel.author_id != self.request.user.id:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         self.queryset = self.model.objects.prefetch_related('volume__novel')
         return super().get_queryset()
@@ -99,7 +105,6 @@ class ChapterUpdate(LoginRequiredMixin, UpdateView):
         lines_count = len(paragraph_lines)
         novel = self.object.volume.novel
         for i, (paragraph, line) in enumerate(zip(paragraph_set.all(), paragraph_lines)):
-
             # paragraph
             old_count = paragraph.word_count
             new_count = calc_word_count(line)

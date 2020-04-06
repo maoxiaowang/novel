@@ -414,7 +414,7 @@
 }
 
 .notie-container {
-  z-index: 5;
-  padding-bottom: 25px;
-  padding-top: 25px;
+  z-index: 2000;
+  padding-bottom: 24px;
+  padding-top: 24px;
 }

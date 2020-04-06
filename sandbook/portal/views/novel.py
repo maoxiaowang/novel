@@ -7,3 +7,10 @@ from django.views.generic import CreateView, DetailView
 
 from base.models import Novel
 from portal.forms.novel import NovelCreationForm
+
+
+class NovelDetail(DetailView):
+    model = Novel
+    pk_url_kwarg = 'novel_id'
+    template_name = ''
+    context_object_name = 'novel'

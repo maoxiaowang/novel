@@ -279,7 +279,6 @@ $.extend($.validator.messages, {
  * messages notify
  * */
 let $messages = $('body > ul.messages');
-console.log($messages)
 if ($messages.length > 0) {
   setTimeout(function () {
     $.each($messages.find('li.message'), function (i, item) {
@@ -292,3 +291,63 @@ if ($messages.length > 0) {
   // $messages.remove();
 
 }
+
+/**
+ * ajax events
+ */
+let activeElement;
+$(document).ajaxStart(
+  function (e) {
+    // blockTimeout = setTimeout($.blockUI, 300);
+    try {
+      activeElement = $(e.target.activeElement);
+      // just a precautionary check
+      if (!activeElement.hasClass('btn')) {
+        return
+      }
+      activeElement.attr('disabled', true)
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+).ajaxStop(
+  function () {
+    // clearTimeout(blockTimeout);
+    // $.unblockUI();
+    if (activeElement) {
+      try {
+        if (!activeElement.hasClass('btn')) {
+          return
+        }
+        activeElement.removeAttr('disabled')
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+
+  }
+).ajaxSuccess(
+  function (event, xhr, options) {
+    if (xhr.responseJSON && options.type !== 'GET') {
+      let res = xhr.responseJSON;
+      if (!res.result) {
+        $.each(res.messages, function () {
+          let level = res.level;
+          let msg = this;
+          notie.alert({ type: level, text: msg, time: 2 })
+        });
+      }
+
+    } else {
+
+    }
+  }
+).ajaxError(
+  function (event, xhr, options, exc) {
+    let statusText = xhr.statusText;
+    if (xhr.status === 0) {
+      statusText = '已从服务器断开'
+    }
+    notie.alert({ type: 'error', text: statusText, time: 2 })
+  }
+);

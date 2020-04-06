@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from base.models import User
-from base.models.account import Notification
+from base.models.account import Notification, AuthorInfo
 from base.models.author import AuthorApplication
 
 
@@ -16,14 +16,19 @@ def on_application_changed(sender, instance, **kwargs):
     else:
         if instance.status == instance.STATUS['agreed']:
             # 审核通过，给用户发送通知
-            approver = instance.approver
-            approver.is_author = True
-            approver.save()
+            applier = instance.applier
+            applier.is_author = True
+            applier.save()
+
+            AuthorInfo.objects.get_or_create(
+                defaults={'pen_name': instance.pen_name, 'user': applier},
+                user=applier
+            )
 
             # Notification
             Notification.objects.create(
                 title='恭喜你', content='你提交的成为作家的请求已经通过，可以前往作品管理处发布作品。',
-                sender=instance.approver, receiver=instance.applier, level=Notification.LEVEL_SUCCESS
+                sender=instance.approver, receiver=applier, level=Notification.LEVEL_SUCCESS
             )
         elif instance.status == instance.STATUS['rejected']:
             # 审核拒绝

@@ -11,6 +11,6 @@ user_urlpatterns = [
 
     path('user/<int:user_id>/follow/', user.Follow.as_view(), name='user_follow'),
 
-    path('user/be-author/', user.BeAuthor.as_view(), name='user_be_author')
+    path('user/become-author/', user.BecomeAuthor.as_view(), name='user_become_author')
 
 ]

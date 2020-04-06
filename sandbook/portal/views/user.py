@@ -1,12 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, CreateView
 from django.views.generic.base import View
 
 from base.constants.account import SYSTEM_ROBOT_ID
 from base.constants.novel import ALL_CATEGORIES
 from base.models import User, ActivityLikes, ActivityComment, Novel, AuthorApplication
+from general.forms.mixin import FormValidationMixin
 from general.views import JSONResponseMixin
+from portal.forms.user import AuthorApplicationForm
 
 
 class HomeBaseView(LoginRequiredMixin, DetailView):
@@ -98,18 +100,16 @@ class NovelDetail(DetailView):
     model = Novel
 
 
-class BeAuthor(JSONResponseMixin, View):
+class BecomeAuthor(FormValidationMixin, CreateView):
     """
     创建审批
     """
+    model = AuthorApplication
+    form_class = AuthorApplicationForm
     http_method_names = ['post']
+    json = True
 
-    def post(self, request, **kwargs):
-        if not request.user.is_author:
-            AuthorApplication.objects.get_or_create(
-                defaults={'applier': request.user}, applier=request.user,
-                status=AuthorApplication.STATUS['unapproved']
-            )
-            return self.json_response()
-        return self.json_response(result=False)
-
+    def form_valid(self, form):
+        form.instance.applier = self.request.user
+        form.instance.status = AuthorApplication.STATUS['unapproved']
+        return super().form_valid(form)

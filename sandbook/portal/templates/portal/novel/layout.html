@@ -1,10 +1,2 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'portal/layout.html' %}
+{% block title_content %}《{{ novel.name }}》 - {{ novel.author.username }}{% endblock %}

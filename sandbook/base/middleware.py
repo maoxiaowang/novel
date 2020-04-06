@@ -33,7 +33,7 @@ class ExceptionProcessingMiddleware(MiddlewareMixin):
         """
         call before view executing
         """
-        if JSONResponseMixin in view_func.__class__.__bases__:
+        if hasattr(view_func.__class__, 'json') and view_func.__class__.json:
             request.response_type = 'json'
         else:
             request.response_type = 'html'

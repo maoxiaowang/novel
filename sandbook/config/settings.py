@@ -292,6 +292,7 @@ LOGGING = {
 
 CELERY_BROKER_URL = sys_settings.Celery.broker_url
 CELERY_ACCEPT_CONTENT = ['json']
+CELERY_IGNORE_RESULT = True
 # CELERY_RESULT_BACKEND = sys_settings.Celery.result_backend
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Shanghai'

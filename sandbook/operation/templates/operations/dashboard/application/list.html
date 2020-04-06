@@ -62,21 +62,26 @@
                 <th>ID</th>
                 <th></th>
                 <th>账号</th>
+                <th>笔名</th>
+                <th>简介</th>
                 <th>加入时间</th>
                 <th></th>
               </tr>
               </thead>
               <tbody>
               {% for object in object_list %}
+                {% with applier=object.applier %}
                 <tr>
-                  <td>{{ object.applier.id }}</td>
+                  <td>{{ applier.id }}</td>
                   <td style="width: 100px;">
                     <div class="img-container" style="max-width: 64px;">
-                      <img src="{{ object.applier.avatar.url }}" alt="avatar image">
+                      <img src="{{ applier.avatar.url }}" alt="avatar image">
                     </div>
                   </td>
-                  <td><a href="#" class="text-dark">{{ object.applier.username }}</a></td>
-                  <td>{{ object.applier.date_joined }}</td>
+                  <td><a href="#" class="text-dark">{{ applier.username }}</a></td>
+                  <td><b>{{ object.pen_name }}</b></td>
+                  <td>{{ object.self_intro|default:"-" }}</td>
+                  <td>{{ applier.date_joined }}</td>
                   <td class="td-actions text-right">
                     {#                  <button type="button" rel="tooltip" class="btn btn-info btn-link"#}
                     {#                          title="添加" data-add="{{ novel.id }}">#}
@@ -94,6 +99,7 @@
                     </button>
                   </td>
                 </tr>
+                {% endwith %}
               {% endfor %}
 
               </tbody>

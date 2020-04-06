@@ -11,10 +11,12 @@
   {% block css_base %}
     <link href="{% static 'portal/libs/material/material_css.css' %}?v=1" rel="stylesheet">
     <link href="{% static 'portal/libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">
-    <link href="{% static 'portal/libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">
+{#    <link href="{% static 'portal/libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">#}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 {#    <link href="{% static 'libs/material/vertical-nav.css' %}" rel="stylesheet">#}
-    <link href="{% static 'portal/libs/notie/notie.min.css' %}" rel="stylesheet">
-    <link href="{% static 'portal/css/main.css' %}?v=15" rel="stylesheet">
+{#    <link href="{% static 'portal/libs/notie/notie.min.css' %}" rel="stylesheet">#}
+    <link href="https://cdn.bootcss.com/notie/4.3.1/notie.min.css" rel="stylesheet">
+    <link href="{% static 'portal/css/main.css' %}?v=19" rel="stylesheet">
   {% endblock %}
   {% block css %}{% endblock %}
 </head>
@@ -29,16 +31,19 @@
 {% endif %}
 {% block main_base %}{% endblock %}
 {% block js_base %}
-  <script src="{% static 'portal/libs/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'portal/libs/jquery/popper.min.js' %}"></script>
+{#  <script src="{% static 'portal/libs/jquery/jquery.min.js' %}"></script>#}
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+{#  <script src="{% static 'portal/libs/jquery/popper.min.js' %}"></script>#}
+  <script src="https://cdn.bootcss.com/popper.js/1.16.1/umd/popper.min.js"></script>
 {#  <script src="{% static 'libs/material/vertical-nav.js' %}"></script>#}
 {#  <script async defer src="{% static 'libs/material/buttons.js' %}"></script>#}
 {#  <script src="{% static 'libs/material/modernizr.js' %}"></script>#}
   <script src="{% static 'portal/libs/material/bootstrap-material-design.min.js' %}"></script>
+{#  <script src="https://cdn.bootcss.com/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.min.js"></script>#}
   <script src="{% static 'portal/libs/material/material-kit.min.js' %}?v=1"></script>
-  <script src="{% static 'portal/libs/validate/dist/jquery.validate.min.js' %}"></script>
+  <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>
   <script src="{% static 'portal/libs/notie/notie.min.js' %}"></script>
-  <script src="{% static 'js/main.js' %}?v=12"></script>
+  <script src="{% static 'js/main.js' %}?v=13"></script>
   <script>
     $('[data-toggle=tooltip]').tooltip();
     let id = '{{ ID }}', str = '{{ STR }}';

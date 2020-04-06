@@ -85,11 +85,11 @@
           不要害怕失败，参天大树也是从发芽开始，现在就迈出从0到1的一步吧...
         </p>
         {% if not application %}
-          <button id="be-author-btn" class="btn btn-outline-info btn-round">
+          <button id="become-author-btn" class="btn btn-outline-info btn-round" data-toggle="modal" data-target="#become-author-modal">
             <i class="material-icons">subject</i> 成为作者
           </button>
         {% else %}
-          <button id="be-author-btn" class="btn btn-round btn-warning">
+          <button id="become-author-btn" class="btn btn-round btn-warning">
             <i class="material-icons">perm_identity</i> 审核中
           </button>
         {% endif %}

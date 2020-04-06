@@ -1,3 +1,4 @@
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 
 
@@ -19,6 +20,8 @@ class AuthorApplication(models.Model):
     status = models.SmallIntegerField(default=0)
     approver = models.ForeignKey('base.User', on_delete=models.CASCADE, related_name='approver',
                                  null=True, default=None, verbose_name='审批者')
+    pen_name = models.CharField('笔名', max_length=32, validators=[UnicodeUsernameValidator])
+    self_intro = models.TextField('给编辑的话', max_length=512, blank=True)
     created_at = models.DateTimeField('创建时间', auto_now_add=True)
     updated_at = models.DateTimeField('更新时间', auto_now=True)
 

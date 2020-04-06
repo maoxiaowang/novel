@@ -136,7 +136,8 @@ class AuthorInfo(models.Model):
         (5, '铂金')
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='用户')
-    name = models.CharField('笔名', max_length=32, default=None, validators=[UnicodeUsernameValidator])
+    pen_name = models.CharField('笔名', max_length=32, unique=True, null=True, default=None,
+                                validators=[UnicodeUsernameValidator])
     level = models.PositiveSmallIntegerField('等级', choices=LEVEL_CHOICES, default=0)
     date_joined = models.DateTimeField('成为作者的日期', default=timezone.now)
 
