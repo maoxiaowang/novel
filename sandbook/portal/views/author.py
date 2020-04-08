@@ -172,7 +172,6 @@ class VolumeRename(FormValidationMixin, UpdateView):
     fields = ('name',)
     pk_url_kwarg = 'volume_id'
     http_method_names = ['post']
-    json = True
 
 
 class ChapterCreate(CreateView):

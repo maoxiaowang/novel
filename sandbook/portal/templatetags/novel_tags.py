@@ -1,5 +1,6 @@
 from django import template
 
+from base.models import Chapter
 from general.utils.datetime import humanize_datetime_simple
 
 register = template.Library()
@@ -14,3 +15,19 @@ def novel_status_color(novel):
         4: 'danger',  # 已屏蔽
     }
     return status_mappings.get(novel.status) or 'info'
+
+
+@register.filter
+def next_chapter(chapter):
+    newer_chapters = Chapter.objects.filter(id__gt=chapter.id).order_by('id')
+    if newer_chapters:
+        return newer_chapters.first()
+    return
+
+
+@register.filter
+def previous_chapter(chapter):
+    older_chapters = Chapter.objects.filter(id__lt=chapter.id).order_by('id')
+    if older_chapters:
+        return older_chapters.last()
+    return

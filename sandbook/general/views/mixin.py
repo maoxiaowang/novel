@@ -1,5 +1,6 @@
 import typing
 
+from django.contrib.auth import mixins as auth_mixin
 from django.http import JsonResponse
 from django.utils.functional import Promise
 
@@ -49,3 +50,8 @@ class JSONResponseMixin:
         )
 
         return response
+
+
+class LoginRequiredMixin(auth_mixin.LoginRequiredMixin):
+    raise_exception = True
+    permission_denied_message = '需要登录'

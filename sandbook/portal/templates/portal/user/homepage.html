@@ -46,7 +46,7 @@
           </button>
         </div>
 
-        <form method="post" action="{% url 'portal:user_become_author' %}">
+        <form method="post" action="{% url 'portal:user_become_author' %}?json=true">
           {% csrf_token %}
           <div class="modal-body">
             <div class="form-group">
@@ -302,7 +302,7 @@
         let $this = $(this);
         let $btn = $('#become-author-btn');
         $.ajax({
-          url: '{% url 'portal:user_become_author' %}',
+          url: '{% url 'portal:user_become_author' %}?json=true',
           data: $this.serialize(),
           type: 'POST',
           success: function (res) {

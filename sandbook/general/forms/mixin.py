@@ -10,6 +10,11 @@ class FormValidationMixin(JSONResponseMixin):
     non_field_replacement = None
     json = False
 
+    def dispatch(self, request, *args, **kwargs):
+        if 'json' in request.GET:
+            self.json = True
+        return super().dispatch(request, *args, **kwargs)
+
     def get_success_url(self):
         if self.json:
             return

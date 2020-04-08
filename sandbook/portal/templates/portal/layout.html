@@ -9,10 +9,12 @@
   {#  <link rel="icon" type="image/png" href="../assets/img/favicon.png">#}
   <title>{% block title_content %}{% endblock %} - 沙之书</title>
   {% block css_base %}
-    <link href="{% static 'portal/libs/material/material_css.css' %}?v=1" rel="stylesheet">
-    <link href="{% static 'portal/libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">
+{#    <link href="{% static 'portal/libs/material/material_css.css' %}?v=1" rel="stylesheet">#}
+    <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
+{#    <link href="{% static 'portal/libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">#}
+    <link href="http://q8exls826.bkt.clouddn.com/material-kit.min.css" rel="stylesheet">
 {#    <link href="{% static 'portal/libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">#}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" >
 {#    <link href="{% static 'libs/material/vertical-nav.css' %}" rel="stylesheet">#}
 {#    <link href="{% static 'portal/libs/notie/notie.min.css' %}" rel="stylesheet">#}
     <link href="https://cdn.bootcss.com/notie/4.3.1/notie.min.css" rel="stylesheet">
@@ -21,6 +23,72 @@
   {% block css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+<div class="modal fade show" id="loginModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-login" role="document">
+    <div class="modal-content">
+      <div class="card card-signup card-plain">
+        <div class="modal-header">
+          <div class="card-header card-header-primary text-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+                class="material-icons">clear</i></button>
+            <h4 class="card-title">Log in</h4>
+            <div class="social-line">
+              <a href="#pablo" class="btn btn-just-icon btn-link">
+                <i class="fa fa-facebook-square"></i>
+              </a>
+              <a href="#pablo" class="btn btn-just-icon btn-link">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#pablo" class="btn btn-just-icon btn-link">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <form class="form" method="" action="">
+            <p class="description text-center">Or Be Classical</p>
+            <div class="card-body">
+              <div class="form-group bmd-form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">face</i>
+                      </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="First Name...">
+                </div>
+              </div>
+              <div class="form-group bmd-form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">mail</i>
+                      </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Email...">
+                </div>
+              </div>
+              <div class="form-group bmd-form-group">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                  </div>
+                  <input type="password" placeholder="Password..." class="form-control">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <a href="#pablo" class="btn btn-primary btn-link btn-wd btn-lg">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% block modals %}{% endblock %}
 {% if messages %}
   <ul class="messages" hidden>
@@ -32,17 +100,21 @@
 {% block main_base %}{% endblock %}
 {% block js_base %}
 {#  <script src="{% static 'portal/libs/jquery/jquery.min.js' %}"></script>#}
-  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="http://q8exls826.bkt.clouddn.com/jquery.min.js"></script>
 {#  <script src="{% static 'portal/libs/jquery/popper.min.js' %}"></script>#}
-  <script src="https://cdn.bootcss.com/popper.js/1.16.1/umd/popper.min.js"></script>
+  <script src="http://q8exls826.bkt.clouddn.com/popper.min.js"></script>
 {#  <script src="{% static 'libs/material/vertical-nav.js' %}"></script>#}
 {#  <script async defer src="{% static 'libs/material/buttons.js' %}"></script>#}
 {#  <script src="{% static 'libs/material/modernizr.js' %}"></script>#}
-  <script src="{% static 'portal/libs/material/bootstrap-material-design.min.js' %}"></script>
+{#  <script src="{% static 'portal/libs/material/bootstrap-material-design.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/bootstrap-material-design.js"></script>
 {#  <script src="https://cdn.bootcss.com/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.min.js"></script>#}
-  <script src="{% static 'portal/libs/material/material-kit.min.js' %}?v=1"></script>
-  <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>
-  <script src="{% static 'portal/libs/notie/notie.min.js' %}"></script>
+{#  <script src="{% static 'portal/libs/material/material-kit.min.js' %}?v=1"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/material-kit.min.js"></script>
+{#  <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/jquery.validate.min.js"></script>
+{#  <script src="{% static 'portal/libs/notie/notie.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/notie.min.js"></script>
   <script src="{% static 'js/main.js' %}?v=13"></script>
   <script>
     $('[data-toggle=tooltip]').tooltip();
@@ -51,9 +123,15 @@
 {% endblock %}
 {% block js %}{% endblock %}
 <script>
-  $(function () {
-    $.each($('form'), function (i, item) {
-      let $form = $(item);
+  let Portal = {
+    init: function () {
+      return this.bindUIActions(), this
+    },
+    bindUIActions: function () {
+        this.validateForms();
+        // this.handleForm();
+    },
+    validateForm: function validateForm($form) {
       let validator = $form.validate({
         errorPlacement: function (error, element) {
           error.appendTo(element.parent().parent())
@@ -66,8 +144,19 @@
           return false
         }
       })
-    });
-  })
+      return validator
+    },
+    validateForms: function () {
+      let self = this;
+      $(function () {
+        $.each($('form'), function (i, item) {
+        let $form = $(item);
+        self.validateForm($form)
+      });
+      })
+
+    }
+  }.init()
 
   </script>
 </body>

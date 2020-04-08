@@ -1,0 +1,63 @@
+{% extends 'portal/novel/layout.html' %}
+{% load novel_tags %}
+{% block css %}
+  <style>
+  .novel-paragraph {
+    font-size: large;
+    margin-bottom: 2.5rem;
+    word-break: break-word;
+    text-align: justify;
+    line-height: 2.5rem;
+  }
+  </style>
+{% endblock %}
+{% block title_content %}{{ chapter.title }} - 《{{ chapter.volume.novel.name }}》{% endblock %}
+{% block body_class %}bg-dark{% endblock %}
+{% block main_base %}
+  <div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card card-nav-tabs">
+    <div class="card-header card-header-info">
+      <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+      <div class="nav-tabs-navigation">
+        <div class="nav-tabs-wrapper">
+          <ul class="nav nav-tabs" data-tabs="tabs">
+            <li class="nav-item">
+              <a class="nav-link" style="font-size: x-large">
+                {{ chapter.title }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-body ">
+      <div class="tab-content text-center">
+        <div class="tab-pane active">
+          {% for paragraph in chapter.paragraph_set.all %}
+            <p class="novel-paragraph" style="font-size: large">{{ paragraph.content }}</p>
+          {% endfor %}
+          <hr>
+          <div>
+            {% with previous_chapter=chapter|previous_chapter %}
+              {% if previous_chapter %}
+                <a class="btn btn-link btn-lg float-left" href="{% url 'portal:novel_chapter_detail' previous_chapter.id %}">上一章节：{{ previous_chapter.title }}</a>
+              {% endif %}
+            {% endwith %}
+            {% with next_chapter=chapter|next_chapter %}
+              {% if next_chapter %}
+                <a class="btn btn-link btn-lg float-right" href="{% url 'portal:novel_chapter_detail' next_chapter.id %}">下一章节：{{ next_chapter.title }}</a>
+              {% endif %}
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+  </div>
+
+
+{% endblock %}

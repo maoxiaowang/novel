@@ -10,11 +10,12 @@
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
   {% block css_base %}
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'operations/libs/material/bootstrap-material-design.css' %}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+{#    <link href="{% static 'operations/libs/material/bootstrap-material-design.css' %}" rel="stylesheet">#}
+    <link href="http://q8exls826.bkt.clouddn.com/bootstrap-material-design.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{% static 'operations/libs/notie/notie.min.css' %}" rel="stylesheet">
+{#    <link href="{% static 'operations/libs/notie/notie.min.css' %}" rel="stylesheet">#}
+    <link href="http://q8exls826.bkt.clouddn.com/notie.min.css">
     <link href="{% static 'operations/css/main.css' %}?v=2" rel="stylesheet">
     {% block css %}{% endblock %}
   {% endblock %}
@@ -30,11 +31,16 @@
 {% endif %}
 {% block main_base %}{% endblock %}
 {% block js_base %}
-  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdn.bootcss.com/popper.js/1.16.1/umd/popper.min.js"></script>
-  <script src="{% static 'operations/libs/material/bootstrap-material-design.js' %}"></script>
-  <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>
-  <script src="{% static 'operations/libs/notie/notie.min.js' %}"></script>
+{#  <script src="{% static 'js/jquery/jquery.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/jquery.min.js"></script>
+{#  <script src="{% static 'js/jquery/popper.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/popper.min.js"></script>
+{#  <script src="{% static 'operations/libs/material/bootstrap-material-design.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/bootstrap-material-design.js"></script>
+{#  <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/jquery.validate.min.js"></script>
+{#  <script src="{% static 'operations/libs/notie/notie.min.js' %}"></script>#}
+  <script src="http://q8exls826.bkt.clouddn.com/notie.min.js"></script>
   <script src="{% static 'js/main.js' %}?v=12"></script>
   <script>$(document).ready(function () {
     $('body').bootstrapMaterialDesign();

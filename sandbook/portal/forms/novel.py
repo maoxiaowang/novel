@@ -3,7 +3,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from base.constants.novel import DEFAULT_COVER
 from base.models import Novel, Chapter
-from base.models.novel import Volume
+from base.models.novel import Volume, NovelComment
 from general.utils.image import process_novel_cover
 
 
@@ -114,3 +114,10 @@ class VolumeCreateForm(forms.ModelForm):
 
     def clean_name(self):
         return '新卷'
+
+
+class NovelCommentCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = NovelComment
+        fields = ('title', 'content')

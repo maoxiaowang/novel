@@ -135,6 +135,4 @@ gen
 sandbook/settings.ini
 sandbook/clean_files.py
 sandbook/media/novel/
-sandbook/portal/templatetags/user_tags.py
 sandbook/rebuild_db.py
-!/sandbook/portal/templates/portal/user/layout.html

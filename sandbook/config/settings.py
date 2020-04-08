@@ -208,7 +208,7 @@ LOGGING = {
             'style': '{',
         },
         'standard': {
-            'format': '{levelname} {asctime} {module} %(filename)s {message}'
+            'format': '%(levelname)-4s [%(asctime)s] %(filename)s: %(message)s'
         },
     },
     'filters': {

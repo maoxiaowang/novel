@@ -1,0 +1,249 @@
+{% extends 'portal/novel/layout.html' %}
+{% load static %}
+{% block css %}
+  <style>
+    .blur-wrap {
+      position: absolute;
+      height: 60vh;
+      width: 100%;
+    {#top:-70px;#} left: 0;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      overflow: hidden;
+    }
+
+    .blur {
+      position: absolute;
+      width: 110%;
+      height: 60vh;
+      top: 160px;
+      left: 50%;
+      margin: -200px -55%;
+      background-repeat: no-repeat;
+      -webkit-filter: blur(40px);
+      -moz-filter: blur(40px);
+      -ms-filter: blur(40px);
+      filter: blur(40px);
+      filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);
+      background-size: 100%;
+      background-position: center;
+
+    }
+
+    .blur:before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .3);
+      filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#48000000, endColorstr=#48000000);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    .comment-title {
+      font-size: large;
+      font-weight: 500;
+    }
+    .media .media-footer .btn {
+      margin-bottom: unset;
+    }
+  </style>
+{% endblock %}
+{% block body_class %}landing-page sidebar-collapse{% endblock %}
+{% block main_base %}
+  {% include 'portal/blocks/nav.html' %}
+  <div class="blur-wrap">
+    <div class="blur" style="background-image: url('{{ novel.cover.url }}')"></div>
+    <div style="clear: both"></div>
+  </div>
+  <div class="page-header header-filter" data-parallax="true" style="height: 60vh;">
+    <div class="container">
+      <div class="row">
+        <div class="col col-md-4">
+          <img src="{{ novel.cover.url }}" align="《{{ novel.name }}的封面》">
+        </div>
+        <div class="col ol-md-6 mr-auto">
+          <h1 class="title">{{ novel.name }}</h1>
+          <h3 class="mb-3">
+            <span class="badge badge-rose">{{ novel.category.name }}</span>
+            <span class="badge badge-info">{{ novel.sub_category.name }}</span>
+          </h3>
+          <h5>作者：{{ novel.author.authorinfo.pen_name }}</h5>
+          <p class="h5">简介：{{ novel.intro }}</p>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main main-raised">
+    <div class="container">
+      <div class="section text-center">
+        <div class="row">
+          <div class="col-md-8 ml-auto mr-auto">
+            <h2 class="title">章节</h2>
+            <h5 class="description"></h5>
+          </div>
+        </div>
+        <div class="features">
+          {% for volume in novel.volume_set.all %}
+            <div class="row mb-5">
+              <div class="col col-12 mb-3 text-left">
+                <h3>{{ volume.name }}</h3></div>
+              {% for chapter in volume.chapter_set.all %}
+                <div class="col col-6 col-lg-3 text-left mb-4">
+                  <a href="{% url 'portal:novel_chapter_detail' chapter.id %}" class="text-dark"><i
+                      class="material-icons">link</i> {{ chapter.title }}</a>
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+        <hr> {# 卷和评论的分割线 #}
+      </div>
+
+      <div id="reply-media" hidden class="media media-post">
+        <a class="author float-left" href="#">
+          <div class="avatar">
+            <img class="media-object" alt="64x64" src="{{ request.user.avatar.url }}">
+          </div>
+        </a>
+        <div class="media-body">
+          <form method="post" action="{% url 'portal:novel_comment_create' novel.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <div>
+                <label for="reply-area"></label>
+                <textarea id="reply-area" class="form-control" rows="4" placeholder="输入回复内容……" required></textarea>
+              </div>
+            </div>
+            <div class="media-footer">
+              <button class="btn btn-primary float-right">
+                <i class="material-icons">reply</i> 回复
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="comment-area">
+        <div class="title">
+          <h3>评论</h3>
+        </div>
+        <div class="row">
+          <div class="col-md-8 ml-auto mr-auto">
+            <div class="media-area">
+              <h3 class="text-center"> {{ novel.name }}的书评 <br>
+                <small>- 共-条 -</small>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+          <div class="image header">
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+          <div class="paragraph">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </div>
+      </div>
+{#      {% include 'portal/novel/blocks/comment_area.html' %}#}
+    </div>
+  </div>
+  {% include 'portal/blocks/footer.html' %}
+{% endblock %}
+{% block js %}
+  <script>
+    $(function () {
+      let NovelDetail = {
+        urls: {
+          commentList: '{% url 'portal:novel_comment_list' novel.id %}'
+        },
+        init: function () {
+          return this.bindUIActions(), this
+        },
+        bindUIActions: function () {
+          this.bindCommentPostForm();
+          this.bindReplyBtn();
+          this.loadComments();
+
+          // this.handleForm();
+        },
+        bindCommentPostForm: function () {
+          console.log('bindCommentPostForm init')
+          let self = this;
+          $('#comment-post-form').submit(function (e) {
+            console.log('bindCommentPostForm submit')
+            let $this = $(this);
+            e.preventDefault();
+            let $validator = $this.validate();
+            if ($validator.form()) {
+              $.ajax({
+                url: $this.attr('action'),
+                data: $this.serialize(),
+                type: $this.attr('method'),
+                success: function (res) {
+                  console.log('bindCommentPostForm success')
+                  self.loadComments();
+                  self.bindCommentPostForm();
+                }
+              })
+            }
+
+          })
+        },
+        bindReplyBtn: function () {
+          $('[data-comment-reply-btn]').click(function () {
+            let $this = $(this);
+            $this.parent().parent().find('.media-post').replaceWith($('#reply-media'));
+            let $mediaPost = $this.parent().parent().find('.media-post');
+            $mediaPost.removeAttr('reply-media hidden');
+            let commentUsername = $this.parent().parent().find('[data-comment-username]').attr('data-comment-username');
+            $mediaPost.find('label').text('回复 {0}:'.format(commentUsername));
+            $mediaPost.find('textarea').focus();
+
+            // validate
+            let $replyForm = $mediaPost.find('form');
+            Portal.validateForm($replyForm);
+            $replyForm.submit(function (e) {
+              e.preventDefault();
+              $.ajax({
+                url: $replyForm.attr('action'),
+                data: $replyForm.serialize(),
+                type: $replyForm.attr('method'),
+                success: function (res) {
+
+                }
+              })
+            })
+          })
+        },
+        loadComments: function (page) {
+          console.log('loadComments init')
+          let self = this;
+          page = page || '';
+          $.ajax({
+            url: this.urls.commentList + '?page={0}'.format(page),
+            success: function (res) {
+              $('#comment-area').replaceWith(res);
+              self.bindCommentPostForm();
+              Portal.validateForm($('#comment-post-form'));
+              console.log('loadComments loaded')
+              $('.pagination-area').find('a').click(function (e) {
+                e.preventDefault();
+                self.loadComments($(this).attr('data-page'))
+              })
+            }
+          })
+        }
+      }.init();
+    })
+  </script>
+{% endblock %}

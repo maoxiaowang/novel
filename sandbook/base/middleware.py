@@ -66,4 +66,6 @@ class ExceptionProcessingMiddleware(MiddlewareMixin):
             return JSONResponseMixin.json_response(
                 result=False, messages=messages, code=code, level=level, data=data
             )
-
+        else:
+            logger.error(str(exception))
+            logger.error(traceback.format_exc())
