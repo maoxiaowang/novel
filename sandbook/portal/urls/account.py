@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from portal.views import account
 
 account_urlpatterns = [
+    path('account/is-login/', account.IsLogin.as_view(), name='account_is_login'),
     path('account/login/', account.Login.as_view(), name='account_login'),
     path('account/logout/', account.Logout.as_view(), name='account_logout'),
     path('account/sign-up/', account.SignUp.as_view(), name='account_signup'),

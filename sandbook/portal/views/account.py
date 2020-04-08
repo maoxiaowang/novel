@@ -10,15 +10,22 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import CreateView, FormView, DetailView
+from django.views.generic import CreateView, FormView, DetailView, View
 
 from base.models.account import User
-from general.forms.mixin import FormValidationMixin
+from general.forms.mixin import FormValidationMixin, JSONResponseMixin
 from portal.forms.account import AuthenticationForm, SignUpForm, ActiveForm, PasswordResetForm, SetPasswordForm
 from portal.tasks import send_user_creating_email
 
 INTERNAL_ACTIVE_URL_TOKEN = 'account-active'
 INTERNAL_ACTIVE_SESSION_TOKEN = '_account_active_token'
+
+
+class IsLogin(JSONResponseMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        result = True if request.user.is_authenticated else False
+        return self.json_response(result=result)
 
 
 class Login(FormValidationMixin, auth_views.LoginView):

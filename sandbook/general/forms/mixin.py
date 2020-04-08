@@ -23,7 +23,8 @@ class FormValidationMixin(JSONResponseMixin):
     def form_valid(self, form):
         response = super().form_valid(form)
         if self.json:
-            return self.json_response(data=self.object)
+            data = self.object if hasattr(self, 'object') else {}
+            return self.json_response(data=data)
         return response
 
     def form_invalid(self, form):

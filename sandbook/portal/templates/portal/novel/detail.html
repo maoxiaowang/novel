@@ -173,6 +173,7 @@
           this.bindCommentPostForm();
           this.bindReplyBtn();
           this.loadComments();
+          this.bindLoginCheck();
 
           // this.handleForm();
         },
@@ -234,6 +235,7 @@
             success: function (res) {
               $('#comment-area').replaceWith(res);
               self.bindCommentPostForm();
+              self.bindLoginCheck();
               Portal.validateForm($('#comment-post-form'));
               console.log('loadComments loaded')
               $('.pagination-area').find('a').click(function (e) {
@@ -241,6 +243,22 @@
                 self.loadComments($(this).attr('data-page'))
               })
             }
+          })
+        },
+        bindLoginCheck: function () {
+          console.log('bindLoginCheck')
+          $('#comment-post-form').find('[name]').focus(function () {
+            $.ajax({
+              url: Portal.urls.isLogin,
+              success: function (res) {
+                if (!res.result) {
+                  Portal.$loginModal.modal();
+              Portal.$loginModal.on('shown.bs.modal', function () {
+                $(this).find('input[name=username]').focus()
+              })
+                }
+              }
+            })
           })
         }
       }.init();

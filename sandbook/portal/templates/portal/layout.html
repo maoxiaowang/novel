@@ -23,67 +23,58 @@
   {% block css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
-<div class="modal fade show" id="loginModal" tabindex="-1" role="dialog">
+<div class="modal fade show" id="login-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-login" role="document">
     <div class="modal-content">
       <div class="card card-signup card-plain">
-        <div class="modal-header">
+        <div class="modal-header mb-4">
           <div class="card-header card-header-primary text-center">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
-                class="material-icons">clear</i></button>
-            <h4 class="card-title">Log in</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+            <h4 class="card-title">登录</h4>
             <div class="social-line">
-              <a href="#pablo" class="btn btn-just-icon btn-link">
-                <i class="fa fa-facebook-square"></i>
+              <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
+                <i class="fa fa-qq"></i>
               </a>
-              <a href="#pablo" class="btn btn-just-icon btn-link">
-                <i class="fa fa-twitter"></i>
+              <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
+                <i class="fa fa-weixin"></i>
               </a>
-              <a href="#pablo" class="btn btn-just-icon btn-link">
-                <i class="fa fa-google-plus"></i>
+              <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
+                <i class="fa fa-weibo"></i>
               </a>
             </div>
           </div>
         </div>
         <div class="modal-body">
-          <form class="form" method="" action="">
-            <p class="description text-center">Or Be Classical</p>
-            <div class="card-body">
-              <div class="form-group bmd-form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="material-icons">face</i>
-                      </span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="First Name...">
+          <form class="form" method="post" action="{% url 'portal:account_login' %}?json=true">
+            {% csrf_token %}
+            <p class="card-description text-center">或使用账号登录 </p>
+            <p class="card-description text-center">没有账号？<a href="{% url 'portal:account_signup' %}">快速注册</a> <a
+                href="{% url 'portal:account_password_recover' %}">忘记密码</a></p>
+            {{ login_form.non_field_errors }}
+            <div class="form-group bmd-form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="material-icons">face</i>
+                  </span>
                 </div>
+                {{ login_form.username }}
               </div>
-              <div class="form-group bmd-form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="material-icons">mail</i>
-                      </span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Email...">
+            </div>
+            <div class="form-group bmd-form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="material-icons">lock_outline</i>
+                  </span>
                 </div>
-              </div>
-              <div class="form-group bmd-form-group">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="material-icons">lock_outline</i>
-                      </span>
-                  </div>
-                  <input type="password" placeholder="Password..." class="form-control">
-                </div>
+                {{ login_form.password }}
               </div>
             </div>
           </form>
         </div>
-        <div class="modal-footer justify-content-center">
-          <a href="#pablo" class="btn btn-primary btn-link btn-wd btn-lg">Get Started</a>
+        <div class="card-footer justify-content-center pt-0">
+          <button type="submit" class="btn btn-primary btn-link btn-wd btn-lg">登 录</button>
         </div>
       </div>
     </div>
@@ -124,12 +115,16 @@
 {% block js %}{% endblock %}
 <script>
   let Portal = {
+    urls: {
+      isLogin: '{% url 'portal:account_is_login' %}',
+    },
+    $loginModal: $('#login-modal'),
     init: function () {
       return this.bindUIActions(), this
     },
     bindUIActions: function () {
         this.validateForms();
-        // this.handleForm();
+        this.bindLoginModal();
     },
     validateForm: function validateForm($form) {
       let validator = $form.validate({
@@ -143,7 +138,7 @@
         if (!validator.form()) {
           return false
         }
-      })
+      });
       return validator
     },
     validateForms: function () {
@@ -155,7 +150,28 @@
       });
       })
 
+    },
+    bindLoginModal: function () {
+      console.log('bindLoginModal')
+      let $loginForm = this.$loginModal.find('form');
+      $loginForm.submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: $(this).attr('action'),
+          type: $(this).attr('method'),
+          data: $(this).serialize(),
+          success: function (res) {
+            if (res.result) {
+              window.location.reload()
+            }
+          }
+        })
+      });
+      this.$loginModal.find('button[type=submit]').click(function () {
+        $loginForm.trigger('submit')
+      })
     }
+
   }.init()
 
   </script>
