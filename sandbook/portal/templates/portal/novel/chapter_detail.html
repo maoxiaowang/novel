@@ -1,62 +1,89 @@
 {% extends 'portal/novel/layout.html' %}
+{% load static %}
 {% load novel_tags %}
 {% block css %}
   <style>
-  .novel-paragraph {
-    font-size: large;
-    margin-bottom: 2.5rem;
-    word-break: break-word;
-    text-align: justify;
-    line-height: 2.5rem;
-  }
+    body {
+      user-select: none;
+    }
+    .novel-paragraph {
+      font-size: large;
+      margin-bottom: 2.5rem;
+      word-wrap: break-word;
+      word-break: break-word;
+      text-align: justify;
+      line-height: 1.8;
+    }
+
+    #content .container {
+      max-width: 800px;
+    }
+
+    #summary {
+      border: none
+    }
+
   </style>
 {% endblock %}
 {% block title_content %}{{ chapter.title }} - 《{{ chapter.volume.novel.name }}》{% endblock %}
-{% block body_class %}bg-dark{% endblock %}
-{% block main_base %}
+{% block body_attr %}style="background-image: url('{% static 'portal/images/background/1920x1200/bg1.jpg' %}');
+  background-size: cover; background-position: top center;"{% endblock %}
+{% block page_content %}
   <div class="container">
-  <div class="row">
-    <div class="col">
-      <div class="card card-nav-tabs">
-    <div class="card-header card-header-info">
-      <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
-      <div class="nav-tabs-navigation">
-        <div class="nav-tabs-wrapper">
-          <ul class="nav nav-tabs" data-tabs="tabs">
-            <li class="nav-item">
-              <a class="nav-link" style="font-size: x-large">
-                {{ chapter.title }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="card-body ">
-      <div class="tab-content text-center">
-        <div class="tab-pane active">
-          {% for paragraph in chapter.paragraph_set.all %}
-            <p class="novel-paragraph" style="font-size: large">{{ paragraph.content }}</p>
-          {% endfor %}
-          <hr>
-          <div>
-            {% with previous_chapter=chapter|previous_chapter %}
-              {% if previous_chapter %}
-                <a class="btn btn-link btn-lg float-left" href="{% url 'portal:novel_chapter_detail' previous_chapter.id %}">上一章节：{{ previous_chapter.title }}</a>
-              {% endif %}
-            {% endwith %}
-            {% with next_chapter=chapter|next_chapter %}
-              {% if next_chapter %}
-                <a class="btn btn-link btn-lg float-right" href="{% url 'portal:novel_chapter_detail' next_chapter.id %}">下一章节：{{ next_chapter.title }}</a>
-              {% endif %}
-            {% endwith %}
+    {% with novel=chapter.volume.novel %}
+      <div class="row">
+        <div class="col col-12">
+          <div class="panel" id="summary">
+            <div style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat; height: 20px;"></div>
+            <div class="panel-heading" style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
+              <h1 class="h1 m-0 px-5">{{ chapter.title }}</h1>
+            </div>
+            <div class="panel-body pt-0"
+                 style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
+
+              <div class="px-5">
+                <a class="mr-5" href="{% url 'portal:novel_detail' novel.id %}"><i
+                    class="fa fa-book"></i> {{ novel.name }}</a>
+                <a class="mr-5" href="#"><i class="fa fa-user"></i> {{ novel.author.authorinfo.pen_name }}</a>
+                <a class="mr-5" href="#"><i class="fa fa-user"></i> 共{{ chapter.word_count }}字</a>
+                <a class="mr-5" href="#"><i class="fa fa-calendar"></i> {{ chapter.updated_at|date:"Y-m-d H:i:s" }}</a>
+              </div>
+
+              <hr class="mt-3">
+              {% for paragraph in chapter.paragraph_set.all %}
+                <p id="para-{{ paragraph.id }}" class="novel-paragraph px-5">{{ paragraph.content }}</p>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="container mb-4">
+            <div class="row"
+                 style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
+              <div class="col-lg-4 text-center py-2">
+                {% with previous_chapter=chapter|previous_chapter %}
+                  {% if previous_chapter %}
+                    <a class="btn btn-link btn-lg"
+                       href="{% url 'portal:novel_chapter_detail' previous_chapter.id %}">上一章</a>
+                  {% endif %}
+                {% endwith %}
+              </div>
+              <div class="col-lg-4 text-center py-2">
+                <a class="btn btn-link btn-lg" href="{% url 'portal:novel_detail' novel.id %}">目录</a>
+              </div>
+              <div class="col-lg-4 text-center py-2">
+                {% with next_chapter=chapter|next_chapter %}
+                  {% if next_chapter %}
+                    <a class="btn btn-link btn-lg"
+                       href="{% url 'portal:novel_chapter_detail' next_chapter.id %}">下一章</a>
+                  {% endif %}
+                {% endwith %}
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
-  </div>
-    </div>
-  </div>
+    {% endwith %}
   </div>
 
 

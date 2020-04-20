@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.tokens import default_token_generator
-from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ValidationError, PermissionDenied
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -43,7 +43,6 @@ class SignUp(FormValidationMixin, CreateView):
     form_class = SignUpForm
     template_name = 'portal/account/signup.html'
     success_url = reverse_lazy('portal:account_signup_done')
-    valid_link = False
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
@@ -67,7 +66,6 @@ class SignUp(FormValidationMixin, CreateView):
                 )
             ),
         )
-        self.valid_link = True
         return response
 
 
@@ -101,6 +99,8 @@ class Active(FormView):
                     self.request.session[INTERNAL_ACTIVE_SESSION_TOKEN] = token
                     redirect_url = self.request.path.replace(token, INTERNAL_ACTIVE_URL_TOKEN)
                     return HttpResponseRedirect(redirect_url)
+        else:
+            raise Http404
         return self.render_to_response(self.get_context_data())
 
     def get(self, request, *args, **kwargs):
@@ -148,17 +148,16 @@ class PasswordRecover(auth_views.PasswordResetView):
     title = '密码找回'
     form_class = PasswordResetForm
     # from_email = settings.DEFAULT_FROM_EMAIL
-    email_template_name = 'account/password/reset_email.html'
+    email_template_name = 'portal/account/password/reset_email.html'
     html_email_template_name = 'mail/general.html'
     success_url = reverse_lazy('portal:account_password_recover_done')
     template_name = 'portal/account/password/recover.html'
-    subject_template_name = 'account/password/reset_subject.txt'
+    subject_template_name = 'portal/account/password/reset_subject.txt'
 
     def form_valid(self, form):
         self.extra_email_context = {
             'host': self.request.META['HTTP_HOST'],  # fixme
             'date': timezone.now().strftime('%Y-%m-%d')}
-        # messages.add_message(self.request, messages.SUCCESS, '找回密码成功')
         return super().form_valid(form)
 
 
@@ -168,13 +167,4 @@ class PasswordResetConfirm(auth_views.PasswordResetConfirmView):
     """
     form_class = SetPasswordForm
     template_name = 'portal/account/password/reset_confirm.html'
-    success_url = reverse_lazy('portal:account_login')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        # user = form.user
-        # user.password_updated_at = timezone.now()
-        # user.need_to_change_password = False
-        # user.save()
-        # messages.add_message(self.request, messages.SUCCESS, '你的密码已修改成功，请登录。')
-        return response
+    success_url = reverse_lazy('portal:account_password_reset_confirm_done')

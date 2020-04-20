@@ -115,8 +115,13 @@ class UserInfo(models.Model):
     """
     用户详细信息
     """
+    GENDER_CHOICES = (
+        (0, '男'),
+        (1, '女')
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='用户')
     exp = models.PositiveIntegerField('经验值', default=0)
+    gender = models.BooleanField(default=0, verbose_name='性别')
 
     class Meta:
         db_table = 'auth_user_info'

@@ -1,4 +1,5 @@
 from django import template
+from django.db.models import QuerySet, Count, Sum
 
 from base.models import Chapter
 from general.utils.datetime import humanize_datetime_simple
@@ -31,3 +32,9 @@ def previous_chapter(chapter):
     if older_chapters:
         return older_chapters.last()
     return
+
+
+@register.filter
+def volume_word_count(volume):
+    result = volume.chapter_set.aggregate(Sum('word_count'))
+    return result['word_count__sum']

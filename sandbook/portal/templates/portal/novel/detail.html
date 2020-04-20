@@ -1,229 +1,241 @@
 {% extends 'portal/novel/layout.html' %}
 {% load static %}
+{% load common_tags novel_tags %}
 {% block css %}
   <style>
-    .blur-wrap {
-      position: absolute;
-      height: 60vh;
-      width: 100%;
-    {#top:-70px;#} left: 0;
-      -webkit-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-      overflow: hidden;
-    }
+  .blur-wrap {
+    z-index: -1;
+    position: absolute;
+    height: 455px;
+    width: 100%;
+    top: -70px;
+    left: 0;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    overflow: hidden;
+}
+  .blur {
+    position: absolute;
+    width: 110%;
+    height: 455px;
+    top: 160px;
+    left: 50%;
+    margin: -200px -55%;
+    background-repeat: no-repeat;
+    -webkit-filter: blur(40px);
+    -moz-filter: blur(40px);
+    -ms-filter: blur(40px);
+    filter: blur(40px);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);
+    background-position: center;
+    background-size: cover
+}
+  .blur:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .3);
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#48000000, endColorstr=#48000000);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+  #novel-intro {
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,.6);
+    margin-bottom: 50px;
+    padding-top: 40px;
+  }
+  #novel-intro p {
+    margin-bottom: 2px;
+  }
+  #novel-intro .media-object {
+    width: 180px;
+  }
+  #novel-intro .media-left {
+    padding-right: 20px;
+  }
+  h1 {
+    font-size: 28px;
+    margin-top: 0;
+  }
 
-    .blur {
-      position: absolute;
-      width: 110%;
-      height: 60vh;
-      top: 160px;
-      left: 50%;
-      margin: -200px -55%;
-      background-repeat: no-repeat;
-      -webkit-filter: blur(40px);
-      -moz-filter: blur(40px);
-      -ms-filter: blur(40px);
-      filter: blur(40px);
-      filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false);
-      background-size: 100%;
-      background-position: center;
+  #directory h3 {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ffffff;
+    font-size: 1.6rem;
+  }
+  
+  #directory h3 > small {
+    color: #7F8C8D;;
+  }
 
-    }
+  #comment-area .comment-title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
 
-    .blur:before {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, .3);
-      filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#48000000, endColorstr=#48000000);
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 100;
-    }
-    .comment-title {
-      font-size: large;
-      font-weight: 500;
-    }
-    .media .media-footer .btn {
-      margin-bottom: unset;
-    }
+  #comment-area .media-heading {
+    width: 250px;
+    {#border-bottom: 1px solid #eee;#}
+    {#padding-bottom: 5px;#}
+  }
+  #comment-area .media .form-group {
+    margin-bottom: 10px;
+  }
+  #comment-area .media-reply-area {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 0;
+  }
+  #comment-area .media-reply-area .media-footer {
+    margin-bottom: 10px;
+  }
+
   </style>
 {% endblock %}
-{% block body_class %}landing-page sidebar-collapse{% endblock %}
-{% block main_base %}
-  {% include 'portal/blocks/nav.html' %}
-  <div class="blur-wrap">
-    <div class="blur" style="background-image: url('{{ novel.cover.url }}')"></div>
-    <div style="clear: both"></div>
-  </div>
-  <div class="page-header header-filter" data-parallax="true" style="height: 60vh;">
-    <div class="container">
-      <div class="row">
-        <div class="col col-md-4">
-          <img src="{{ novel.cover.url }}" align="《{{ novel.name }}的封面》">
-        </div>
-        <div class="col ol-md-6 mr-auto">
-          <h1 class="title">{{ novel.name }}</h1>
-          <h3 class="mb-3">
-            <span class="badge badge-rose">{{ novel.category.name }}</span>
-            <span class="badge badge-info">{{ novel.sub_category.name }}</span>
-          </h3>
-          <h5>作者：{{ novel.author.authorinfo.pen_name }}</h5>
-          <p class="h5">简介：{{ novel.intro }}</p>
-          <br>
-        </div>
+{% block page_content %}
+    <div class="blur-wrap">
+      <div class="blur" style="background-image: url('{{ novel.cover.url }}')">
+
       </div>
+    <div class="clearfix"></div>
     </div>
-  </div>
-
-  <div class="main main-raised">
-    <div class="container">
-      <div class="section text-center">
-        <div class="row">
-          <div class="col-md-8 ml-auto mr-auto">
-            <h2 class="title">章节</h2>
-            <h5 class="description"></h5>
-          </div>
-        </div>
-        <div class="features">
-          {% for volume in novel.volume_set.all %}
-            <div class="row mb-5">
-              <div class="col col-12 mb-3 text-left">
-                <h3>{{ volume.name }}</h3></div>
-              {% for chapter in volume.chapter_set.all %}
-                <div class="col col-6 col-lg-3 text-left mb-4">
-                  <a href="{% url 'portal:novel_chapter_detail' chapter.id %}" class="text-dark"><i
-                      class="material-icons">link</i> {{ chapter.title }}</a>
-                </div>
-              {% endfor %}
+  <article class="container">
+    {% with author_pen_name=novel.author.authorinfo.pen_name %}
+    <section id="novel-intro">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="media">
+            <div class="media-left">
+              <img class="media-object" src="{{ novel.cover.url }}" alt="《{{ novel.name }}》封面">
             </div>
-          {% endfor %}
-        </div>
-        <hr> {# 卷和评论的分割线 #}
-      </div>
-
-      <div id="reply-media" hidden class="media media-post">
-        <a class="author float-left" href="#">
-          <div class="avatar">
-            <img class="media-object" alt="64x64" src="{{ request.user.avatar.url }}">
+            <div class="media-body">
+              <h1>{{ novel.name }} <small class="ml-5">{{ author_pen_name }} 著</small></h1>
+              <div class="mb-3">
+                <span class="badge badge-primary">{{ novel.category.name }}</span>
+                <span class="badge badge-info">{{ novel.sub_category.name }}</span>
+              </div>
+              <p>更新于：{{ novel.updated_at|render_datetime }}</p>
+              <p>收藏：0</p>
+              <p>点击：0</p>
+              <p>评论：0</p>
+              <p class="mt-4">
+                <button class="btn btn-primary btn-sm mr-2">立即试读</button>
+                <button class="btn btn-info btn-sm">加入书架</button>
+              </p>
+            </div>
           </div>
-        </a>
-        <div class="media-body">
-          <form method="post" action="{% url 'portal:novel_comment_create' novel.id %}">
-            {% csrf_token %}
-            <div class="form-group">
-              <div>
-                <label for="reply-area"></label>
-                <textarea id="reply-area" class="form-control" rows="4" placeholder="输入回复内容……" required></textarea>
+        </div>
+      </div>
+    </section>
+    <section id="novel-main">
+      <div class="row">
+        <div class="col-md-9 col-lg-9" id="left-part">
+
+          {# 作品信息 #}
+          <section>
+            <div class="panel" id="summary">
+              <div class="panel-heading"><h2 class="h3 m-0">作品信息</h2></div>
+              <div class="panel-body"><p>
+                {{ novel.intro|safe }}</p>
               </div>
             </div>
-            <div class="media-footer">
-              <button class="btn btn-primary float-right">
-                <i class="material-icons">reply</i> 回复
-              </button>
+          </section>
+
+          {# 作品目录 #}
+          <section>
+            <div class="panel" id="directory">
+              <div class="panel-heading"><h2 class="h3 m-0">目录</h2></div>
+              <div class="panel-body">
+                {% for volume in novel.volume_set.all %}
+                  <div class="row mb-5 mx-0">
+                    <h3 class="mb-4 m-0">{{ volume.name }}, 共{{ volume.chapter_set.count }}章
+                      <small class="text-secondary ml-2"> 本卷共 {{ volume|volume_word_count|default_if_none:0 }} 字</small>
+                    </h3>
+                    {% for chapter in volume.chapter_set.all %}
+                      <div class="col col-xs-6 col-md-6 col-lg-4 text-left mb-4 pl-0">
+                        <a class="text-dark" href="{% url 'portal:novel_chapter_detail' chapter.id %}">{{ chapter.title }}</a>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+                <p>
+                </p>
+              </div>
             </div>
-          </form>
+          </section>
+
+          {# 作品评论 #}
+        <section>
+          <div class="panel" id="comment-area">
+              <div class="panel-heading"><h2 class="h3 m-0">评论 (-)</h2></div>
+              <div class="panel-body">
+                <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+                <div class="image header">
+                  <div class="line"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="paragraph">
+                  <div class="line"></div>
+                  <div class="line"></div>
+                  <div class="line"></div>
+                  <div class="line"></div>
+                  <div class="line"></div>
+                </div>
+              </div>
+              </div>
+          </div>
+        </section>
+
         </div>
-      </div>
-      <div id="comment-area">
-        <div class="title">
-          <h3>评论</h3>
-        </div>
-        <div class="row">
-          <div class="col-md-8 ml-auto mr-auto">
-            <div class="media-area">
-              <h3 class="text-center"> {{ novel.name }}的书评 <br>
-                <small>- 共-条 -</small>
-              </h3>
+
+
+        <div class="col-md-3 col-lg-3 hidden-xs hidden-sm" id="right-part">
+          <aside>
+            <div class="panel" id="author-works">
+              <div class="panel-heading"><h2 class="h3 m-0">{{ author_pen_name }}的其他作品</h2></div>
+              <div class="panel-body">
+              </div>
             </div>
-          </div>
+        </aside>
         </div>
-        <div class="ui fluid placeholder ml-4 mt-4 mb-5">
-          <div class="image header">
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-          <div class="paragraph">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-        </div>
+
       </div>
-{#      {% include 'portal/novel/blocks/comment_area.html' %}#}
-    </div>
-  </div>
-  {% include 'portal/blocks/footer.html' %}
+    </section>
+  {% endwith %}
+  </article>
 {% endblock %}
 {% block js %}
   <script>
     $(function () {
       let NovelDetail = {
         urls: {
-          commentList: '{% url 'portal:novel_comment_list' novel.id %}'
+          commentList: '{% url 'portal:novel_comment_list' novel.id %}',
+          replyList: '{% url 'portal:novel_comment_reply_list' 0 %}'
         },
         init: function () {
           return this.bindUIActions(), this
         },
         bindUIActions: function () {
-          this.bindCommentPostForm();
-          this.bindReplyBtn();
           this.loadComments();
-          this.bindLoginCheck();
+          this.bindReplyBtn();
 
           // this.handleForm();
         },
-        bindCommentPostForm: function () {
-          console.log('bindCommentPostForm init')
-          let self = this;
-          $('#comment-post-form').submit(function (e) {
-            console.log('bindCommentPostForm submit')
-            let $this = $(this);
-            e.preventDefault();
-            let $validator = $this.validate();
-            if ($validator.form()) {
-              $.ajax({
-                url: $this.attr('action'),
-                data: $this.serialize(),
-                type: $this.attr('method'),
-                success: function (res) {
-                  console.log('bindCommentPostForm success')
-                  self.loadComments();
-                  self.bindCommentPostForm();
-                }
-              })
-            }
-
-          })
-        },
         bindReplyBtn: function () {
-          $('[data-comment-reply-btn]').click(function () {
-            let $this = $(this);
-            $this.parent().parent().find('.media-post').replaceWith($('#reply-media'));
-            let $mediaPost = $this.parent().parent().find('.media-post');
-            $mediaPost.removeAttr('reply-media hidden');
-            let commentUsername = $this.parent().parent().find('[data-comment-username]').attr('data-comment-username');
-            $mediaPost.find('label').text('回复 {0}:'.format(commentUsername));
-            $mediaPost.find('textarea').focus();
-
-            // validate
-            let $replyForm = $mediaPost.find('form');
-            Portal.validateForm($replyForm);
-            $replyForm.submit(function (e) {
-              e.preventDefault();
-              $.ajax({
-                url: $replyForm.attr('action'),
-                data: $replyForm.serialize(),
-                type: $replyForm.attr('method'),
-                success: function (res) {
-
-                }
-              })
-            })
+          let self = this;
+          $('[data-comment-reply-btn]').unbind('click').click(function () {
+            let $this = $(this), commentId = $this.attr('data-comment-reply-btn');
+            let $replyArea = $this.parent().parent().find('.media-reply-area');
+            if ($replyArea.is(':visible')) {
+              $replyArea.hide().html('');
+            } else {
+              self.loadReplies('', commentId, $this)
+            }
           })
         },
         loadComments: function (page) {
@@ -234,10 +246,36 @@
             url: this.urls.commentList + '?page={0}'.format(page),
             success: function (res) {
               $('#comment-area').replaceWith(res);
-              self.bindCommentPostForm();
-              self.bindLoginCheck();
-              Portal.validateForm($('#comment-post-form'));
               console.log('loadComments loaded')
+
+              // bind post form
+              let $commentPostForm = $('#comment-post-form');
+              let $validator = Portal.validateForm($commentPostForm);
+              $commentPostForm.submit(function (e) {
+                console.log('bindCommentPostForm submit')
+                let $this = $(this);
+                e.preventDefault();
+                {#let $validator = $this.validate();#}
+                if ($validator.form()) {
+                  $.ajax({
+                    url: $this.attr('action'),
+                    data: $this.serialize(),
+                    type: $this.attr('method'),
+                    success: function (res) {
+                      console.log('bindCommentPostForm success')
+                      self.loadComments();
+                    }
+                  })
+                }
+              });
+
+              // bind reply btn
+              self.bindReplyBtn();
+
+              // login check
+              self.bindLoginCheck();
+
+              // bind pagination click
               $('.pagination-area').find('a').click(function (e) {
                 e.preventDefault();
                 self.loadComments($(this).attr('data-page'))
@@ -245,17 +283,62 @@
             }
           })
         },
+        loadReplies: function (page, commentId, $replyBtn) {
+          console.log('loadReplies')
+          let self = this;
+          page = page || '';
+          $.ajax({
+            url: self.urls.replyList.replace('0', commentId) + '?page={0}'.format(page),
+            success: function (res) {
+              // render
+              $replyBtn.parent().parent().find('.media-reply-area').replaceWith(res);
+
+              // bind login check
+              self.bindLoginCheck();
+
+              let $replyArea = $replyBtn.parent().parent().find('.media-reply-area');
+              $replyArea.show();
+              $replyArea.find('textarea').focus();
+
+              // validate
+              let $replyForm = $replyArea.find('form');
+              let $validator = Portal.validateForm($replyForm);
+              $replyForm.submit(function (e) {
+                e.preventDefault();
+                if ($validator.form()) {
+                  $.ajax({
+                    url: $replyForm.attr('action'),
+                    data: $replyForm.serialize(),
+                    type: $replyForm.attr('method'),
+                    success: function (res) {
+                      self.loadReplies(1, commentId, $replyBtn);
+                      let replyCount = $replyBtn.parent().parent().find('.media-reply-area').attr('data-reply-count');
+                      $replyBtn.text('回复({0})'.format(parseInt(replyCount) + 1));
+
+                      $replyBtn.parent().parent().find('.media-reply-area').show()
+                    }
+                  })
+                }
+              });
+              $('.reply-pagination-area').find('a').click(function (e) {
+                e.preventDefault();
+                self.loadReplies($(this).attr('data-page'), commentId, $replyBtn)
+              });
+
+            }
+          });
+        },
         bindLoginCheck: function () {
           console.log('bindLoginCheck')
-          $('#comment-post-form').find('[name]').focus(function () {
+          $('#comment-area').find('[name]').unbind('focus').focus(function () {
             $.ajax({
               url: Portal.urls.isLogin,
               success: function (res) {
                 if (!res.result) {
                   Portal.$loginModal.modal();
-              Portal.$loginModal.on('shown.bs.modal', function () {
-                $(this).find('input[name=username]').focus()
-              })
+                  Portal.$loginModal.on('shown.bs.modal', function () {
+                    $(this).find('input[name=username]').focus()
+                  })
                 }
               }
             })

@@ -1,31 +1,41 @@
 from django.conf import settings
+from django.http import HttpResponseRedirect
 
 from general.views import JSONResponseMixin
 
 
 class FormValidationMixin(JSONResponseMixin):
     """
+    Only for ModelFormMixin
     non_field_replacement must be a field name
     """
     non_field_replacement = None
     json = False
+    ajax = False
 
     def dispatch(self, request, *args, **kwargs):
         if 'json' in request.GET:
             self.json = True
+            self.ajax = True
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        if self.json:
+        if self.ajax:
             return
         return super().get_success_url()
 
+    def _template_response(self):
+        raise ValueError("Mode 'ajax' can not be set without 'json'.")
+
     def form_valid(self, form):
-        response = super().form_valid(form)
+        self.object = form.save()
         if self.json:
             data = self.object if hasattr(self, 'object') else {}
             return self.json_response(data=data)
-        return response
+        success_url = self.get_success_url()
+        if success_url is not None:
+            return HttpResponseRedirect(success_url)
+        return self._template_response()
 
     def form_invalid(self, form):
         # Append css class to every field that contains errors.

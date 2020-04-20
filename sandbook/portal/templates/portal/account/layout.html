@@ -3,6 +3,55 @@
 
 {% block title_content %}登录{% endblock %}
 {% block css %}
+  <style>
+    .login {
+      padding: unset;
+      margin-bottom: 0;
+      background-size: cover;
+    }
+
+
+    .login-form .login-field {
+      {#border-color: unset;#}
+    }
+
+    .login-icon {
+      width: unset;
+    }
+
+    .login-icon > h4 small {
+      display: inline;
+    }
+
+    .login-screen {
+      {#opacity: 0.85;#}
+      background-color: unset;
+      min-height: calc(100vh - 53px);
+      display: flex;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .login-icon {
+      position: initial;
+    }
+
+    .form-wrap {
+      align-self: center;
+      padding: 0;
+      min-width: 380px;
+    }
+
+    .form-title {
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar, .mh-head {
+      margin-bottom: 0;
+    }
+
+  </style>
   {% block css_account %}{% endblock %}
 {% endblock %}
 {% block main_base %}

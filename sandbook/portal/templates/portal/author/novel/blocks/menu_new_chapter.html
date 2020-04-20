@@ -1,0 +1,9 @@
+{% with volume=chapter.volume %}
+<li class="mm-listitem">
+  <a href="{% url 'portal:novel_chapter_update' volume.novel.id chapter.id %}" class="mm-listitem__text">
+    {% if chapter.status == 0 %}<i class="fa fa-sticky-note-o" title="草稿"></i>{% else %}<i class="fa fa-check"></i>{% endif %}
+    {{ chapter.title }}
+    <small class="text-muted">{{ chapter.word_count }}</small>
+  </a>
+</li>
+{% endwith %}

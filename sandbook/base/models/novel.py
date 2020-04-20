@@ -122,8 +122,9 @@ class NovelComment(models.Model):
     """
     书评
     """
-    novel = models.ForeignKey(Novel, on_delete=models.CASCADE, verbose_name='小说')
-    user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='用户')
+    novel = models.ForeignKey(Novel, on_delete=models.CASCADE, verbose_name='小说', related_name='comments', )
+    user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True, verbose_name='用户',
+                             related_name='nc_user')
     title = models.CharField('标题', max_length=32, blank=True)  # 标题可选
     content = models.CharField('内容', max_length=4096)
     created_at = models.DateTimeField('创建于', auto_now_add=True)
@@ -137,7 +138,9 @@ class NovelCommentReply(models.Model):
     """
     书评回复
     """
-    novel_comment = models.ForeignKey(NovelComment, on_delete=models.CASCADE, verbose_name='书评')
+    comment = models.ForeignKey(NovelComment, on_delete=models.CASCADE, related_name='replies',
+                                verbose_name='书评')
+    content = models.CharField('内容', max_length=1024)
     user = models.ForeignKey('base.User', on_delete=models.SET_NULL, null=True,
                              related_name='nc_reply_user', verbose_name='回复用户')
     created_at = models.DateTimeField('创建于', auto_now_add=True)

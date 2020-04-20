@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
+from django.http import Http404
 from django.views.generic import DetailView, UpdateView, CreateView
 from django.views.generic.base import View
 
@@ -11,71 +12,57 @@ from general.views import JSONResponseMixin
 from portal.forms.user import AuthorApplicationForm
 
 
-class HomeBaseView(LoginRequiredMixin, DetailView):
+class Home(DetailView):
+    """
+    用户主页（领地）
+
+    书架，信箱，通知，设置
+    非本人只能看到书架菜单（可在设置中关闭书架里书）
+
+    """
     model = User
     pk_url_kwarg = 'user_id'
-
-
-class HomePage(HomeBaseView):
-    """
-    用户主页
-
-    非自己的主页，只能看到当前用户的动态（若未开启隐私保护）
-    自己的主页，可以看到自己和自己关注的人（非对方黑名单或隐私保护）的动态
-
-    发送私信（非自己主页）
-    关注/取消关注（非自己主页）
-
-    """
-    template_name = 'portal/user/homepage.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(categories=ALL_CATEGORIES)
         return context
 
+    def get_template_names(self):
+        if self.object == self.request.user:
+            # 被访问用户是请求本人
+            return ['portal/user/home/my_home.html']
+        return ['portal/user/home/user_home.html']
 
-class Profile(HomeBaseView):
-    """
-    个人资料
-    """
-    template_name = 'portal/user/blocks/profile.html'
 
-
-class Circle(HomeBaseView):
+class HomePart(DetailView):
     """
-    用户圈子
+    用户主页其他部分
     """
-    template_name = 'portal/user/blocks/circle.html'
+    model = User
+    pk_url_kwarg = 'user_id'
+    parts = ('bookshelf', 'home', 'mailbox', 'settings', 'workbench')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        activities = self.object.activity_set.prefetch_related(
-            Prefetch('likes', queryset=ActivityLikes.objects.filter(user=self.object),
-                     to_attr='user_likes'),
-            Prefetch('comments', queryset=ActivityComment.objects.filter(user=self.object),
-                     to_attr='user_comments')
-        )
-        context.update(activities=activities)
-        context.update(system_robot=self.model.objects.get(id=SYSTEM_ROBOT_ID))
+        part = self.kwargs.get('part')
+        try:
+            context = self.__getattribute__('get_%s_context_data' % part)(context)
+        except AttributeError:
+            pass
         return context
 
+    def get_template_names(self):
+        part = self.kwargs.get('part')
+        if part not in self.parts:
+            raise Http404
+        self.template_name = 'portal/user/home/parts/%s.html' % part
+        return super().get_template_names()
 
-class Settings(HomeBaseView):
-    """
-    用户（账号）设置
-    """
-    template_name = 'portal/user/blocks/settings.html'
+    def get_bookshelf_context_data(self, context):
+        return context
 
-
-class Works(HomeBaseView):
-    """
-    用户（作家）的作品管理
-    """
-    template_name = 'portal/user/blocks/works.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_workbench_context_data(self, context):
         if self.object.is_author:
             works = self.object.novel_set.select_related(
                 'sub_category__category').prefetch_related('volume_set__chapter_set')
@@ -87,6 +74,60 @@ class Works(HomeBaseView):
                 applier=self.request.user, status=AuthorApplication.STATUS['unapproved']).exists()
         )
         return context
+
+
+# class Profile(HomeBaseView):
+#     """
+#     个人资料
+#     """
+#     template_name = 'portal/user/blocks/profile.html'
+#
+#
+# class Circle(HomeBaseView):
+#     """
+#     用户圈子
+#     """
+#     template_name = 'portal/user/blocks/circle.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         activities = self.object.activity_set.prefetch_related(
+#             Prefetch('likes', queryset=ActivityLikes.objects.filter(user=self.object),
+#                      to_attr='user_likes'),
+#             Prefetch('comments', queryset=ActivityComment.objects.filter(user=self.object),
+#                      to_attr='user_comments')
+#         )
+#         context.update(activities=activities)
+#         context.update(system_robot=self.model.objects.get(id=SYSTEM_ROBOT_ID))
+#         return context
+#
+#
+# class Settings(HomeBaseView):
+#     """
+#     用户（账号）设置
+#     """
+#     template_name = 'portal/user/blocks/settings.html'
+#
+#
+# class Works(HomeBaseView):
+#     """
+#     用户（作家）的作品管理
+#     """
+#     template_name = 'portal/user/blocks/works.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         if self.object.is_author:
+#             works = self.object.novel_set.select_related(
+#                 'sub_category__category').prefetch_related('volume_set__chapter_set')
+#             context.update(works=works)
+#
+#         # if be-author application exists
+#         context.update(
+#             application=AuthorApplication.objects.filter(
+#                 applier=self.request.user, status=AuthorApplication.STATUS['unapproved']).exists()
+#         )
+#         return context
 
 
 class Follow(LoginRequiredMixin, JSONResponseMixin, UpdateView):
@@ -107,7 +148,6 @@ class BecomeAuthor(FormValidationMixin, CreateView):
     model = AuthorApplication
     form_class = AuthorApplicationForm
     http_method_names = ['post']
-    json = True
 
     def form_valid(self, form):
         form.instance.applier = self.request.user

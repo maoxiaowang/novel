@@ -1,8 +1,15 @@
 {% extends 'portal/account/layout.html' %}
 {% load static %}
 {% block title_content %}重置密码成功{% endblock %}
-{% block body_class %}login-page sidebar-collapse{% endblock %}
+{% block css_account %}
+  <style>
+  .login-form {
+    background-color: rgba(0,0,0, 0.5);
+  }
+  </style>
+{% endblock %}
 {% block main_account %}
+
   <div class="page-header header-filter"
        style="background-image: url('{% static 'portal/images/background/1920x1200/bg2.jpg' %}'); background-size: cover; background-position: top center;">
     <div class="container">

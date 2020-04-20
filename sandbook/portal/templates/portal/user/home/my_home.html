@@ -1,0 +1,449 @@
+{% extends 'portal/user/home/home_layout.html' %}
+{% load static %}
+{% block css_home %}
+  <link href="https://cdn.bootcss.com/jasny-bootstrap/4.0.0/css/jasny-bootstrap.min.css" rel="stylesheet">
+  <style>
+    .fileinput-new.thumbnail {
+      border: none;
+    }
+  </style>
+{% endblock %}
+{% block modals %}
+  <div id="novel-create-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="novel-create-modal"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h5 class="modal-title" id="exampleModalLiveLabel">创建作品</h5>
+        </div>
+        <div class="modal-body"></div>
+      </div>
+    </div>
+  </div>
+  <div id="become-author-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="novel-create-modal"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h5 class="modal-title">成为作家</h5>
+        </div>
+
+        <form method="post" action="{% url 'portal:user_become_author' %}?json=true">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="form-group">
+              <div>
+                <label for="pen-name-input">笔名</label>
+                <input id="pen-name-input" class="form-control" name="pen_name" maxlength="32" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <div>
+                <label for="self-intro-input">给编辑的一些话</label>
+                <textarea id="self-intro-input" class="form-control" name="self_intro" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-raised btn-primary">提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block avatar %}
+  <a href="{% url 'portal:user_home' request.user.id %}">
+    <img class="img-circle img-responsive avatar-lg" src="{{ request.user.avatar.url }}" alt="user-avatar">
+  </a>
+{% endblock %}
+{% block home_nav %}
+  <nav>
+    <!-- Nav tabs -->
+    <ul role="tablist">
+      <li class="active" role="presentation">
+        <a href="#home" aria-controls="home" role="tab" data-toggle="tab" data-part="home">近况</a>
+      </li>
+      <li role="presentation">
+        <a href="#bookshelf" aria-controls="bookshelf" role="tab" data-toggle="tab" data-part="bookshelf">书架</a>
+      </li>
+      <li role="presentation">
+        <a id="speak-tab-btn" href="#workbench" aria-controls="workbench" role="tab" data-toggle="tab"
+           data-part="workbench">作品</a>
+      </li>
+      <li role="presentation">
+        <a id="comment-tab-btn" href="#mailbox" aria-controls="comment" role="tab" data-toggle="tab"
+           data-part="mailbox">信箱</a>
+      </li>
+      <li role="presentation">
+        <a id="post-tab-btn" href="#settings" aria-controls="post" role="tab" data-toggle="tab"
+           data-part="settings">设置</a>
+      </li>
+    </ul>
+  </nav>
+{% endblock %}
+{% block tab_content %}
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade active in" role="tabpanel">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+            <div class="image header">
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div class="paragraph">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="bookshelf" class="tab-pane fade" role="tabpanel">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+            <div class="image header">
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div class="paragraph">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="workbench" class="tab-pane fade" role="tabpanel">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+            <div class="image header">
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div class="paragraph">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="mailbox" class="tab-pane fade" role="tabpanel">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+            <div class="image header">
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div class="paragraph">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="settings" class="tab-pane fade" role="tabpanel">
+      <div class="list-group">
+        <div class="list-group-item">
+          <div class="ui fluid placeholder ml-4 mt-4 mb-5">
+            <div class="image header">
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+            <div class="paragraph">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js_home %}
+  <script src="https://cdn.bootcss.com/jasny-bootstrap/4.0.0/js/jasny-bootstrap.min.js"></script>
+  <script>
+    let categories = {{ categories|safe }};
+    $(function () {
+      let MyHome = {
+        init: function () {
+          return this.bindUIActions(), this
+        },
+        bindUIActions: function () {
+          this.initCreateModal();
+          this.initBecomeAuthor();
+        },
+
+        initCategorySelect: function () {
+          let $modal = $('#novel-create-modal'),
+            $select = $modal.find('select[name=category]'), 
+            $subSelect = $modal.find('select[name=sub_category]');
+          console.log('initSelect')
+          $select.select2().on('change', function (e) {
+            console.log(e.val)
+            if (e.val) {
+              let val = parseInt(e.val);
+              $.each(categories, function (ci, c) {
+                if (c['id'] === val) {
+                  let options = '<option value selected>请选择</option>';
+                  $.each(c['sub'], function (si, s) {
+                    options += '<option value="{0}">{1}</option>'.format(s['id'], s['name'])
+                  });
+                  $subSelect.removeAttr('disabled').html(options);
+                }
+              })
+            } else {
+              $subSelect.attr('disabled', true).select2('val', '')
+            }
+          });
+          $subSelect.select2();
+        },
+
+        initCreateModal: function () {
+          // New Work
+          let self = this;
+          let $novelCreateModal = $('#novel-create-modal');
+          $novelCreateModal.on('show.bs.modal', function (e) {
+            $.ajax({
+              url: '{% url 'portal:novel_create' %}',
+              success: function (res) {
+                $novelCreateModal.find('div.modal-body').html(res);
+                let $form = $novelCreateModal.find('form');
+
+                // Select init
+                self.initCategorySelect();
+                console.log($('#novel-create-modal').find('select[name=category]'));
+
+                // Validator init
+                let validator = $form.validate({
+                  errorPlacement: function (error, element) {
+                    error.appendTo(element.parent())
+                  },
+                  errorClass: 'errorlist d-block'
+                });
+                $form.submit(function (e) {
+                  e.preventDefault();
+                  // validate
+                  if (!validator.form()) {
+                    return false
+                  }
+                  let formData = new FormData();
+                  $.each($form.serializeArray(), function (i, item) {
+                    formData.append(item.name, item.value)
+                  });
+                  formData.append('cover', $('input[name=cover]')[0].files[0]);
+                  $.ajax({
+                    url: $form.attr('action'),
+                    type: $form.attr('method'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                      console.log(res)
+                      if (res.indexOf('class="errorlist"') >= 0) {
+                        $novelCreateModal.find('div.modal-body').html(res);
+                        self.initCategorySelect();
+                      } else {
+                        console.log('<0')
+                        $novelCreateModal.modal('hide');
+                        $('#workbench').html(res);
+                      }
+                    }
+                  })
+                });
+              }
+            })
+          }).on('shown.bs.modal', function () {
+            $(this).find('input[name]').focus()
+          });
+        },
+
+        initBecomeAuthor: function () {
+            // Become author
+          let $becomeAuthorModal = $('#become-author-modal');
+          $becomeAuthorModal.on('shown.bs.modal', function () {
+            $(this).find('input[name=pen_name]').focus()
+          });
+          $becomeAuthorModal.find('form').submit(function (e) {
+            e.preventDefault();
+            let $this = $(this), $btn = $('#become-author-btn');
+            $.ajax({
+              url: $this.attr('action'),
+              data: $this.serialize(),
+              type: $this.attr('method'),
+              success: function (res) {
+                if (res.result) {
+                  $becomeAuthorModal.modal('hide');
+                  $btn.removeAttr('data-toggle').removeAttr('data-target');
+                  $btn.removeClass('btn-primary').attr('disabled', true);
+                  $btn.html('审核中')
+                }
+
+              }
+            })
+          });
+        }
+
+
+      }.init();
+    })
+
+
+  </script>
+
+{#  <script>#}
+{#    'use strict';#}
+{##}
+{#    let categories = {{ categories|safe }};#}
+{#    let User = (function () {#}
+{#      // Tab#}
+{#      function request(tab, relatedTab) {#}
+{#        tab = tab || '[data-toggle="tab"][href="#profile"]';#}
+{#        let $tab = $(tab), $tabContent = $($tab.attr('href'));#}
+{#        $(relatedTab).find('div.ui.placeholder').show();#}
+{#        $tabContent.find(':not(.ui,.image,.line,.paragraph,.placeholder)').remove();#}
+{#        $tabContent.find('div.ui.placeholder').show();#}
+{#        $.ajax({#}
+{#          url: $tab.attr('data-url'),#}
+{#          success: function (res) {#}
+{#            $tabContent.find('div.ui.placeholder').hide();#}
+{#            $tabContent.prepend(res);#}
+{#            // init sth#}
+{##}
+{#          },#}
+{#        })#}
+{#      }#}
+{##}
+{#      // Become author#}
+{#      let $becomeAuthorModal = $('#become-author-modal');#}
+{#      $becomeAuthorModal.on('shown.bs.modal', function () {#}
+{#        $(this).find('input[name=pen_name]').focus()#}
+{#      });#}
+{#      $becomeAuthorModal.find('form').submit(function (e) {#}
+{#        e.preventDefault();#}
+{#        let $this = $(this);#}
+{#        let $btn = $('#become-author-btn');#}
+{#        $.ajax({#}
+{#          url: '{% url 'portal:user_become_author' %}?json=true',#}
+{#          data: $this.serialize(),#}
+{#          type: 'POST',#}
+{#          success: function (res) {#}
+{#            if (res.result) {#}
+{#              $becomeAuthorModal.modal('hide');#}
+{#              $btn.removeAttr('data-toggle').removeAttr('data-target');#}
+{#              $btn.removeClass('btn-outline-info').addClass('btn-warning');#}
+{#              $btn.html('<i class="material-icons">perm_identity</i> 审核中')#}
+{#            }#}
+{#          }#}
+{#        })#}
+{#      });#}
+{##}
+{#      request();#}
+{#      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {#}
+{#        request(e.target, e.relatedTarget)#}
+{#      });#}
+{##}
+{#      function initSelect() {#}
+{#        $('.selectpicker').selectpicker('setStyle', 'btn-link', 'add');#}
+{#        $('select[name=category]').on('change', function () {#}
+{#          let $this = $(this), val = $this.val();#}
+{#          if (val) {#}
+{#            val = parseInt(val);#}
+{#            $.each(categories, function (ci, c) {#}
+{#              if (c['id'] === val) {#}
+{#                let options = '<option value selected>请选择</option>';#}
+{#                $.each(c['sub'], function (si, s) {#}
+{#                  options += '<option value="{0}">{1}</option>'.format(s['id'], s['name'])#}
+{#                });#}
+{#                $('select[name=sub_category]').removeAttr('disabled').html(#}
+{#                  options).selectpicker('refresh');#}
+{#              }#}
+{#            })#}
+{#          } else {#}
+{#            $('select[name=sub_category]').attr('disabled', true).selectpicker('refresh')#}
+{#          }#}
+{#        });#}
+{#      }#}
+{##}
+{#      // New Work#}
+{#      let $novelCreateModal = $('#novel-create-modal');#}
+{#      $novelCreateModal.on('show.bs.modal', function (e) {#}
+{#        $.ajax({#}
+{#          url: '{% url 'portal:novel_create' %}',#}
+{#          success: function (res) {#}
+{#            $novelCreateModal.find('div.modal-body').html(res);#}
+{#            let $form = $novelCreateModal.find('form');#}
+{##}
+{#            // Select init#}
+{#            initSelect();#}
+{##}
+{#            // Validator init#}
+{#            let validator = $form.validate({#}
+{#              errorPlacement: function (error, element) {#}
+{#                error.appendTo(element.parent())#}
+{#              },#}
+{#              errorClass: 'errorlist d-block'#}
+{#            });#}
+{#            $form.submit(function (e) {#}
+{#              e.preventDefault();#}
+{#              // validate#}
+{#              if (!validator.form()) {#}
+{#                return false#}
+{#              }#}
+{#              var formdata = new FormData();#}
+{#              $.each($form.serializeArray(), function (i, item) {#}
+{#                formdata.append(item.name, item.value)#}
+{#              });#}
+{#              formdata.append('cover', $('input[name=cover]')[0].files[0]);#}
+{#              $.ajax({#}
+{#                url: $form.attr('action'),#}
+{#                type: $form.attr('method'),#}
+{#                data: formdata,#}
+{#                processData: false,#}
+{#                contentType: false,#}
+{#                success: function (res) {#}
+{#                  if (res.indexOf('class="errorlist"') >= 0) {#}
+{#                    $novelCreateModal.find('div.modal-body').html(res);#}
+{#                    initSelect();#}
+{#                  } else {#}
+{#                    $novelCreateModal.modal('hide');#}
+{#                    request('[data-toggle="tab"][href="#works"]')#}
+{#                  }#}
+{#                }#}
+{#              })#}
+{#            });#}
+{#          }#}
+{#        })#}
+{#      });#}
+{##}
+{#    })();#}
+{##}
+{#  </script>#}
+{% endblock %}

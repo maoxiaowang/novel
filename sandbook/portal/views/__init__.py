@@ -13,8 +13,6 @@ class Index(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context.update(
-            latest_novels=Novel.objects.filter(
-                updated_at__gte=timezone.now() - datetime.timedelta(days=3),
-                status=Novel.STATUS['active']
-            ).order_by('-updated_at'))
+            latest_novels=Novel.objects.select_related(
+                'sub_category__category').order_by('-updated_at'))
         return context

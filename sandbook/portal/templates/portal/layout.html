@@ -1,4 +1,5 @@
 {% load static %}
+{% load common_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,72 +11,410 @@
   <title>{% block title_content %}{% endblock %} - 沙之书</title>
   {% block css_base %}
 {#    <link href="{% static 'portal/libs/material/material_css.css' %}?v=1" rel="stylesheet">#}
-    <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">
+{#    <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">#}
 {#    <link href="{% static 'portal/libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">#}
-    <link href="http://q8exls826.bkt.clouddn.com/material-kit.min.css" rel="stylesheet">
+{#    <link href="http://q8exls826.bkt.clouddn.com/material-kit.min.css" rel="stylesheet">#}
 {#    <link href="{% static 'portal/libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">#}
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" >
 {#    <link href="{% static 'libs/material/vertical-nav.css' %}" rel="stylesheet">#}
 {#    <link href="{% static 'portal/libs/notie/notie.min.css' %}" rel="stylesheet">#}
+{#    <link href="{% static 'portal/css/bootstrap.min.css' %}" rel="stylesheet">#}
+<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    {#    <link href="http://designmodo.github.io/Flat-UI/dist/css/vendor/bootstrap.min.css" rel="stylesheet">#}
+{#    <link href="http://designmodo.github.io/Flat-UI/dist/css/flat-ui.css" rel="stylesheet">#}
+    <link href="http://cdn.bootcss.com/flat-ui/2.3.0/css/flat-ui.min.css" rel="stylesheet">
+    <link href="https://mmenujs.com/mmenu/mmenu.css?v=8.5.0" rel="stylesheet">
+    <link href="https://mmenujs.com/mmenu-light/mmenu-light.css?v=8.5.0" rel="stylesheet">
+{#    <link href="https://mmenujs.com/demo/css/demo.css?v=8.5.0" rel="stylesheet">#}
+    <link href="https://mmenujs.com/mburger/mburger.css" rel="stylesheet">
+    <link href="https://mmenujs.com/mhead/jquery.mhead.css?v=8.5.0" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/flat-ui/2.3.0/js/vendor/html5shiv.js"></script>
+    <script src="//cdn.bootcss.com/flat-ui/2.3.0/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <style>
+    .mm-menu {
+				height: calc( 100% - 53px ) !important;
+				--mm-color-background: #34495E;
+				--mm-listitem-size: 50px;
+			}
+			.mm-navbars_top {
+				--mm-color-background: #2C3E50;
+				border-bottom: none !important;
+			}
+			.mm-navbar {
+				color: #fff !important;
+				font-size: 14px;
+				font-weight: bold;
+			}
+			.mm-navbar input {
+				text-align: center;
+			}
+      .mm-navbar>a.registry {
+        width: 50px;
+        display: inline;
+        flex-grow: unset;
+        min-height: unset;
+        padding: 10px;
+      }
+			.mm-navbar:first-child {
+				align-content: center;
+				justify-content: center;
+				align-items: center;
+			}
+			.mm-navbar img {
+				flex-grow: 0;
+				opacity: 0.6;
+				{#border: 1px solid #fff;#}
+				border-radius: 50px;
+				width: 100px;
+				height: 100px;
+				padding: 10px;
+				margin: 0 10px;
+			}
+			.mm-navbar .fa {
+				flex-grow: 0;
+				border: 1px solid rgba(255, 255, 255, 0.6);
+				border-radius: 30px;
+				color: rgba(255, 255, 255, 0.8) !important;
+				font-size: 16px !important;
+				line-height: 50px;
+				width: 50px;
+				height: 50px;
+				padding: 0;
+			}
+			.mm-navbar .fa:hover {
+				border-color: #fff;
+				color: #fff !important;
+			}
+
+			.mm-panels > .mm-panel:after {
+				content: none;
+				display: none;
+			}
+
+			.mm-listview {
+				font-size: 16px;
+			}
+			.mm-listitem:last-child:after {
+				content: none;
+				display: none;
+			}
+			.mm-listitem a,
+			.mm-listitem span {
+				color: rgba(255, 255, 255, 0.7);
+				text-align: center;
+				padding-right: 20px !important;
+			}
+			.mm-listitem a:hover,
+			.mm-listitem a:hover + span {
+				color: #fff;
+			}
+
+    body {
+      {#background-color: #fff;#}
+      {#font-family: Arial, Helvetica, Verdana;#}
+      {#font-size: 15px;#}
+      {#line-height: 22px;#}
+      {#color: #666;#}
+      min-height: 100vh;
+      position: relative;
+      -webkit-text-size-adjust: none;
+      background: #f5f5f5;
+      font-size: 14px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    a.button, span.button {
+      background: #3c6;
+      color: #fff !important;
+      font-size: 18px;
+      text-align: center;
+      text-decoration: none
+    }
+
+    .mm-divider.button {
+      text-indent: 0 !important;
+      padding: 20px 20px 40px 20px !important
+    }
+
+
+    @media (min-width: 992px) {
+      nav:not(.mm-menu) {
+        display: block;
+      }
+
+      .mh-head {
+        display: none;
+      }
+    }
+
+    @media (max-width: 991px) {
+      nav:not(.mm-menu) {
+        display: none;
+      }
+
+      .mh-head {
+        display: block;
+      }
+      .section-heading {
+
+        font-size: 1.8rem!important;
+      }
+
+    }
+
+    .navbar {
+      position: sticky;
+      margin-bottom: 0;
+      {#border-bottom: 1px solid #e5e5e5;#}
+    }
+
+    .navbar-brand {
+      line-height: 53px;
+      padding: 5px 12px;
+    }
+
+    .navbar-brand>img {
+      height: 43px;
+    }
+
+    .navbar-nav > li > a {
+      font-weight: normal;
+    }
+
+    .form-inline {
+      display: inline-block;
+    }
+
+    nav.mm:not(.mm-menu) {
+      display: block
+    }
+
+    body .mh-head {
+      background: #34495e;
+      color: white;
+      min-height: 53px;
+    }
+
+    body .mh-text {
+      font-size: 16px;
+      min-height: 53px;
+      line-height: 53px!important;
+      padding: 0!important;
+    }
+
+    .mh-text img {
+      height: 43px;
+    }
+
+    .mh-head {
+      margin-bottom: 0;
+    }
+
+    .mh-head .mburger {
+      --mb-button-size: 40px;
+      --mb-bar-height: 2px;
+      --mb-bar-spacing: 7px
+    }
+
+    .mh-head a[href="#page"] {
+      display: none !important
+    }
+
+    .mm-wrapper_opening .mh-head .fa[href="#menu"] {
+      display: none !important
+    }
+
+    .mm-wrapper_opening .mh-head .fa[href="#page"] {
+      display: block !important;
+      left: 0 !important
+    }
+    .content:hover:before {
+      -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+      transform: scale(1);
+      opacity: .4
+    }
+
+    .content + .content:before {
+      content: none
+    }
+
+    .content + .content:last-child {
+      padding-bottom: 150px
+    }
+
+    .content.scroll-down, .content.scroll-down ~ .content {
+      padding-top: 100px;
+      min-height: calc(100vh - 50px)
+    }
+
+    .mm-menu:not(.mm-menu_offcanvas) {
+      z-index: 10
+    }
+
+    .mm-menu:not(.mm-menu_offcanvas) + #page {
+      display: none
+    }
+
+    .mm-listitem .fa {
+      margin: 0 20px 0 5px;
+      font-size: 16px;
+      width: 12px;
+      text-align: center
+    }
+
+    .mm-menu_tileview .mm-listitem .fa {
+      margin: 0;
+      line-height: 0
+    }
+
+    .mm-menu_tileview .mm-listitem .fa + span {
+      display: none
+    }
+
+    footer.main-footer {
+      padding-top: 40px;
+      padding-bottom: 40px;
+      {#margin-top: 5px;#}
+      background-color: #34495e;
+      color: #9aa4af;
+      text-align: center;
+      {#border-top: 1px solid #e5e5e5;#}
+    }
+    footer.main-footer p {
+      font-size: 14px;
+    }
+
+    .section-heading {
+      margin: 20px 0 10px 15px;
+      padding: 10px;
+      font-size: 1.2em;
+      border-left: 4px solid #1abc9c;
+      line-height: 1em;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .text-dark {
+      color: #34495e
+    }
+
+    h3 small, h4 small {
+      color: #7F8C8D;
+    }
+
+    .navbar .navbar-nav>.dropdown>a .caret {
+    border-top-color: #ccc;
+    border-bottom-color: #ccc;
+    }
+
+    .avatar {
+      height: 64px;
+      width: 64px;
+    }
+
+    .avatar-sm {
+      height: 48px;
+      width: 48px;
+    }
+
+    .avatar-lg {
+      height: 96px;
+      width: 96px;
+    }
+
+    #nav-user-avatar {
+      padding-top: 2px;
+      padding-bottom: 3px;
+    }
+    #content {
+      min-height: calc(100vh - 53px);
+    }
+    #login-modal .modal-dialog {
+      width: 400px;
+    }
+    #login-modal .login-form {
+      width: 100%;
+      padding: 0;
+    }
+    #login-modal .login-form .checkbox {
+      display: flex;
+      justify-items: center;
+    }
+    #login-modal .modal-content {
+      background: #edeff1;
+    border: 1px solid #555;
+    }
+    #login-modal .modal-title {
+      font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    }
+
+    .custom-checkbox, .checkbox .icons, .checkbox input[type=checkbox].custom-checkbox {
+      top: 7px;
+    }
+
+    .login-form .checkbox .icons {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+      line-height: 18px;
+    }
+
+    .radio label, .checkbox label {
+      padding-left: 0;
+      color: #999;
+    }
+
+    .checkbox > label {
+      font-size: 15px;
+    }
+
+
+    </style>
     <link href="https://cdn.bootcss.com/notie/4.3.1/notie.min.css" rel="stylesheet">
-    <link href="{% static 'portal/css/main.css' %}?v=19" rel="stylesheet">
+    <link href="{% static 'portal/css/main.css' %}?v=28" rel="stylesheet">
   {% endblock %}
   {% block css %}{% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
-<div class="modal fade show" id="login-modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-login" role="document">
+<body {% block body_attr %}{% endblock %}>
+<div class="modal fade in" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modal"
+     aria-hidden="false">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <div class="card card-signup card-plain">
-        <div class="modal-header mb-4">
-          <div class="card-header card-header-primary text-center">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
-            <h4 class="card-title">登录</h4>
-            <div class="social-line">
-              <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
-                <i class="fa fa-qq"></i>
-              </a>
-              <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
-                <i class="fa fa-weixin"></i>
-              </a>
-              <a href="#" class="btn btn-just-icon btn-link btn-white" disabled="disabled" data-toggle="tooltip" title="暂不可用">
-                <i class="fa fa-weibo"></i>
-              </a>
-            </div>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">欢迎来到沙之书，请登录</h4>
+      </div>
+      <div class="modal-body">
+        <form class="login-form" method="post" action="{% url 'portal:account_login' %}?json=true">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ login_form.username }}
+            {{ login_form.username|to_label:'login-field-icon fui-user' }}
           </div>
-        </div>
-        <div class="modal-body">
-          <form class="form" method="post" action="{% url 'portal:account_login' %}?json=true">
-            {% csrf_token %}
-            <p class="card-description text-center">或使用账号登录 </p>
-            <p class="card-description text-center">没有账号？<a href="{% url 'portal:account_signup' %}">快速注册</a> <a
-                href="{% url 'portal:account_password_recover' %}">忘记密码</a></p>
-            {{ login_form.non_field_errors }}
-            <div class="form-group bmd-form-group">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="material-icons">face</i>
-                  </span>
-                </div>
-                {{ login_form.username }}
-              </div>
-            </div>
-            <div class="form-group bmd-form-group">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="material-icons">lock_outline</i>
-                  </span>
-                </div>
-                {{ login_form.password }}
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="card-footer justify-content-center pt-0">
-          <button type="submit" class="btn btn-primary btn-link btn-wd btn-lg">登 录</button>
-        </div>
+
+          <div class="form-group">
+            {{ login_form.password }}
+            {{ login_form.password|to_label:'login-field-icon fui-lock' }}
+          </div>
+          <div class="checkbox">
+            <label>
+              <input class="custom-checkbox" type="checkbox" data-toggle="checkbox">
+              下次自动登录
+            </label>
+          </div>
+          <button class="btn btn-primary btn-block">登录</button>
+          <a class="login-link" href="{% url 'portal:account_password_recover' %}">忘记密码？</a>
+        </form>
+        <!-- <div class="clearfix"></div> -->
       </div>
     </div>
   </div>
@@ -88,32 +427,275 @@
     {% endfor %}
   </ul>
 {% endif %}
-{% block main_base %}{% endblock %}
+
+{% block main %}
+  {% block page %}
+    <div id="page">
+      <nav class="navbar navbar-inverse navbar-expand-lg navbar-fixed-top" role="navigation">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'portal:index' %}">
+            <img src="{% static 'images/logo/logo.png' %}" alt="logo">
+          </a>
+          <div class="collapse navbar-collapse" id="navbar-collapse-01">
+            <ul class="nav navbar-nav mr-auto">
+              <li class="dropdown">
+                <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-hover="dropdown" aria-expanded="false">奇幻世界<b
+                    class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">剑与魔法</a></li>
+                  <li><a href="#">史诗奇幻</a></li>
+                  <!-- <li class="divider"></li> -->
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-hover="dropdown" aria-expanded="false">冒险者之家<b
+                    class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">技巧切磋</a></li>
+                  <li><a href="#">心得分享</a></li>
+                  <li><a href="#">悬赏大厅</a></li>
+                </ul>
+              </li>
+              <li><a href="#">关于我们</a></li>
+
+            </ul>
+            <form class="navbar-form form-inline" id="search-form" name="search-form" method="get" action="/search/"
+                  role="search">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" value="{% block nav_search_val %}{% endblock %}" id="nav-search"
+                         type="search" maxlength="30" autocomplete="off" placeholder="搜索">
+                  <span class="input-group-btn">
+                <button type="submit" class="btn"><span class="fui-search"></span></button>
+              </span>
+                </div>
+                <div class="search-wrap"></div>
+              </div>
+            </form>
+
+
+              {% if request.user.is_authenticated %}
+                <ul class="nav navbar-nav pull-right">
+                  <li class="dropdown visible-sm-block" id="nav-menu-search-icon">
+                    <a href="#" role="button" aria-expanded="false"><i class="fa fa-search"></i></a>
+                  </li>
+                  <li class="dropdown" id="nav-menu-notice">
+                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-hover="dropdown"><i
+                        class="fa fa-bell-o"></i></a>
+                    <span class="navbar-unread hidden"></span>
+                    <ul class="dropdown-menu">
+                      <li id="notice-default"><a style="cursor:default">暂无消息</a></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown" id="nav-menu-user">
+                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" data-hover="dropdown" id="nav-user-avatar">
+                      <img class="img-circle avatar-sm" src="{{ request.user.avatar.url }}" alt="avatar">
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'portal:user_home' request.user.id %}"><i class="fa fa-home fa-fw"></i>&nbsp;我的领地</a></li>
+                      <li><a href="#"><i class="fa fa-envelope fa-fw"></i>&nbsp;私人信件</a></li>
+                      <li><a href="#"><i class="fa fa-cog fa-fw"></i>&nbsp;账号设置</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'portal:account_logout' %}?next={{ request.path }}" id="nav-logout-btn"><i class="fa fa-sign-out fa-fw"></i>&nbsp;退出登录</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              {% else %}
+                {% block quick_login %}
+                  <ul class="nav navbar-nav pull-right">
+{#                    <li class="dropdown visible-sm-block" id="nav-menu-search-icon">#}
+{#                      <a href="/search/" role="button" aria-expanded="false"><i class="fa fa-search"></i></a>#}
+{#                    </li>#}
+                    <li><a href="{% url 'portal:account_login' %}">登录</a></li>
+                    <li><a href="{% url 'portal:account_signup' %}">注册</a></li>
+                  </ul>
+                {% endblock %}
+              {% endif %}
+
+
+          </div><!-- /.navbar-collapse -->
+        </div>
+      </nav>
+      <div class="mh-head Sticky mh-btns-left-2 mh-btns-right-2 mh-sticky">
+        <span class="mh-btns-left">
+          <a href="#menu" class="fa fa-bars"></a>
+          <a href="#page" class="fa fa-close"></a>
+        </span>
+        <span class="mh-text">
+          <img src="{% static 'images/logo/logo.png' %}" alt="logo">
+        </span>
+      </div>
+
+      <div id="content" class="content">
+        {% block page_content %}{% endblock %}
+      </div>
+    </div>
+  {% endblock %}
+
+  {% block menu %}
+    <nav id="menu">
+      <ul id="panel-menu">
+        <li><a href="#">首页</a></li>
+        <li>
+          <span>奇幻世界</span>
+          <ul>
+            <li><a href="#">剑与魔法</a></li>
+            <li><a href="#">史诗奇幻</a></li>
+          </ul>
+        </li>
+        <li><span>冒险者之家</span>
+          <ul>
+            <li><a href="#">技巧切磋</a></li>
+            <li><a href="#">心得分享</a></li>
+            <li><a href="#">悬赏大厅</a></li>
+          </ul>
+        </li>
+        <li><a href="#">关于我们</a></li>
+        {% if request.user.is_authenticated %}
+          <li><a href="{% url 'portal:user_home' request.user.id %}">我的领地</a></li>
+          <li><a href="#">城市广场</a></li>
+        {% endif %}
+
+      </ul>
+    </nav>
+  {% endblock %}
+{% endblock %}
+
+{% block footer %}
+<footer class="main-footer">
+    <div class="container">
+      <div class="col-xs-12 col-sm-12 col-md-9">
+        <p>本站资源均来自网友分享，仅供交流学习之用，版权归作者本人所有。</p>
+        <p>请勿长时间阅读，注意保护视力，合理安排时间，享受健康生活。</p>
+        <p>Copyright&nbsp;<span class="fa fa-copyright" aria-hidden="true"></span>&nbsp;2020 沙之书 sandbook 版权所有 | <span class="fa fa-envelope-o" aria-hidden="true"></span>&nbsp;联系我们: sandbookadmin<i class="fa fa-at"></i>163.com</p>
+        <p></p>
+      </div>
+      <div class="col-md-3">
+        <p><a href="#">站内导航 </a></p>
+        <p><a href="#">订阅内容</a></p>
+        <p><a href="#">关于我们</a></p>
+        <!--<p><script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1260763987'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1260763987' type='text/javascript'%3E%3C/script%3E"));</script></p>-->
+      </div>
+    </div>
+  </footer>
+{% endblock %}
 {% block js_base %}
-{#  <script src="{% static 'portal/libs/jquery/jquery.min.js' %}"></script>#}
-  <script src="http://q8exls826.bkt.clouddn.com/jquery.min.js"></script>
-{#  <script src="{% static 'portal/libs/jquery/popper.min.js' %}"></script>#}
-  <script src="http://q8exls826.bkt.clouddn.com/popper.min.js"></script>
+{#  <script src="{% static 'js/jquery/jquery.min.js' %}"></script>#}
+  <script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+{#  <script src="https://cdn.bootcss.com/select2/4.0.12/js/select2.min.js"></script>#}
+{#  <script src="http://q8exls826.bkt.clouddn.com/jquery.min.js"></script>#}
+{#  <script src="{% static 'js/jquery/popper.min.js' %}"></script>#}
+{#  <script src="http://q8exls826.bkt.clouddn.com/popper.min.js"></script>#}
+  <script src="//cdn.bootcss.com/flat-ui/2.3.0/js/flat-ui.min.js"></script>
+  <script src="//q8exls826.bkt.clouddn.com/application.js"></script>
+
+  <script src="https://mmenujs.com/mhead/jquery.mhead.js?v=8.5.0"></script>
+  <script src="https://mmenujs.com/demo/js/playground.js"></script>
+  <script src="https://mmenujs.com/mmenu/mmenu.js?v="></script>
+  <script src="https://mmenujs.com/mmenu/mmenu.polyfills.js?v="></script>
+  <script>
+
+			$(function() {
+			  let navMenuLogin, navMenuSignup;
+			  let userAvatarUrl;
+        {% if request.user.is_authenticated %}
+          userAvatarUrl = '{{ request.user.avatar.url }}';
+          navMenuLogin = navMenuSignup = '';
+        {% else %}
+          navMenuLogin = '<a href="{% url 'portal:account_login' %}" class="registry">登录</a>';
+          navMenuSignup = '<a href="{% url 'portal:account_signup' %}" class="registry">注册</a>';
+          userAvatarUrl = '{% static 'images/avatars/default1.png' %}';
+        {% endif %}
+
+        new Mmenu("#menu", {
+          extensions: ["position-bottom", "fullscreen", "theme-black", "border-full"],
+          navbars: [{
+            height: 2,
+            content: [
+              navMenuLogin,
+              '<img src="{0}">'.format(userAvatarUrl),
+              navMenuSignup,
+            ]
+          }, {
+            content: ["searchfield"]
+          }, {
+            content: ["prev", "title"]
+          }]
+        }, {});
+
+        $(".mh-head.Sticky").mhead({
+          scroll: {
+            hide: 200
+          }
+        });
+        $(".mh-head:not(.Sticky)").mhead({
+          scroll: false
+        });
+
+      });
+
+  </script>
 {#  <script src="{% static 'libs/material/vertical-nav.js' %}"></script>#}
 {#  <script async defer src="{% static 'libs/material/buttons.js' %}"></script>#}
 {#  <script src="{% static 'libs/material/modernizr.js' %}"></script>#}
 {#  <script src="{% static 'portal/libs/material/bootstrap-material-design.min.js' %}"></script>#}
-  <script src="http://q8exls826.bkt.clouddn.com/bootstrap-material-design.js"></script>
+{#  <script src="http://q8exls826.bkt.clouddn.com/bootstrap-material-design.js"></script>#}
 {#  <script src="https://cdn.bootcss.com/bootstrap-material-design/4.0.2/bootstrap-material-design.umd.min.js"></script>#}
 {#  <script src="{% static 'portal/libs/material/material-kit.min.js' %}?v=1"></script>#}
-  <script src="http://q8exls826.bkt.clouddn.com/material-kit.min.js"></script>
+{#  <script src="http://q8exls826.bkt.clouddn.com/material-kit.min.js"></script>#}
 {#  <script src="{% static 'js/validate/dist/jquery.validate.min.js' %}"></script>#}
   <script src="http://q8exls826.bkt.clouddn.com/jquery.validate.min.js"></script>
 {#  <script src="{% static 'portal/libs/notie/notie.min.js' %}"></script>#}
   <script src="http://q8exls826.bkt.clouddn.com/notie.min.js"></script>
   <script src="{% static 'js/main.js' %}?v=13"></script>
   <script>
-    $('[data-toggle=tooltip]').tooltip();
+    {#$('[data-toggle=tooltip]').tooltip();#}
     let id = '{{ ID }}', str = '{{ STR }}';
   </script>
 {% endblock %}
-{% block js %}{% endblock %}
 <script>
+  //hover-dropdown
+  !function (e, n) {
+    var o = e();
+    e.fn.dropdownHover = function (t) {
+      return "ontouchstart" in document ? this : (o = o.add(this.parent()), this.each(function () {
+        function r() {
+          d.parents(".navbar").find(".navbar-toggle").is(":visible") || (n.clearTimeout(a), n.clearTimeout(i), i = n.setTimeout(function () {
+            o.find(":focus").blur(), v.instantlyCloseOthers === !0 && o.removeClass("open"), n.clearTimeout(i), d.attr("aria-expanded", "true"), s.addClass("open"), d.trigger(h)
+          }, v.hoverDelay))
+        }
+
+        var a, i, d = e(this), s = d.parent(), u = {delay: 200, hoverDelay: 0, instantlyCloseOthers: !0}, l = {
+          delay: e(this).data("delay"),
+          hoverDelay: e(this).data("hover-delay"),
+          instantlyCloseOthers: e(this).data("close-others")
+        }, h = "show.bs.dropdown", c = "hide.bs.dropdown", v = e.extend(!0, {}, u, t, l);
+        s.hover(function (e) {
+          return s.hasClass("open") || d.is(e.target) ? void r(e) : !0
+        }, function () {
+          n.clearTimeout(i), a = n.setTimeout(function () {
+            d.attr("aria-expanded", "false"), s.removeClass("open"), d.trigger(c)
+          }, v.delay)
+        }), d.hover(function (e) {
+          return s.hasClass("open") || s.is(e.target) ? void r(e) : !0
+        }), s.find(".dropdown-submenu").each(function () {
+          var o, t = e(this);
+          t.hover(function () {
+            n.clearTimeout(o), t.children(".dropdown-menu").show(), t.siblings().children(".dropdown-menu").hide()
+          }, function () {
+            var e = t.children(".dropdown-menu");
+            o = n.setTimeout(function () {
+              e.hide()
+            }, v.delay)
+          })
+        })
+      }))
+    }, e(document).ready(function () {
+      e('[data-hover="dropdown"]').dropdownHover()
+    })
+  }(jQuery, window);
+
   let Portal = {
     urls: {
       isLogin: '{% url 'portal:account_is_login' %}',
@@ -129,7 +711,8 @@
     validateForm: function validateForm($form) {
       let validator = $form.validate({
         errorPlacement: function (error, element) {
-          error.appendTo(element.parent().parent())
+          error.appendTo(element.parent());
+          {#$(element).parent().addClass('has-error')#}
         },
         errorClass: 'errorlist d-block'
       });
@@ -145,35 +728,52 @@
       let self = this;
       $(function () {
         $.each($('form'), function (i, item) {
-        let $form = $(item);
-        self.validateForm($form)
-      });
+          self.validateForm($(item))
+        });
       })
-
+    },
+    select2Initialized: function (select) {
+      return $(select).hasClass('select2-hidden-accessible')
+    },
+    select2Config: function (customConfigs) {
+      return $.extend({
+        // minimumResultsForSearch: Infinity,
+        // theme: "bootstrap4",
+        // allowClear: true
+        language: {
+          "noResults": function () {
+            return '未找到任何结果';
+          }
+        }
+      }, customConfigs)
     },
     bindLoginModal: function () {
       console.log('bindLoginModal')
+      let self = this;
       let $loginForm = this.$loginModal.find('form');
+      let $validator = this.validateForm($loginForm);
       $loginForm.submit(function (e) {
         e.preventDefault();
-        $.ajax({
-          url: $(this).attr('action'),
-          type: $(this).attr('method'),
-          data: $(this).serialize(),
-          success: function (res) {
-            if (res.result) {
-              window.location.reload()
+        if ($validator.form()) {
+          $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: $(this).serialize(),
+            success: function (res) {
+              if (res.result) {
+                // log full page
+                window.location.reload()
+              }
             }
-          }
-        })
+          })
+        }
+
       });
-      this.$loginModal.find('button[type=submit]').click(function () {
-        $loginForm.trigger('submit')
-      })
     }
 
   }.init()
 
   </script>
+{% block js %}{% endblock %}
 </body>
 </html>

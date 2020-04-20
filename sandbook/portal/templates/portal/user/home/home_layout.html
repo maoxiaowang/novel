@@ -1,0 +1,721 @@
+{% extends 'portal/layout.html' %}
+{% load static %}
+{% block title_content %}{{ user.get_display_name }}的领地{% endblock %}
+{% block css %}
+  <style>
+
+    ul {
+      margin-bottom: 0
+    }
+
+    #myFansModal p,
+    #myFocusedModal p {
+      margin: 0;
+      font-size: 12px;
+    }
+
+    #myFansModal .modal-header,
+    #myFocusedModal .modal-header {
+      border-bottom: 0;
+    }
+
+    #myFansModal .pull-right,
+    #myFocusedModal .pull-right {
+      margin-top: 7px;
+    }
+
+    #myFansModal
+    #deleteConfirmModal, #ccConfirmModal {
+      top: 30%;
+    }
+
+    h3 {
+      line-height: 1.4
+    }
+
+    h6 {
+      margin-top: 0;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .profile-outer {
+      position: relative;
+      display: table;
+      width: 100%;
+      height: 350px;
+      padding-bottom: 44px;
+      margin-bottom: 0;
+      text-align: center;
+      background-size: cover;
+      border: 0;
+      margin-top: -53px;
+    }
+
+    .profile-outer > nav {
+      display: block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      line-height: 0;
+    }
+
+    .profile-outer > nav > ul {
+      display: inline-block;
+      border-bottom: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .profile-outer > nav > ul > li {
+      float: left;
+      margin-bottom: -1px;
+      position: relative;
+      display: block;
+    }
+
+    .profile-outer > nav .active:after {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      content: '';
+      margin-left: -10px;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #f5f8fa;
+    }
+
+    .profile-outer > nav li a {
+      display: block;
+      color: rgba(255, 255, 255, 0.5);
+      border: 1px solid transparent;
+      border-radius: 4px 4px 0 0;
+      padding: 0 10px 18px;
+      font-size: 16px;
+      margin-right: 2px;
+      line-height: 1.6;
+      transition: color 0.2s ease-in-out;
+      background-color: transparent;
+    }
+
+    .profile-outer > nav li a:hover {
+      color: #fff;
+    }
+
+    .profile-outer > nav li.active > a {
+      position: relative;
+      color: #fff;
+    }
+
+    .profile-outer .profile-content {
+      color: #fff;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .profile-outer .profile-content img {
+      display: inline-block;
+      margin: 0 auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 3px solid #fff;
+    }
+
+    .profile-outer .profile-content > h3 {
+      margin-top: 20px;
+      padding-left: 19px;
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .profile-outer .container {
+      display: table-cell;
+      width: 1000000px;
+      padding-top: 53px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+
+    a.relationship {
+      margin-left: 15px;
+      vertical-align: middle;
+      line-height: 1em;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .exp-progress-wrap {
+      margin-top: 4px;
+      padding-left: 5px;
+    }
+
+    /*.personal-info .personal-tag {
+      margin-left: 10px;
+    }*/
+    .gender {
+      margin-left: 5px;
+      font-size: 14px;
+    }
+
+    .mars {
+      color: #4ea9e6;
+    }
+
+    .venus {
+      color: #ea6ac3;
+    }
+
+    .personal-content {
+      font-size: 13px;
+      color: #777;
+    }
+
+    .personal-info .col-lg-6 {
+      padding-right: 0;
+      padding-bottom: 10px;
+    }
+
+    .personal-info .fa,
+    .personal-info [class|=fui] {
+      font-size: 16px;
+    }
+
+    .fa-birthday-cake {
+      color: #e2cd10;
+    }
+
+    .fui-location {
+      color: #e9967a;
+    }
+
+    .personal-tag {
+      height: 20px;
+      width: 31px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .mr-10 {
+      margin-right: 10px;
+    }
+
+    #statistics ul > li > span {
+      display: inline-block;
+      width: 150px;
+    }
+
+    #visitors ul > li {
+      padding-left: 0;
+      padding-right: 4px;
+    }
+
+    /*** PROFILE DETAIL ***/
+    .profile-detail-outer {
+      height: 250px;
+      padding-top: 176px;
+      margin-top: -53px;
+    }
+
+    .profile-detail-outer .profile-content {
+      position: relative;
+      height: 74px;
+    }
+
+    .profile-detail-outer h3 {
+      font-size: 18px;
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .profile-detail-outer .avatar-wrap {
+      position: absolute;
+      z-index: 2;
+      top: 5px;
+    }
+
+    .profile-detail-outer .avatar-wrap img {
+      border: 3px solid;
+    }
+
+    .profile-detail-outer .other-wrap {
+      margin-left: 120px;
+      color: #fff;
+    }
+
+    .detail-nav-wrap {
+      background: #fff;
+      height: 50px;
+      margin-bottom: 15px;
+      border-bottom: 0;
+    }
+
+    .detail-nav-wrap > ul {
+      height: 100%;
+      line-height: 50px;
+      padding: 0;
+    }
+
+    .detail-nav-wrap > ul > li {
+      margin-right: 20px;
+    }
+
+    .detail-nav-wrap > ul > li.active {
+      border-bottom: 3px solid #16a085;
+    }
+
+    .detail-nav-wrap > ul > li.active > a {
+      color: #16a085;
+    }
+
+    .detail-nav-wrap > ul > li a {
+      font-size: 14px;
+      color: #999;
+    }
+
+    .detail-nav-wrap > ul a:hover {
+      color: #16a085;
+    }
+
+    #main-row {
+      padding-top: 15px;
+    }
+
+    #collect > .list-group {
+      position: relative;
+    }
+
+    #collect > .list-group .pagination-simple {
+      margin-bottom: 0;
+    }
+
+    #collect .media-heading {
+      font-weight: normal;
+      margin-bottom: 10px;
+    }
+
+    #collect .media:first-child {
+      margin-top: 15px;
+    }
+
+    #collect .media-left img {
+      height: 180px;
+    }
+
+    #collect .douban-color {
+      font-size: 14px;
+      margin-left: 5px;
+    }
+
+    .collect_date {
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .media-category {
+      position: relative;
+      margin: 10px;
+    }
+
+    .media-intro, .media-intro > p {
+      margin: 0;
+      color: #777;
+      font-size: 12px;
+    }
+
+    .comment-wrap p {
+      margin: 0;
+    }
+
+    .media-intro > .comment-fade-cover {
+      top: 20px;
+      background: -webkit-linear-gradient(transparent, rgba(240, 240, 240, 0.1) 20%, rgba(240, 240, 240, 0.1) 35%, rgba(240, 240, 240, 0.7) 65%, rgba(240, 240, 240, 0.9));
+      background: -o-linear-gradient(transparent, rgba(240, 240, 240, 0.1) 20%, rgba(240, 240, 240, 0.3) 35%, rgba(240, 240, 240, 0.7) 65%, rgba(240, 240, 240, 0.9));
+      background: -moz-linear-gradient(transparent, rgba(240, 240, 240, 0.1) 20%, rgba(240, 240, 240, 0.3) 35%, rgba(240, 240, 240, 0.7) 65%, rgba(240, 240, 240, 0.9));
+      background: linear-gradient(transparent, rgba(240, 240, 240, 0.1) 20%, rgba(240, 240, 240, 0.3) 35%, rgba(240, 240, 240, 0.7) 65%, rgba(240, 240, 240, 0.9));
+    }
+
+    #post .media-intro {
+      position: relative;
+      max-height: 60px;
+    }
+
+    .tab-content .default-tip {
+      position: absolute;
+      text-align: center;
+      color: #777;
+      top: 10px;
+      left: 300px;
+    }
+
+    .msg-img-wrap {
+      margin: 20px 0 25px;
+      width: 435px;
+    }
+
+    .msg-img-wrap > a {
+      display: block;
+      width: 32%;
+      float: left;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .msg-img-wrap > a > img {
+      width: 100%;
+    }
+
+    .ekko-lightbox .modal-header {
+      display: none !important;
+    }
+
+    .modal-user-list-wrap {
+      max-height: 500px;
+      overflow: auto;
+      border-radius: 6px;
+    }
+
+    #speak .media-content {
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    #speak .media-content {
+      line-height: 1.7;
+    }
+
+    #speak > .list-group-item > .media-body > .media-bottom {
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .speak-reply-list > .media {
+      position: relative;
+    }
+
+    .speak-rr-list > .media {
+      position: relative;
+      margin-top: 5px;
+    }
+
+    .speak-reply-list .media-heading {
+      margin-bottom: 0;
+    }
+
+    .msg-wrap .input-group-btn:last-child > .btn {
+      border: 1px solid;
+    }
+
+    .comment-heading {
+      padding-top: 5px;
+      padding-bottom: 10px;
+
+    }
+
+    .comment-content {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 19px;
+      max-height: 220px;
+    }
+
+    .comment-content img {
+      max-width: 638px;
+    }
+
+    #comment .media-wrap img {
+      max-width: 150px;
+      max-height: 150px;
+    }
+
+    .my-calendar {
+      width: 70px;
+      box-shadow: 0 0 2px #999;
+      border: 0;
+      font-weight: bold;
+    }
+
+    .my-calendar .panel-heading {
+      padding: 0;
+      background: rgb(231, 76, 60);
+      color: #fff;
+      border-bottom: 3px solid rgb(192, 57, 43);
+    }
+
+    .my-calendar .panel-body {
+      padding: 0;
+      height: 50px;
+      line-height: 50px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .media-wrap {
+      margin-bottom: 5px;
+    }
+
+    .quote-post-wrap {
+      margin-bottom: 0;
+      background: #eee;
+    }
+
+    .comment-fade-cover {
+      position: absolute;
+      top: 170px;
+      width: 100%;
+      height: 50px;
+      line-height: 75px;
+      color: #999;
+      background: rgba(255, 255, 255, 0.7);
+      /*background: url(/static/images/common/gradient.png) 0 0 repeat-x;*/
+      background: -webkit-linear-gradient(transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.1) 35%, rgba(255, 255, 255, 0.7) 65%, rgba(255, 255, 255, 0.9));
+      background: -o-linear-gradient(transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.7) 65%, rgba(255, 255, 255, 0.9));
+      background: -moz-linear-gradient(transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.7) 65%, rgba(255, 255, 255, 0.9));
+      background: linear-gradient(transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.3) 35%, rgba(255, 255, 255, 0.7) 65%, rgba(255, 255, 255, 0.9));
+      transition: color .25s;
+      -webkit-transition: color .25s;
+    }
+
+    .comment-fade-cover:hover {
+      color: #000;
+    }
+
+    /* Scroll Loading */
+    #infscr-loading {
+      width: auto !important;
+      height: auto !important;
+      opacity: 1 !important;
+      text-align: center;
+    }
+
+    #infscr-loading > img {
+      padding-top: 10px;
+    }
+
+    #post-next-page, #comment-next-page, #speak-next-page {
+      display: none;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 1199px) {
+      /* medium - small desktop */
+    }
+
+    @media (max-width: 991px) {
+      /* small - tablet */
+      .profile-outer {
+        height: 460px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* extra small - phone */
+      body {
+        padding-top: 0;
+      }
+
+      .profile-outer {
+        height: 400px;
+      }
+
+      .tab-content .default-tip {
+        left: 150px;
+      }
+    }
+
+    @media (max-width: 435px) {
+      /* 375 - 435 */
+      body {
+        padding-top: 0;
+      }
+
+      .profile-outer {
+        height: 360px;
+      }
+    }
+
+    @media (max-width: 374px) {
+      /* 320 - 374 */
+      body {
+        padding-top: 0;
+      }
+
+      .profile-outer {
+        height: 300px;
+      }
+    }
+
+    .navbar {
+      margin-bottom: 0;
+    }
+
+    .list-group-item {
+      border-color: transparent;
+    }
+  </style>
+  {% block css_home %}{% endblock %}
+{% endblock %}
+{% block modals %}
+
+{% endblock %}
+{% block page_content %}
+  <div class="profile-outer" style="background-image:url('{% static 'portal/images/background/1920x1200/bg3.jpg' %}');">
+    <div class="container">
+      <div class="profile-content">
+        {% block avatar %}{% endblock %}
+        <h3>
+          {{ object.get_display_name }}
+          {% if object.user_info.gender == 0 %}
+            <span class="gender venus fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i
+                class="fa fa-venus fa-stack-1x fa-inverse"></i></span>
+          {% else %}
+            <span class="gender mars fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i
+                class="fa fa-mars fa-stack-1x fa-inverse"></i></span>
+          {% endif %}
+        </h3>
+        <h4>{% if object.authorinfo %}<span class="badge badge-warning">作家</span>{% endif %}</h4>
+        <p>{{ profile_user_info.mysign }}</p>
+        {% block interact_area %}{% endblock %}
+      </div>
+    </div>
+
+    {% block home_nav %}{% endblock %}
+
+  </div>
+
+  <div class="container">
+    <!-- Tab panes -->
+    <div class="row" id="main-row">
+      <div class="col-lg-8 col-md-8">
+        {% block tab_content %}{% endblock %}
+      </div>
+
+      {# 领地信息 #}
+      <div class="col-lg-4 col-md-4 hidden-sm hidden-xs">
+        <div class="list-group-item personal-info mb-5">
+          <div class="col-lg-6 col-md-6 p-5">
+            <div class="text-center">关注<a class="relationship" role="button" data-toggle="modal"
+                                          data-target="#myFocusedModal">{{ his_focused|length }}</a></div>
+          </div>
+          <div class="col-lg-6 col-md-6 p-5">
+            <div class="text-center">粉丝<a class="relationship" role="button" data-toggle="modal"
+                                          data-target="#myFansModal">{{ his_fans|length }}</a></div>
+          </div>
+          <div class="col-lg-2 col-md-2">
+            <span class="label label-warning ml-2" style="font-size: 0.6rem;">Lv{{ user_level }}</span>
+          </div>
+          <div class="col-lg-10 col-md-10 exp-progress-wrap">
+            <div class="progress">
+              <div class="progress-bar" style="width:20%;"
+                   title="当前经验：{{ exp_percent|floatformat }}%"></div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <span class="personal-tag mr-10"><i class="fa fa-id-card text-info"></i></span>
+            <span class="personal-content">{{ object.id }}</span>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <span class="personal-tag" style="color:#8bc58b;" title="注册时间"><i class="fa fa-calendar-check-o"></i></span>
+            <span class="personal-content">注册于 {{ profile_user_info.create_date|date:'Y-m-d' }}</span>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <span class="personal-tag mr-10" title="生日"><i class="fa fa-birthday-cake"></i></span>
+            <span class="personal-content">-</span>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <span class="personal-tag" title="所在地"><i class="fui-location"></i></span>
+            <span class="personal-content">{% if profile_user_info.location|length > 6 %}
+              {{ profile_user_info.location|slice:'6' }}...{% else %}{{ profile_user_info.location }}{% endif %}</span>
+          </div>
+          <div class="clearfix"></div>
+        </div>  <!-- personal-info -->
+
+        <div class="panel">
+          <div class="panel-heading py-1">
+            <div class="">
+              <h2 class="h4 m-0 d-inline">我的成就</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <ul class="list-unstyled">
+              <li><span>总经验值:</span>-</li>
+              <li><span>目前等级:</span>-</li>
+              <li><span>加入沙之书:</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading py-1">
+            <div class="">
+              <h2 class="h4 m-0 d-inline">最近访客</h2>
+            </div>
+          </div>
+          <div class="panel-body">
+            <ul class="list-inline">
+              {% if recent_visitors %}
+                {% for item in recent_visitors %}
+                  <li><a target="_blank" title="{{ item.visitor.username }}"
+                         href="/user/profile/{{ item.visitor.id }}/">
+                    <img class="img-circle media-object avatar-s"
+                         src="{{ item.visitor.thumb_s }}" alt="avatar"></a>
+                  </li>
+                {% endfor %}
+              {% else %}
+                <li>&nbsp;&nbsp;还没有来过访客哦~</li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}
+{% block js %}
+  <script>
+    $(function () {
+      let Home = {
+        urls: {
+          userHomePart: '{% url 'portal:user_home_part' object.id 'PART' %}',
+        },
+        init: function () {
+          return this.bindUIActions(), this
+        },
+        bindUIActions: function () {
+          this.initTabContent();
+          this.bindTabSwitch();
+        },
+        initTabContent: function () {
+          $.ajax({
+            url: this.urls.userHomePart.replace('PART', 'home'),
+            success: function (res) {
+              $('#home').html(res);
+            }
+          })
+        },
+        bindTabSwitch: function () {
+          let self = this;
+          $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            let part = $(e.target).attr('data-part')
+            $.ajax({
+              url: self.urls.userHomePart.replace('PART', part),
+              success: function (res) {
+                $('#' + part).html(res);
+
+              }
+            })
+          })
+        }
+      }.init();
+    });
+
+  </script>
+  {% block js_home %}{% endblock %}
+{% endblock %}

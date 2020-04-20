@@ -1,8 +1,22 @@
 {% extends 'portal/account/layout.html' %}
 {% load static %}
 {% block title_content %}激活成功{% endblock %}
-{% block body_class %}login-page sidebar-collapse{% endblock %}
-{% block main_account %}
+{% block page_content %}
+  <div class="login" style="background: url('{% static 'portal/images/background/1920x1200/bg3.jpg' %}')">
+    <div class="row login-screen">
+      <div class="row form-wrap col-sm-10 col-md-6 col-lg-3 col-xl-3">
+        <div class="login-form">
+          <h2><i class="fui-check text-success"></i> 找回密码成功</h2>
+          <p>恭喜你，找回密码成功！</p>
+          <p>邮件已经发送至你的邮箱，请尽快查看邮件，并按照提示重置密码。</p>
+          <p>
+            <a class="btn btn-sm btn-link mr-2" href="{% url 'portal:account_login' %}">登录</a>
+            <a class="btn btn-sm btn-link" href="{% url 'portal:index' %}">去首页</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="page-header header-filter"
        style="background-image: url('{% static 'portal/images/background/1920x1200/bg1.jpg' %}'); background-size: cover; background-position: top center;">
     <div class="container">

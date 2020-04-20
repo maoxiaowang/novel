@@ -13,5 +13,6 @@ author_urlpatterns = [
          name='novel_volume_rename'),
     path('author/novel/chapter/create/', author.ChapterCreate.as_view(),
          name='novel_chapter_create'),
-
+    path('author/novel/chapter/<int:chapter_id>/delete/', author.ChapterDelete.as_view(),
+         name='novel_chapter_delete')
 ]

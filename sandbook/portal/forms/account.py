@@ -13,24 +13,26 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
     For extending
     """
     username = UsernameField(
+        label='',
         widget=forms.TextInput(
             attrs={
                 'autofocus': True,
                 'min_length': 6,
-                'max_length': 32,
+                # 'max_length': 32,
                 'placeholder': '用户名',
-                'class': 'form-control'
+                'class': 'form-control login-field',
+                'spellcheck': False
             },
         )
     )
     password = forms.CharField(
-        label=_("Password"),
+        label='',
         strip=False,
         widget=forms.PasswordInput(
             attrs={
                 'autocomplete': 'current-password',
                 'placeholder': '密码',
-                'class': 'form-control'
+                'class': 'form-control login-field'
             }
         ),
     )
@@ -51,6 +53,10 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
 
 
 class SignUpForm(auth_forms.UserCreationForm):
+    error_messages = {
+        'password_mismatch': '两次输入的密码不一致。',
+    }
+
     # terms_and_conditions = forms.BooleanField(
     #     label_suffix='',
     #     label=_('I agree to the %(term)s') % {
@@ -66,19 +72,23 @@ class SignUpForm(auth_forms.UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].label_suffix = ''
+        self.fields['username'].label = ''
         self.fields['username'].help_text = _('Username is the only identifier of your account.')
         self.fields['password1'].label_suffix = ''
+        self.fields['password1'].label = ''
         self.fields['password1'].help_text = password_validation.password_validators_help_texts()
         self.fields['password2'].label_suffix = ''
+        self.fields['password2'].label = ''
         self.fields['email'].label_suffix = ''
+        self.fields['email'].label = ''
         self.fields['email'].help_text = _('Email address is important to active and your account '
                                            'and help to recover password.')
         self.fields['password1'].widget.attrs.update({
-            'class': 'form-control',
+            'class': 'form-control login-field',
             'placeholder': '密码',
         })
         self.fields['password2'].widget.attrs.update({
-            'class': 'form-control',
+            'class': 'form-control login-field',
             'placeholder': '确认密码',
         })
 
@@ -94,7 +104,7 @@ class SignUpForm(auth_forms.UserCreationForm):
         widgets = {
             'username': forms.TextInput(
                 attrs={
-                    'class': 'form-control',
+                    'class': 'form-control login-field',
                     'placeholder': '用户名',
                     'required': True,
                     'spellcheck': 'false',
@@ -102,8 +112,9 @@ class SignUpForm(auth_forms.UserCreationForm):
                 }
             ),
             'email': forms.EmailInput(
+
                 attrs={
-                    'class': 'form-control',
+                    'class': 'form-control login-field',
                     'required': True,
                     'placeholder': '电子邮件'
                 }
@@ -125,11 +136,11 @@ class ActiveForm(forms.Form):
 
 class PasswordResetForm(auth_forms.PasswordResetForm):
     email = forms.EmailField(
-        label='电子邮件',
+        label='',
         label_suffix='',
         widget=forms.EmailInput(
             attrs={
-                'class': 'form-control',
+                'class': 'form-control login-field',
                 'autofocus': True,
             }
         ),
@@ -168,12 +179,16 @@ class PasswordResetForm(auth_forms.PasswordResetForm):
 
 
 class SetPasswordForm(auth_forms.SetPasswordForm):
+    error_messages = {
+        'password_mismatch': '两次输入的密码不一致。',
+    }
     new_password1 = forms.CharField(
-        label='新密码',
+        label='',
         label_suffix='',
         widget=forms.PasswordInput(
             attrs={
-                'class': 'form-control',
+                'class': 'form-control login-field',
+                'placeholder': '新密码',
                 'autofocus': True,
             }
         ),
@@ -181,11 +196,12 @@ class SetPasswordForm(auth_forms.SetPasswordForm):
         help_text=password_validation.password_validators_help_text_html(),
     )
     new_password2 = forms.CharField(
-        label='新密码确认',
+        label='',
         label_suffix='',
         widget=forms.PasswordInput(
             attrs={
-                'class': 'form-control',
+                'class': 'form-control login-field',
+                'placeholder': '新密码确认',
             }
         ),
         strip=False,

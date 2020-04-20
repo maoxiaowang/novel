@@ -289,7 +289,6 @@ if ($messages.length > 0) {
   }, 100)
 
   // $messages.remove();
-
 }
 
 /**

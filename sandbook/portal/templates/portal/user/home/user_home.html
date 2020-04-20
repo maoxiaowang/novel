@@ -1,0 +1,29 @@
+{% extends 'portal/user/home/home_layout.html' %}
+{% load static %}
+{% block avatar %}
+  <img class="img-circle img-responsive avatar-lg" src="{{ request.user.avatar.url }}" alt="user-avatar">
+{% endblock %}
+{% block interact_area %}
+  <div>
+    <button class="btn btn-danger btn-xs btn-focus mr-2" data-uid="{{ profile_user_info.id }}">
+      {% if focused %}已粉{% else %}关注{% endif %}
+    </button>
+    <button class="btn btn-primary btn-xs btn-msg" data-uid="{{ profile_user_info.id }}">私信</button>
+  </div>
+{% endblock %}
+{% block home_nav %}
+  <nav>
+    <!-- Nav tabs -->
+    <ul role="tablist">
+      <li class="" role="presentation">
+        <a id="collect-tab-btn" href="{% url 'portal:user_home_part' object.id 'bookshelf' %}" aria-controls="collect"
+           role="tab" data-toggle="tab">近况</a>
+      </li>
+      <li role="presentation">
+        <a id="collect-tab-btn" href="{% url 'portal:user_home_part' object.id 'bookshelf' %}" aria-controls="collect"
+           role="tab" data-toggle="tab">书架</a>
+      </li>
+
+    </ul>
+  </nav>
+{% endblock %}

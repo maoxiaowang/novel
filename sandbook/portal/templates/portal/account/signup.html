@@ -1,132 +1,50 @@
 {% extends 'portal/account/layout.html' %}
 {% load static %}
+{% load common_tags %}
 {% block title_content %}注册{% endblock %}
-{% block body_class %}signup-page sidebar-collapse{% endblock %}
-{% block main_account %}
-  <div class="page-header header-filter" filter-color="dark"
-       style="background-image: url('{% static 'portal/images/background/1920x1200/bg1.jpg' %}'); background-size: cover; background-position: top center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-10 ml-auto mr-auto">
-          <div class="card card-signup">
-            <h2 class="card-title text-center">注册</h2>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-5 ml-auto">
-                  <div class="info info-horizontal">
-                    <div class="icon icon-rose">
-                      <i class="material-icons">local_library</i>
-                    </div>
-                    <div class="description">
-                      <h4 class="info-title">安静阅读</h4>
-                      <p class="description">
-                        我们尽力打造一个纯粹的地方以供你安静地阅读和创作。
-                      </p>
-                    </div>
-                  </div>
-                  <div class="info info-horizontal">
-                    <div class="icon icon-primary">
-                      <i class="material-icons">style</i>
-                    </div>
-                    <div class="description">
-                      <h4 class="info-title">精品资源</h4>
-                      <p class="description">
-                        我们只收集精品的小说，以奇幻题材为主，力图成为奇幻小说爱好者聚集地。
-                      </p>
-                    </div>
-                  </div>
-                  <div class="info info-horizontal">
-                    <div class="icon icon-info">
-                      <i class="material-icons">group</i>
-                    </div>
-                    <div class="description">
-                      <h4 class="info-title">志同道合</h4>
-                      <p class="description">
-                        在这里，你可以轻松找到和你一样热爱奇幻小说的志同道合者。
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-5 mr-auto">
-                  <div class="social text-center">
-                    <button class="btn btn-just-icon btn-round btn-twitter" disabled="disabled" data-toggle="tooltip" title="暂不可用">
-                      <i class="fa fa-qq"></i>
-                    </button>
-                    <button class="btn btn-just-icon btn-round btn-dribbble" disabled="disabled" data-toggle="tooltip" title="暂不可用">
-                      <i class="fa fa-weixin"></i>
-                    </button>
-                    <button class="btn btn-just-icon btn-round btn-facebook" disabled="disabled" data-toggle="tooltip" title="暂不可用">
-                      <i class="fa fa-weibo"> </i>
-                    </button>
-                    <h4> 或通过账号注册 </h4>
-                  </div>
-                  <form class="form icon-prepend-form" method="post" action="{% url 'portal:account_signup' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">
-                            <i class="material-icons">face</i>
-                          </span>
-                        </div>
-                        {{ form.username }}
-                      </div>
-                      {{ form.username.errors }}
-                    </div>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">
-                            <i class="material-icons">mail</i>
-                          </span>
-                        </div>
-                        {{ form.email }}
-                      </div>
-                      {{ form.email.errors }}
-                    </div>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">
-                            <i class="material-icons">lock_outline</i>
-                          </span>
-                        </div>
-                        {{ form.password1 }}
-                      </div>
-                      {{ form.password1.errors }}
-                    </div>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">
-                            <i class="material-icons">lock_outline</i>
-                          </span>
-                        </div>
-                        {{ form.password2 }}
-                      </div>
-                      {{ form.password2.errors }}
-                    </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="" checked="">
-                        <span class="form-check-sign">
-                          <span class="check"></span>
-                        </span>
-                        我同意 <a href="#">用户协议</a>和<a href="#">隐私政策</a>.
-                      </label>
-                    </div>
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary btn-round">注 册</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
+{% block page_content %}
+  <div class="login" style="background: url('{% static 'portal/images/background/1920x1200/bg1.jpg' %}') 0 0 no-repeat">
+    <div class="row login-screen">
+      <div class="row form-wrap col-sm-10 col-md-6 col-lg-3 col-xl-3">
+        <div class="form-title">
+          <div class="login-icon">
+            {#        <img src="{% static 'images/logo/logo.png' %}">#}
+            <h1>欢迎来到沙之书</h1>
           </div>
         </div>
+        <div class="login-form">
+          <form method="post">
+            {{ form.non_field_errors }}
+            {% csrf_token %}
+            <div class="form-group">
+              {{ form.username }}
+              {{ form.username|to_label:'login-field-icon fui-user' }}
+              {{ form.username.errors }}
+            </div>
+
+            <div class="form-group">
+              {{ form.password1 }}
+              {{ form.password1|to_label:'login-field-icon fui-lock' }}
+              {{ form.password1.errors }}
+            </div>
+            <div class="form-group">
+              {{ form.password2 }}
+              {{ form.password2|to_label:'login-field-icon fui-lock' }}
+              {{ form.password2.errors }}
+            </div>
+            <div class="form-group">
+              {{ form.email }}
+              {{ form.email|to_label:'login-field-icon fui-mail' }}
+              {{ form.email.errors }}
+            </div>
+            <button class="btn btn-primary btn-lg btn-block">注册</button>
+            <a class="login-link" href="{% url 'portal:account_login' %}">登录</a>
+          </form>
+        </div>
+
       </div>
+
     </div>
-    {% include 'portal/blocks/footer.html' %}
   </div>
 {% endblock %}
 {% block js_account %}

@@ -1,0 +1,102 @@
+{% load static %}
+{% load novel_tags %}
+<div class="panel">
+  <div class="panel-heading">
+    <div class="">
+      <h2 class="h3 m-0 d-inline">我的作品</h2>
+      {% if request.user.is_author and works.count > 0 %}
+        <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#novel-create-modal">新作品
+        </button>
+      {% endif %}
+    </div>
+  </div>
+  <div class="panel-body">
+    {% if request.user.is_author %}
+      {% if works.count == 0 %}
+        {# 没有作品 #}
+        <div class="tile">
+          <img src="https://cdn.bootcss.com/flat-ui/2.3.0/img/icons/png/Book.png" alt="pensil"
+               class="tile-image big-illustration">
+          <h3 class="tile-title">成为作家</h3>
+          <p>与社区里的奇幻爱好者们分享你内心的奇妙世界。</p>
+          <div class="d-flex justify-content-center">
+            <button class="btn btn-info btn-large btn-block w-50" data-toggle="modal" data-target="#novel-create-modal">
+              发布作品
+            </button>
+          </div>
+        </div>
+      {% else %}
+        {# 有作品 #}
+
+        <div class="table-responsive">
+          <table class="table table-shopping">
+            <thead>
+            <tr>
+              <th colspan="2">作品</th>
+              <th>状态</th>
+              <th class="th-description text-center">总字数</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for work in works %}
+              <tr>
+                <td class="align-middle" style="width: 100px;">
+                  <div class="img-container">
+                    <img class="cover-xs" src="{{ work.cover.url }}" alt="cover image">
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <h4 class="m-0 mb-3">
+                    <a href="#" class="text-dark" style="vertical-align: middle">{{ work.name }}</a>
+                  </h4>
+                  <h5 class="text-dark m-0 mb-3">
+                    <small class="text-dark">{{ work.category.name }} - {{ work.sub_category.name }}</small>
+                  </h5>
+                  <div>
+                    <small>{% if work.word_count > 0 %}
+                      {{ work.volume_set.last.chapter_set.last.title|default:"-" }}{% else %}-{% endif %}</small>
+                  </div>
+                </td>
+                <td class="align-middle m-0"><span class="badge badge-{{ work|novel_status_color }}"
+                                                   style="vertical-align: middle">{{ work.get_status_display }}</span>
+                </td>
+                <td class="text-center align-middle m-0">
+                  {{ work.word_count }}
+                </td>
+                <td class="td-actions align-middle">
+                  <a href="{% url 'portal:novel_chapter_update' work.id 0 %}" target="_blank">
+                    <i class="fa fa-fw fa-edit"></i>编辑
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      {% endif %}
+    {% else %}
+      {# not author #}
+
+      <div class="tile">
+        <img src="https://cdn.bootcss.com/flat-ui/2.3.0/img/icons/png/Pensils.png" alt="pensil"
+             class="tile-image big-illustration">
+        <h3 class="tile-title">成为作家</h3>
+        <p>与社区里的奇幻爱好者们分享你内心的奇妙世界。</p>
+        <div class="d-flex justify-content-center">
+          {% if not application %}
+            <button id="become-author-btn" class="btn btn-primary btn-large btn-block w-50" data-toggle="modal"
+                    data-target="#become-author-modal">成为作家
+            </button>
+          {% else %}
+            <button id="become-author-btn" class="btn btn-warning btn-large btn-block w-50" disabled>审核中
+            </button>
+          {% endif %}
+        </div>
+      </div>
+
+    {% endif %}
+
+  </div>
+</div>

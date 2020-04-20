@@ -116,15 +116,13 @@ def humanize_datetime_simple(dt: typing.Union[str, datetime.datetime], show_dire
         secs = -secs
     else:
         return '刚刚'
-    if secs > a_day:  # 60sec * 60min * 24hrs
+    if secs >= a_day:  # 60sec * 60min * 24hrs
         days = int(secs // a_day)
-        # timetot += "{} {}".format(int(days), _('days'))
         timetot += '%(num)s天' % {'num': days}
         secs = secs - days * a_day
 
-    if secs > an_hour:
+    if secs > an_hour and total_secs < a_day:
         hrs = int(secs // an_hour)
-        # timetot += " {} {}".format(int(hrs), _('hours'))
         timetot += ' '
         timetot += '%(num)s小时' % {'num': hrs}
         secs = secs - hrs * an_hour

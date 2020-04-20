@@ -1,5 +1,6 @@
 from base.constants.novel import BUILTIN_CATEGORIES
 from base.models.account import Notification
+from django.conf import settings
 
 
 def common(request):
@@ -12,4 +13,6 @@ def common(request):
         # fixme: 性能
         notifications = Notification.objects.filter(receiver=request.user)
         context['notifications'] = notifications
+
+    context['default_avatar_url'] = settings.MEDIA_URL + 'default/avatars/user.jpg'
     return context

@@ -5,14 +5,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic import CreateView, UpdateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from base.models import Novel, Chapter
 from base.models.novel import Volume, Paragraph
 from general.forms.mixin import FormValidationMixin
 from general.utils.text import calc_word_count
-from portal.forms.novel import NovelCreationForm, ChapterUpdateForm, ChapterCreateForm, VolumeCreateForm
+from portal.forms.author import NovelCreationForm, ChapterUpdateForm, ChapterCreateForm, VolumeCreateForm
 
 
 class NovelCreate(CreateView):
@@ -23,7 +23,12 @@ class NovelCreate(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         self.object = form.save()
-        return render(self.request, 'portal/user/blocks/works.html')
+
+        context = dict()
+        works = self.request.user.novel_set.select_related(
+            'sub_category__category').prefetch_related('volume_set__chapter_set')
+        context.update(works=works)
+        return render(self.request, 'portal/user/home/parts/workbench.html', context=context)
 
 
 class ChapterUpdate(LoginRequiredMixin, UpdateView):
@@ -34,7 +39,7 @@ class ChapterUpdate(LoginRequiredMixin, UpdateView):
     model = Chapter
     pk_url_kwarg = 'chapter_id'
     form_class = ChapterUpdateForm
-    template_name = 'portal/author/novel/update_chapter.html'
+    template_name = 'portal/author/novel/edit_chapters.html'
 
     def dispatch(self, request, *args, **kwargs):
         novel = Novel.objects.get(id=kwargs.get('novel_id'))
@@ -152,18 +157,17 @@ class ChapterUpdate(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class VolumeCreate(CreateView):
+class VolumeCreate(FormValidationMixin, CreateView):
     model = Volume
     form_class = VolumeCreateForm
     http_method_names = ['post']
+    ajax = True
 
-    def get_success_url(self):
-        return reverse(
-            'portal:novel_chapter_update',
-            kwargs={
-                'novel_id': self.object.novel_id,
-                'chapter_id': self.object.chapter_set.get().id
-            }
+    def _template_response(self):
+        return render(
+            self.request,
+            'portal/author/novel/blocks/menu_new_volume.html',
+            context={'volume': self.object}
         )
 
 
@@ -174,16 +178,38 @@ class VolumeRename(FormValidationMixin, UpdateView):
     http_method_names = ['post']
 
 
-class ChapterCreate(CreateView):
+class ChapterCreate(FormValidationMixin, CreateView):
     model = Chapter
     form_class = ChapterCreateForm
     http_method_names = ['post']
+    ajax = True
+
+    def _template_response(self):
+        return render(
+            self.request,
+            'portal/author/novel/blocks/menu_new_chapter.html',
+            context={'chapter': self.object}
+        )
+
+
+class ChapterDelete(DeleteView):
+    model = Chapter
+    pk_url_kwarg = 'chapter_id'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.volume.chapter_set.count() <= 1:
+            messages.add_message(request, messages.WARNING, '卷中至少要保留一个章节')
+            return HttpResponseRedirect(
+                reverse_lazy('portal:novel_chapter_update', kwargs={
+                    'novel_id': self.object.volume.novel_id,
+                    'chapter_id': self.object.id
+                })
+            )
+        return super().delete(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse(
-            'portal:novel_chapter_update',
-            kwargs={
-                'novel_id': self.object.volume.novel_id,
-                'chapter_id': self.object.id
-            }
-        )
+        return reverse_lazy('portal:novel_chapter_update', kwargs={
+            'novel_id': self.object.volume.novel_id,
+            'chapter_id': 0
+        })

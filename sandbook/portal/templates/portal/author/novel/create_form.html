@@ -5,22 +5,25 @@
   <div class="row">
     <div class="col-12 col-md-4 mr-auto">
       <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-        <div class="fileinput-new thumbnail img-raised">
+        <div class="fileinput-new thumbnail">
           <img src="{{ MEDIA_URL }}default/covers/default.png" style="height: 238px;width: 168px;" alt="cover">
         </div>
         <div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
         <div>
-          <span class="btn btn-raised btn-round btn-default btn-file">
+          <span class="btn btn-sm btn-round btn-default btn-file">
             <span class="fileinput-new">选择封面</span>
-            <span class="fileinput-exists">更改</span>
+            <span class="fileinput-exists"> <i class="fa fa-file-image-o"></i> 更改</span>
             {{ form.cover }}
             {{ form.cover.errors }}
           </span>
-          <a href="#" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i
-              class="fa fa-times"></i> 移除</a>
+          <a href="#" class="btn btn-sm btn-danger btn-round fileinput-exists" data-dismiss="fileinput">
+            <i class="fa fa-times"></i> 移除</a>
         </div>
-        <p class="text-left text-muted mt-3">
-          建议选择高宽比在1.41左右且大小小于2M的图片。
+        <p class="text-left text-info mt-3 mb-0">
+          封面图片仅支持 <b>jpeg/jpg/png</b> 格式。
+        </p>
+        <p class="text-left text-muted mt-1">
+          建议选择高宽比在1.41左右（A4纸比例）且大小小于2M的图片。
         </p>
       </div>
     </div>

@@ -141,7 +141,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('portal:index')
 
 LOGOUT_REDIRECT_URL = reverse_lazy('portal:account_login')
 
-LOGIN_URL = LOGOUT_REDIRECT_URL
+LOGIN_URL = reverse_lazy('portal:account_login')
 
 AUTH_USER_MODEL = 'base.User'
 
