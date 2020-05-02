@@ -14,7 +14,7 @@ class FormValidationMixin(JSONResponseMixin):
     ajax = False
 
     def dispatch(self, request, *args, **kwargs):
-        if 'json' in request.GET:
+        if 'json' in request.GET or 'json' in request.POST:
             self.json = True
             self.ajax = True
         return super().dispatch(request, *args, **kwargs)
@@ -28,13 +28,14 @@ class FormValidationMixin(JSONResponseMixin):
         raise ValueError("Mode 'ajax' can not be set without 'json'.")
 
     def form_valid(self, form):
-        self.object = form.save()
+        super().form_valid(form)
         if self.json:
             data = self.object if hasattr(self, 'object') else {}
             return self.json_response(data=data)
-        success_url = self.get_success_url()
-        if success_url is not None:
-            return HttpResponseRedirect(success_url)
+        else:
+            success_url = self.get_success_url()
+            if success_url is not None:
+                return HttpResponseRedirect(success_url)
         return self._template_response()
 
     def form_invalid(self, form):
