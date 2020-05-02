@@ -14,6 +14,9 @@
       text-align: justify;
       line-height: 1.8;
     }
+    #content {
+      margin-top: 3rem;
+    }
 
     #content .container {
       max-width: 800px;
@@ -22,25 +25,39 @@
     #summary {
       border: none
     }
+  .blur-wrap {
+    background-image: url(http://q9p9ifea6.bkt.clouddn.com/bg/1920x1200/bg1.jpg);
+    background-size: cover;
+    background-position: top center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
 
   </style>
 {% endblock %}
 {% block title_content %}{{ chapter.title }} - 《{{ chapter.volume.novel.name }}》{% endblock %}
-{% block body_attr %}style="background-image: url('http://q9p9ifea6.bkt.clouddn.com/bg/1920x1200/bg1.jpg');
-  background-size: cover; background-position: top center;"{% endblock %}
 {% block page_content %}
+  <div class="blur-wrap"></div>
   <div class="container">
     {% with novel=chapter.volume.novel %}
       <div class="row">
         <div class="col col-12">
           <div class="panel" id="summary">
-            <div style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat; height: 20px;"></div>
-            <div class="panel-heading" style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
+            <div
+                style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat; height: 20px;"></div>
+            <div class="panel-heading"
+                 style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
               <h1 class="h1 m-0 px-5">{{ chapter.title }}</h1>
             </div>
             <div class="panel-body pt-0"
                  style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
-
               <div class="px-5">
                 <a class="mr-5" href="{% url 'portal:novel_detail' novel.id %}"><i
                     class="fa fa-book"></i> {{ novel.name }}</a>
@@ -56,7 +73,7 @@
             </div>
           </div>
 
-          <div class="container mb-4">
+          <div class="container mb-5">
             <div class="row"
                  style="background-image: url('{% static 'portal/images/pieces/basic_yangpizhi.png' %}'); background-repeat: repeat">
               <div class="col-lg-4 text-center py-2">
@@ -88,3 +105,4 @@
 
 
 {% endblock %}
+{% block footer %}{% endblock %}
