@@ -20,17 +20,37 @@ def novel_status_color(novel):
 
 @register.filter
 def next_chapter(chapter):
-    newer_chapters = Chapter.objects.filter(id__gt=chapter.id).order_by('id')
+    volume = chapter.volume
+    novel = volume.novel
+    # 本卷是否有更新的章节
+    newer_chapters = chapter.volume.chapter_set.filter(id__gt=chapter.id).order_by('id')
     if newer_chapters:
         return newer_chapters.first()
+
+    # 是否有下一卷
+    newer_volumes = novel.volume_set.filter(id__gt=volume.id)
+    if newer_volumes:
+        newer_volume = newer_volumes.first()
+        if newer_volume:
+            return newer_volume.chapter_set.first()
     return
 
 
 @register.filter
 def previous_chapter(chapter):
-    older_chapters = Chapter.objects.filter(id__lt=chapter.id).order_by('id')
+    volume = chapter.volume
+    novel = volume.novel
+    # 本卷是否有更老的章节
+    older_chapters = chapter.volume.chapter_set.filter(id__lt=chapter.id).order_by('id')
     if older_chapters:
         return older_chapters.last()
+
+    # 是否有前一卷
+    older_volumes = novel.volume_set.filter(id__lt=volume.id).order_by('id')
+    if older_volumes:
+        older_volume = older_volumes.last()
+        if older_volume:
+            return older_volume.chapter_set.last()
     return
 
 
