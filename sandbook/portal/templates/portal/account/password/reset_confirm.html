@@ -2,7 +2,6 @@
 {% load static %}
 {% load common_tags %}
 {% block title_content %}重置密码{% endblock %}
-
 {% block page_content %}
   <div class="login" style="background: url('{% static 'portal/images/background/1920x1200/bg3.jpg' %}')">
     <div class="row login-screen">
@@ -14,73 +13,37 @@
             </h1>
           </div>
         </div>
-        <div class="login-form">
-          <form method="post">
-            {{ form.non_field_errors }}
-            {% csrf_token %}
-            <div class="form-group">
-              {{ form.new_password1 }}
-              {{ form.new_password1|to_label:'login-field-icon fui-lock' }}
-              {{ form.new_password1.errors }}
-            </div>
-            <div class="form-group">
-              {{ form.new_password2 }}
-              {{ form.new_password2|to_label:'login-field-icon fui-lock' }}
-              {{ form.new_password2.errors }}
-            </div>
-            <button class="btn btn-primary btn-lg btn-block">重置</button>
-          </form>
-        </div>
+        {% if form %}
+          <div class="login-form">
+            <form method="post">
+              {{ form.non_field_errors }}
+              {% csrf_token %}
+              <div class="form-group">
+                {{ form.new_password1 }}
+                {{ form.new_password1|to_label:'login-field-icon fui-lock' }}
+                {{ form.new_password1.errors }}
+              </div>
+              <div class="form-group">
+                {{ form.new_password2 }}
+                {{ form.new_password2|to_label:'login-field-icon fui-lock' }}
+                {{ form.new_password2.errors }}
+              </div>
+              <button class="btn btn-primary btn-lg btn-block">重置</button>
+            </form>
+          </div>
+        {% else %}
+          <div class="login-form" style="background-color: rgba(0,0,0, 0.5);">
+            <h2><i class="fui-alert-circle text-warning"></i> 无效链接</h2>
+            <p>对不起，这个链接可能已经失效。</p>
+            <p>如果有任何疑问，请通过邮件等方式联系我们。</p>
+            <p>
+              <a class="btn btn-sm btn-link mr-2" href="{% url 'portal:account_login' %}">登录</a>
+              <a class="btn btn-sm btn-link" href="{% url 'portal:index' %}">去首页</a>
+            </p>
+          </div>
+        {% endif %}
       </div>
     </div>
-  </div>
-
-  <div class="page-header header-filter"
-       style="background-image: url('{% static 'portal/images/background/1920x1200/bg3.jpg' %}'); background-size: cover; background-position: top center;">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-          <form class="form" method="post">
-            {% csrf_token %}
-            <div class="card card-login card-hidden">
-              <div class="card-header card-header-primary text-center">
-                <h4 class="card-title">重置密码</h4>
-              </div>
-              <div class="card-body ">
-                <p class="card-description text-center">请输入你的新密码</p>
-                {{ form.non_field_errors }}
-                <span class="bmd-form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="material-icons">lock_outline</i>
-                      </span>
-                    </div>
-                    {{ form.new_password1 }}
-                  </div>
-                  {{ form.new_password1.errors }}
-                </span>
-                <span class="bmd-form-group">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="material-icons">lock_outline</i>
-                      </span>
-                    </div>
-                    {{ form.new_password2 }}
-                  </div>
-                  {{ form.new_password2.errors }}
-                </span>
-              </div>
-              <div class="card-footer justify-content-center">
-                <button type="submit" class="btn btn-rose btn-link btn-lg">重置密码</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    {% include 'portal/blocks/footer.html' %}
   </div>
 {% endblock %}
 {% block js_account %}

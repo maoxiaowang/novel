@@ -10,27 +10,24 @@
   {#  <link rel="icon" type="image/png" href="../assets/img/favicon.png">#}
   <title>{% block title_content %}{% endblock %} - 沙之书</title>
   {% block css_base %}
-{#    <link href="{% static 'portal/libs/material/material_css.css' %}?v=1" rel="stylesheet">#}
-{#    <link href="https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css" rel="stylesheet">#}
-{#    <link href="{% static 'portal/libs/material/material-kit.min.css' %}?v=2.2.0" rel="stylesheet">#}
 {#    <link href="http://q8exls826.bkt.clouddn.com/material-kit.min.css" rel="stylesheet">#}
 {#    <link href="{% static 'portal/libs/font-awesome/font-awesome.min.css' %}?v=4.7.0" rel="stylesheet">#}
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" >
+    <link href="http://q8exls826.bkt.clouddn.com/font-awesome/font-awesome.min.css" rel="stylesheet" >
 {#    <link href="{% static 'libs/material/vertical-nav.css' %}" rel="stylesheet">#}
 {#    <link href="{% static 'portal/libs/notie/notie.min.css' %}" rel="stylesheet">#}
 {#    <link href="{% static 'portal/css/bootstrap.min.css' %}" rel="stylesheet">#}
-<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://q8exls826.bkt.clouddn.com/bootstrap.min.css" rel="stylesheet">
     {#    <link href="http://designmodo.github.io/Flat-UI/dist/css/vendor/bootstrap.min.css" rel="stylesheet">#}
 {#    <link href="http://designmodo.github.io/Flat-UI/dist/css/flat-ui.css" rel="stylesheet">#}
-    <link href="http://cdn.bootcss.com/flat-ui/2.3.0/css/flat-ui.min.css" rel="stylesheet">
-    <link href="https://mmenujs.com/mmenu/mmenu.css?v=8.5.0" rel="stylesheet">
-    <link href="https://mmenujs.com/mmenu-light/mmenu-light.css?v=8.5.0" rel="stylesheet">
+    <link href="http://q8exls826.bkt.clouddn.com/flat-ui/flat-ui.min.css" rel="stylesheet">
+    <link href="http://q8exls826.bkt.clouddn.com/mmenu/mmenu.css" rel="stylesheet">
+    <link href="http://q8exls826.bkt.clouddn.com/mmenu/mmenu-light.css" rel="stylesheet">
 {#    <link href="https://mmenujs.com/demo/css/demo.css?v=8.5.0" rel="stylesheet">#}
-    <link href="https://mmenujs.com/mburger/mburger.css" rel="stylesheet">
-    <link href="https://mmenujs.com/mhead/jquery.mhead.css?v=8.5.0" rel="stylesheet">
+    <link href="http://q8exls826.bkt.clouddn.com/mmenu/mburger.css">
+    <link href="http://q8exls826.bkt.clouddn.com/mmenu/jquery.mhead.css" rel="stylesheet">
     <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/flat-ui/2.3.0/js/vendor/html5shiv.js"></script>
-    <script src="//cdn.bootcss.com/flat-ui/2.3.0/js/vendor/respond.min.js"></script>
+    <script src="http://q8exls826.bkt.clouddn.com/flat-ui/html5shiv.js"></script>
+    <script src="http://q8exls826.bkt.clouddn.com/flat-ui/respond.min.js"></script>
     <![endif]-->
     <style>
     .mm-menu {
@@ -293,7 +290,7 @@
     .section-heading {
       margin: 20px 0 10px 15px;
       padding: 10px;
-      font-size: 1.2em;
+      font-size: 1.3em;
       border-left: 4px solid #1abc9c;
       line-height: 1em;
       text-align: left;
@@ -378,7 +375,7 @@
 
 
     </style>
-    <link href="https://cdn.bootcss.com/notie/4.3.1/notie.min.css" rel="stylesheet">
+    <link href="http://q8exls826.bkt.clouddn.com/notie.min.css" rel="stylesheet">
     <link href="{% static 'portal/css/main.css' %}?v=28" rel="stylesheet">
   {% endblock %}
   {% block css %}{% endblock %}
@@ -582,13 +579,13 @@
 {% endblock %}
 {% block js_base %}
 {#  <script src="{% static 'js/jquery/jquery.min.js' %}"></script>#}
-  <script src="//cdn.bootcss.com/jquery/2.2.0/jquery.min.js"></script>
+  <script src="http://q8exls826.bkt.clouddn.com/jquery.min.js"></script>
 {#  <script src="https://cdn.bootcss.com/select2/4.0.12/js/select2.min.js"></script>#}
 {#  <script src="http://q8exls826.bkt.clouddn.com/jquery.min.js"></script>#}
 {#  <script src="{% static 'js/jquery/popper.min.js' %}"></script>#}
 {#  <script src="http://q8exls826.bkt.clouddn.com/popper.min.js"></script>#}
-  <script src="//cdn.bootcss.com/flat-ui/2.3.0/js/flat-ui.min.js"></script>
-  <script src="//q8exls826.bkt.clouddn.com/application.js"></script>
+  <script src="http://q8exls826.bkt.clouddn.com/flat-ui/flat-ui.min.js"></script>
+  <script src="http://q8exls826.bkt.clouddn.com/application.js"></script>
 
   <script src="https://mmenujs.com/mhead/jquery.mhead.js?v=8.5.0"></script>
   <script src="https://mmenujs.com/demo/js/playground.js"></script>
@@ -648,6 +645,7 @@
   <script src="http://q8exls826.bkt.clouddn.com/jquery.validate.min.js"></script>
 {#  <script src="{% static 'portal/libs/notie/notie.min.js' %}"></script>#}
   <script src="http://q8exls826.bkt.clouddn.com/notie.min.js"></script>
+  <script src="http://q8exls826.bkt.clouddn.com/jquery.lazyload.min.js"></script>
   <script src="{% static 'js/main.js' %}?v=13"></script>
   <script>
     {#$('[data-toggle=tooltip]').tooltip();#}

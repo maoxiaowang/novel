@@ -178,8 +178,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
-    ('images', os.path.join(STATIC_ROOT, 'images')),  # framework and plugins
+    ('images', os.path.join(STATIC_ROOT, 'images')),
+    ('css', os.path.join(STATIC_ROOT, 'css')),
     ('js', os.path.join(STATIC_ROOT, 'js')),
+    ('libs', os.path.join(STATIC_ROOT, 'libs')),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

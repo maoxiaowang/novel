@@ -28,7 +28,7 @@ class IsLogin(JSONResponseMixin, View):
         return self.json_response(result=result)
 
 
-class Login(FormValidationMixin, auth_views.LoginView):
+class Login(auth_views.LoginView):
     authentication_form = AuthenticationForm
     template_name = 'portal/account/login.html'
     redirect_authenticated_user = True

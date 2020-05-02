@@ -11,8 +11,10 @@ class Index(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        novels = Novel.objects.select_related('sub_category__category')
         context.update(
-            latest_novels=Novel.objects.select_related(
-                'sub_category__category').order_by('-updated_at'))
+            recommended_novels=novels.filter(),
+            hot_novels=novels,
+            latest_novels=novels.order_by('-updated_at'),
+        )
         return context

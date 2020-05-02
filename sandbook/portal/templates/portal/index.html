@@ -5,14 +5,43 @@
   <link href="https://cdn.bootcss.com/Swiper/4.5.1/css/swiper.min.css" rel="stylesheet">
   <link href="http://q8exls826.bkt.clouddn.com/wowslider/style.css" rel="stylesheet">
   <style>
+    aside .tab-pane > a {
+      display: block;
+      padding: 12px;
+    }
+
+    .tab-content .tab-pane > a > span {
+      float: right;
+    }
+
+    .tab-content {
+      background: #fff;
+    }
+
+    .nav-tabs > li > a {
+      color: #999;
+    }
+
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:hover,
+    .nav-tabs > li.active > a:focus {
+      border-top: 1px solid #1abc9c;
+      border-left: 1px solid transparent;
+      border-right: 1px solid transparent;
+    }
+
     #slider-wrap {
-      margin: 0 auto;
+      margin: 2rem auto;
     }
 
     #wowslider-container1 .ws-title div, #wowslider-container1 .ws-title span {
       border-width: 3px;
       padding-top: 3px;
       padding-bottom: 3px;
+    }
+
+    #wowslider-container1 {
+      z-index: 1 !important;
     }
 
     #content {
@@ -44,6 +73,11 @@
       text-shadow: 1px 1px 1px #000;
     }
 
+    .novel-col > a > img {
+      min-height: 186px;
+      overflow: hidden;
+    }
+
     .novel-name {
       padding-top: 10px;
       height: 2.5em;
@@ -73,18 +107,13 @@
       background: linear-gradient(transparent, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.2) 35%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0.6));
     }
 
-    .novel-cover {
-      {#height: 186px;#}
-      width: 100%;
-      display: inline;
-    }
-
   </style>
 {% endblock %}
 
 {% block page_content %}
   {# Sliders #}
-  <section id="banner">
+
+  <div class="container">
     <div class="row" id="slider-wrap">
       <div id="wowslider-container1">
         <div class="ws_images">
@@ -118,43 +147,114 @@
         <div class="ws_shadow"></div>
       </div>
     </div>
-  </section>
 
-
-  <section id="latest-update">
-    <div class="container">
-      <div class="row">
-        <div class="section-heading">最近更新</div>
+    <div class="media-wrap row">
+      <section>
+        <div class="col-12 section-heading">小说</div>
         <div class="col-lg-9 col-md-9 col-sm-12">
-            {% for item in latest_novels %}
-              <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 novel-col">
-                <a href="{% url 'portal:novel_detail' item.id %}" target="_blank">
-                  <img class="novel-cover" src="{{ item.cover.url }}" alt="《{{ item.name }}》封面">
-                  <span class="novel-category">{{ item.category.name }} · {{ item.sub_category.name }}</span>
-                </a>
-                <h4 class="novel-name">
-                  <a class="text-dark" href="{% url 'portal:novel_detail' item.id %}" target="_blank">{{ item.name }}</a>
-                </h4>
-              </div>
-            {% endfor %}
-            <div class="clearfix"></div>
-        </div>
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#novel-r" data-toggle="tab">编辑推荐</a></li>
+            <li><a href="#novel-h" data-toggle="tab">火热连载</a></li>
+            <li><a href="#novel-l" data-toggle="tab">最近更新</a></li>
+            <li class="pull-right"><a href="#">更多 ></a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade in active" id="novel-r">
+              {% for item in recommended_novels %}
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 novel-col">
+                  <a href="{% url 'portal:novel_detail' item.id %}" target="_blank">
+                    <img class="w-100 lazy" src="{{ MEDIA_URL }}default/covers/standard.jpg"
+                         data-original="{{ item.cover.url }}" alt="《{{ item.name }}》封面">
+                    <span class="novel-category">{{ item.category.name }} · {{ item.sub_category.name }}</span>
+                  </a>
+                  <h4 class="novel-name">
+                    <a class="text-dark" href="{% url 'portal:novel_detail' item.id %}"
+                       target="_blank">{{ item.name }}</a>
+                  </h4>
+                </div>
+              {% endfor %}
+
+              <div class="clearfix"></div>
+            </div>
+            <div class="tab-pane fade" id="novel-h">
+              {% for item in hot_novels %}
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 novel-col">
+                  <a href="{% url 'portal:novel_detail' item.id %}" target="_blank">
+                    <img class="w-100 lazy" src="{{ MEDIA_URL }}default/covers/standard.jpg"
+                         data-original="{{ item.cover.url }}" alt="《{{ item.name }}》封面">
+                    <span class="novel-category">{{ item.category.name }} · {{ item.sub_category.name }}</span>
+                  </a>
+                  <h4 class="novel-name">
+                    <a class="text-dark" href="{% url 'portal:novel_detail' item.id %}"
+                       target="_blank">{{ item.name }}</a>
+                  </h4>
+                </div>
+              {% endfor %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="tab-pane fade" id="novel-l">
+              {% for item in latest_novels %}
+                <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 novel-col">
+                  <a href="{% url 'portal:novel_detail' item.id %}" target="_blank">
+                    <img class="w-100 lazy" src="{{ MEDIA_URL }}default/covers/standard.jpg"
+                         data-original="{{ item.cover.url }}" alt="《{{ item.name }}》封面">
+                    <span class="novel-category">{{ item.category.name }} · {{ item.sub_category.name }}</span>
+                  </a>
+                  <h4 class="novel-name">
+                    <a class="text-dark" href="{% url 'portal:novel_detail' item.id %}"
+                       target="_blank">{{ item.name }}</a>
+                  </h4>
+                </div>
+              {% endfor %}
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>  <!-- movie left part -->
 
         <aside>
           <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
-            边栏
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#novel-w" data-toggle="tab">本周Top10</a></li>
+              <li><a href="#novel-m" data-toggle="tab">本月Top10</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane in active fade" id="novel-w">
+                {% for item in hot_novels|slice:10 %}
+                  <a class="text-dark" href="{% url 'portal:novel_detail' item.id %}" target="_blank">
+                    {{ item.name }}<span class="text-primary">10</span>
+                  </a>
+                {% endfor %}
+              </div>
+              <div class="tab-pane fade" id="novel-m">
+                {% for item in hot_novels|slice:10 %}
+                  <a class="text-dark" href="{% url 'portal:novel_detail' item.id %}">
+                    {{ item.name }}<span class="text-primary">10</span>
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
           </div>
         </aside>
-      </div>
-
+      </section>
     </div>
+  </div>
 
-  </section>
 {% endblock %}
 {% block js %}
   <script src="http://q8exls826.bkt.clouddn.com/wowslider/wowslider.js"></script>
   <script src="http://q8exls826.bkt.clouddn.com/wowslider/script.js"></script>
   <script>
-
+    $(function () {
+      $(".media-wrap img.lazy").lazyload({
+        effect: "fadeIn",
+        threshold: 100,
+        //placeholder: "/static/images/default/poster/p_200x284.png"
+      });
+      $(".news-wrap img.lazy").lazyload({
+        effect: "fadeIn",
+        threshold: 100,
+        //placeholder: "/static/images/default/news/n_278x150.png"
+      });
+    });
   </script>
 {% endblock %}
