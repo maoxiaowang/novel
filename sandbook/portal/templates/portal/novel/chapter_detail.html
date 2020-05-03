@@ -6,6 +6,12 @@
     body {
       user-select: none;
     }
+    .disabled {
+      background-color: transparent!important;
+      color: #ccc!important;
+      opacity: 1!important;
+      cursor: default;
+    }
     .novel-paragraph {
       font-size: large;
       margin-bottom: 2.5rem;
@@ -14,6 +20,7 @@
       text-align: justify;
       line-height: 1.8;
     }
+
     #content {
       margin-top: 3rem;
     }
@@ -25,20 +32,21 @@
     #summary {
       border: none
     }
-  .blur-wrap {
-    background-image: url(http://q9p9ifea6.bkt.clouddn.com/bg/1920x1200/bg1.jpg);
-    background-size: cover;
-    background-position: top center;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
-}
+
+    .blur-wrap {
+      background-image: url(http://q9p9ifea6.bkt.clouddn.com/bg/1920x1200/bg1.jpg);
+      background-size: cover;
+      background-position: top center;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
 
   </style>
 {% endblock %}
@@ -81,22 +89,25 @@
                   {% if previous_chapter %}
                     <a class="btn btn-link btn-lg"
                        href="{% url 'portal:novel_chapter_detail' previous_chapter.id %}">上一章</a>
+                  {% else %}
+                    <a class="btn btn-link btn-lg disabled" href="javascript:void(0)">上一章</a>
                   {% endif %}
                 {% endwith %}
               </div>
               <div class="col-lg-4 text-center py-2">
-                <a class="btn btn-link btn-lg" href="{% url 'portal:novel_detail' novel.id %}">目录</a>
+                <a class="btn btn-link btn-lg" href="{% url 'portal:novel_detail' novel.id %}#directory">目录</a>
               </div>
               <div class="col-lg-4 text-center py-2">
                 {% with next_chapter=chapter|next_chapter %}
                   {% if next_chapter %}
                     <a class="btn btn-link btn-lg"
                        href="{% url 'portal:novel_chapter_detail' next_chapter.id %}">下一章</a>
+                  {% else %}
+                    <a class="btn btn-link btn-lg disabled" href="javascript:void(0)">下一章</a>
                   {% endif %}
                 {% endwith %}
               </div>
             </div>
-
           </div>
         </div>
       </div>
