@@ -2,8 +2,8 @@
 {% load static i18n %}
 {% block title_content %}首页{% endblock %}
 {% block css %}
-  <link href="http://q8exls826.bkt.clouddn.com/swiper.min.css" rel="stylesheet">
-  <link href="http://q8exls826.bkt.clouddn.com/wowslider/style.css" rel="stylesheet">
+  <link href="http://cdn.sandbook.club/swiper.min.css" rel="stylesheet">
+  <link href="http://cdn.sandbook.club/wowslider/style.css" rel="stylesheet">
   <style>
     aside .tab-pane > a {
       display: block;
@@ -74,7 +74,7 @@
     }
 
     .novel-col > a > img {
-      min-height: 186px;
+      {#min-height: 160px;#}
       overflow: hidden;
     }
 
@@ -156,7 +156,7 @@
             <li class="active"><a href="#novel-r" data-toggle="tab">编辑推荐</a></li>
             <li><a href="#novel-h" data-toggle="tab">火热连载</a></li>
             <li><a href="#novel-l" data-toggle="tab">最近更新</a></li>
-            <li class="pull-right"><a href="#">更多 ></a></li>
+{#            <li class="pull-right"><a href="#">更多 ></a></li>#}
           </ul>
           <div class="tab-content">
             <div class="tab-pane fade in active" id="novel-r">
@@ -241,8 +241,8 @@
 
 {% endblock %}
 {% block js %}
-  <script src="http://q8exls826.bkt.clouddn.com/wowslider/wowslider.js"></script>
-  <script src="http://q8exls826.bkt.clouddn.com/wowslider/script.js"></script>
+  <script src="http://cdn.sandbook.club/wowslider/wowslider.js"></script>
+  <script src="http://cdn.sandbook.club/wowslider/script.js"></script>
   <script>
     $(function () {
       $(".media-wrap img.lazy").lazyload({

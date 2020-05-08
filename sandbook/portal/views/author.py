@@ -12,6 +12,7 @@ from base.models import Novel, Chapter
 from base.models.novel import Volume, Paragraph
 from general.forms.mixin import FormValidationMixin
 from general.utils.text import calc_word_count
+from general.views import JSONResponseMixin, JSONDeleteView
 from portal.forms.author import NovelCreationForm, ChapterUpdateForm, ChapterCreateForm, VolumeCreateForm
 
 
@@ -176,6 +177,12 @@ class VolumeRename(FormValidationMixin, UpdateView):
     fields = ('name',)
     pk_url_kwarg = 'volume_id'
     http_method_names = ['post']
+
+
+class VolumeDelete(JSONDeleteView):
+    model = Volume
+    pk_url_kwarg = 'volume_id'
+    http_method_names = ['delete']
 
 
 class ChapterCreate(FormValidationMixin, CreateView):
