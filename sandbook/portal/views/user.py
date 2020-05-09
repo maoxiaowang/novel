@@ -151,5 +151,7 @@ class BecomeAuthor(FormValidationMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.applier = self.request.user
-        form.instance.status = AuthorApplication.STATUS['unapproved']
+        # fixme: 暂时不需要审批
+        # form.instance.status = AuthorApplication.STATUS['unapproved']
+        form.instance.status = AuthorApplication.STATUS['agreed']
         return super().form_valid(form)

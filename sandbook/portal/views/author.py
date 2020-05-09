@@ -1,5 +1,3 @@
-import re
-
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -12,7 +10,7 @@ from base.models import Novel, Chapter
 from base.models.novel import Volume, Paragraph
 from general.forms.mixin import FormValidationMixin
 from general.utils.text import calc_word_count
-from general.views import JSONResponseMixin, JSONDeleteView
+from general.views import JSONDeleteView
 from portal.forms.author import NovelCreationForm, ChapterUpdateForm, ChapterCreateForm, VolumeCreateForm
 
 
@@ -23,6 +21,7 @@ class NovelCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        form.instance.status = self.model.STATUS['active']
         self.object = form.save()
 
         context = dict()
